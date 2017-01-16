@@ -4,8 +4,13 @@ var mongoose = require('mongoose');
 // Hint: a user is an object such as
 //     {'username': 'Isaac', 'favoriteFruit': 'apple'}
 var userSchema = new mongoose.Schema({
-  username: {type: String, required: true, index: {unique: true}},
-  favoriteFruit: {type: String, required: true}
+  userID: {type: String, required: true, index: {unique: true}},
+  name: {type: String, required: true},
+  photo: String,
+  description: String,
+  destination: [String],
+  likedTrip: [String],
+  createdTrip: [String],
 });
 
 var User = mongoose.model('User', userSchema);

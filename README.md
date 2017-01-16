@@ -5,3 +5,8 @@
 1. npm install // install all dependecies
 2. remember to setup mongodb, make a directory ./data, then run mongod -dbpath ./data
 3. npm run start // should be able to start in local 
+
+
+#### For using nodemon, use the script:
+npm run startDemon
+
