@@ -4,8 +4,10 @@ var router = express.Router();
 // additional package
 var chalk = require('chalk');
 
-// get the User model
+// get the User, trip, and destination model
 var User = require('../schemas/user');
+var Trip = require('../schemas/trip');
+var Destination = require('../schemas/destination');
 
 
 // GET requests
@@ -36,7 +38,7 @@ router.get('/view_user', function(req, res, next) {
 
 /* GET add_trip_page */;
 router.get('/add_trip_page', function(req, res, next) {
-  // Rendering the index view with the title 'Sign Up'
+  // Rendering the  index view with the title 'Sign Up'
   res.render('add_trip');
 });
 
