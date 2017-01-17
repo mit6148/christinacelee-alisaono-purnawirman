@@ -7,6 +7,7 @@ body {
   background-color: pink;
   text-align: center;
   position: fixed;
+  z-index: 1;
 }
 
 #filter-by-container {
@@ -66,11 +67,6 @@ body {
   margin-top: 10px;
 }
 
-#trip-popup-container {
-  position: fixed;
-  top: 50px;
-  width: 100%;
-}
 .popup-inactive {
   display: none;
 }
@@ -85,7 +81,7 @@ body {
 }
 #trip-popup-close {
   position: absolute;
-  top: 25px;
+  top: 75px;
   right: 25px;
   width: 25px;
   height: 25px;
@@ -96,8 +92,9 @@ body {
 }
 #trip-popup {
   position: absolute;
-  top: 50px;
-  left: 25%;
-  width: 50%;
+  top: 100px;
+  left: 35%;
+  width: 30%;
+  margin-bottom: 25px;
   text-align: center;
 }
