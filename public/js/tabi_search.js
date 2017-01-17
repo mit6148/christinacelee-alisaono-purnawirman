@@ -76,10 +76,16 @@ var main = function() {
 
         } else {
             console.log(tripID+' display');
-            // no re-routing here
+            $('#trip-popup-container').removeClass('popup-inactive');
+            $('#trip-popup').append($(this).clone());
         }
     }
   });  
+
+  $('#trip-popup-close-icon').on('click',function(event){
+    $('#trip-popup-container').addClass('popup-inactive');
+    $('#trip-popup').children('.trip').remove();
+  });
 } 
 
 $(document).ready(main);
