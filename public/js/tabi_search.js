@@ -78,6 +78,7 @@ var main = function() {
             console.log(tripID+' display');
             $('#trip-popup-container').removeClass('popup-inactive');
             $('#trip-popup').append($(this).clone());
+            $('#trip-popup .trip-description').removeClass('text-hidden');
         }
     }
   });  

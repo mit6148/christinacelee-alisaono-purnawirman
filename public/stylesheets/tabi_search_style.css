@@ -66,6 +66,9 @@ body {
   margin: 0;
   margin-top: 10px;
 }
+.text-hidden {
+  display: none;
+}
 
 .popup-inactive {
   display: none;
