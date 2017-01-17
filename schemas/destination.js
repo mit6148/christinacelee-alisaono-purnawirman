@@ -4,8 +4,11 @@ var mongoose = require('mongoose');
 // Hint: a user is an object such as
 //     {'username': 'Isaac', 'favoriteFruit': 'apple'}
 var destinationSchema = new mongoose.Schema({
-  destinationName: {type: String, required: true, index: {unique: true}},
-  trips: [String],
+  destinationID: {type: String, required: true, index: {unique: true}},
+  country: {type: String, required: true},
+  state: {type: String},
+  city: {type: STring, required: true},
+  tabies: [String],
   buddies: [String]
 });
 

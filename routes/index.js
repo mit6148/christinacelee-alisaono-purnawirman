@@ -47,7 +47,8 @@ router.get('/tabi_search', function(req, res, next) {
   {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},
   {tripID: "12348", userID: "126", tripTitle: "test4", username: "user4", description: "this is test description4", liked:true, imageURL:'http://placekitten.com/g/150/150'},
   {tripID: "12349", userID: "127", tripTitle: "test5", username: "user5", description: "this is test description5", liked:true, imageURL:'http://placekitten.com/g/150/150'},]};
-
+  console.log(req);
+  console.log("BBBB");
   res.render('tabi_search', fakeTripData);
 });
 

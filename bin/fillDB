@@ -1,0 +1,66 @@
+/* This is to fill the fake data in the database */
+
+// get the User, trip, and destination model
+var User = require('../schemas/user');
+var Trip = require('../schemas/trip');
+var Destination = require('../schemas/destination');
+var chalk = require('chalk')
+
+/* Adding new user to the database */
+var addNewUser = function(userInfo){
+  // check if userID already exist
+  User.findOne({'userID': userInfo.userID}, function(err, user){
+    if(err){
+      console.log(chalk.red("Error in addNewUser"));
+      return;
+    }
+    if(user != null){
+      console.log(chalk.yellow("User already exist in database"));
+      return;
+    }
+  });
+  // if not existed before, create a new user
+  var newUser = new User(userInfo);
+  newUser.save();
+
+  var destinationID;
+  if(userInfo.hasOwnProperty("userDestinationID")){
+    for(destinationID: userInfo.userDestinationID){
+      Destination.findOne({'destinationID': destinationID}, function(err, destination){
+        destination.buddies.push(userInfo.userID);
+        destination.save();
+      });
+    }
+  }
+}
+
+/* Editing user to the database */
+var editUser = function(userID, userName, userInfo){
+
+}
+
+/* Deleting user to the database */
+var deleteUser = function(userID, userName, userInfo){
+
+}
+
+/* Adding trips to the database */
+var addTrip = function(tripID, tripName, tripCreator, tripDestination, tripType, tripInfo){
+
+}
+
+/* Editing trips to the database */
+var editTrip = function(tripID, tripName, tripCreator, tripDestination, tripType, tripInfo){
+
+}
+
+/* Deleting trips to the database */
+var deleteTrip = function(tripID, tripName, tripCreator, tripDestination, tripType, tripInfo){
+
+}
+
+
+
+
+
+

@@ -5,16 +5,17 @@ var mongoose = require('mongoose');
 //     {'username': 'Isaac', 'favoriteFruit': 'apple'}
 var tripSchema = new mongoose.Schema({
   tripID: {type: String, required: true, index: {unique: true}},
-  name: {type: String, required: true},
-  photo: String,
-  description: String,
-  destination: {type: String, required: true},
-  likedUsers: [String],
-  startTime: Date,
-  endTime: Date,
-  type: {type: String, required: true},
-  startBudget: Number,
-  endBudget: Number
+  tripName: {type: String, required: true},
+  tripCreator: {type: String, required: true},
+  tripDestination: {type: String, required: true},
+  tripType: {type: String, required: true},
+  tripPhoto: String,
+  tripDescription: String,
+  tripLikedUsers: [String],
+  tripStartTime: Date,
+  tripEndTime: Date,
+  tripStartBudget: Number,
+  tripEndBudget: Number
 });
 
 var Trip = mongoose.model('Trip', tripSchema);

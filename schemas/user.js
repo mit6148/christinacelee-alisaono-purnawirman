@@ -5,12 +5,12 @@ var mongoose = require('mongoose');
 //     {'username': 'Isaac', 'favoriteFruit': 'apple'}
 var userSchema = new mongoose.Schema({
   userID: {type: String, required: true, index: {unique: true}},
-  name: {type: String, required: true},
-  photo: String,
-  description: String,
-  destination: [String],
-  likedTrip: [String],
-  createdTrip: [String],
+  userName: {type: String, required: true},
+  userPhoto: String,
+  userDescription: String,
+  userDestinationID: [String],
+  userLikedTrip: [String],
+  userCreatedTrip: [String],
 });
 
 var User = mongoose.model('User', userSchema);
