@@ -109,6 +109,17 @@ router.post('/like_trip', function(req, res, next) {
   res.redirect('/tabi_search')
 });
 
+/* POST like_trip*/
+router.post('/unlike_trip', function(req, res, next) {
+  var unlikedUser = req.body.user_id;
+  var unlikedTrip = req.body.trip_id;
+  console.log(chalk.red("Hit on unlike trip!"));
+
+  // TODO: need to redirect to the current page!
+  // Redirecting back to the root
+  res.redirect('/tabi_search')
+});
+
 /* POST edit_profile_photo*/
 router.post('/edit_profile_photo', function(req, res, next) {
   // var user_id = req.body.user_id;

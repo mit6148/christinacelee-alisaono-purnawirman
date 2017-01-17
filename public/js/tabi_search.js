@@ -55,10 +55,6 @@ var main = function() {
         } else if ($(event.target).attr('class') === 'trip-unlike') {
           console.log(tripID+' unliked post req');
 
-          // temporarily here until "unlike" route is established
-          $(event.target).attr('class','trip-like');
-          $(event.target).attr('src',tripLikeIcon);
-
           $.ajax({
             url: '/unlike_trip',
             method: 'POST', 
@@ -69,7 +65,6 @@ var main = function() {
             }
           }).done(function(response){
             console.log('trip should be unliked');
-            // correct place for updating the icon
             $(event.target).attr('class','trip-like');
             $(event.target).attr('src',tripLikeIcon);
           });
@@ -79,6 +74,7 @@ var main = function() {
             $('#trip-popup-container').removeClass('popup-inactive');
             $('#trip-popup').append($(this).clone());
             $('#trip-popup .trip-description').removeClass('text-hidden');
+            $('#trip-popup').attr('rel',tripID);
         }
     }
   });  
@@ -86,6 +82,7 @@ var main = function() {
   $('#trip-popup-close-icon').on('click',function(event){
     $('#trip-popup-container').addClass('popup-inactive');
     $('#trip-popup').children('.trip').remove();
+    $('#trip-popup').attr('rel',"");
   });
 
   $('#trip-popup').on('click',function(event){
@@ -127,10 +124,6 @@ var main = function() {
       } else if ($(event.target).attr('class') === 'trip-unlike') {
         console.log(tripID+' unliked post req');
 
-        // temporarily here until "unlike" route is established
-        $(event.target).attr('class','trip-like');
-        $(event.target).attr('src',tripLikeIcon);
-
         $.ajax({
           url: '/unlike_trip',
           method: 'POST', 
@@ -141,7 +134,6 @@ var main = function() {
           }
         }).done(function(response){
           console.log('trip should be unliked');
-          // correct place for updating the icon
           $(event.target).attr('class','trip-like');
           $(event.target).attr('src',tripLikeIcon);
         });

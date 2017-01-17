@@ -90,10 +90,6 @@ var main = function() {
 	        } else if ($(event.target).attr('class') === 'trip-unlike') {
 	          console.log(tripID+' unliked post req');
 
-	          // temporarily here until "unlike" route is established
-              $(event.target).attr('class','trip-like');
-              $(event.target).attr('src',tripLikeIcon);
-
 	          $.ajax({
 	            url: '/unlike_trip',
 	            method: 'POST', 
@@ -111,10 +107,77 @@ var main = function() {
 
 	        } else {
 	            console.log(tripID+' display');
-	            // no re-routing here
+	            $('#trip-popup-container').removeClass('popup-inactive');
+            	$('#trip-popup').append($(this).clone());
+            	$('#trip-popup .trip-description').removeClass('text-hidden');
+            	$('#trip-popup').attr('rel',tripID);
 	        }
 	    }
 	});
+
+  $('#trip-popup-close-icon').on('click',function(event){
+    $('#trip-popup-container').addClass('popup-inactive');
+    $('#trip-popup').children('.trip').remove();
+    $('#trip-popup').attr('rel',"");
+  });
+
+  $('#trip-popup').on('click',function(event){
+     event.preventDefault();
+
+    if ($(event.target).attr('class') === 'trip-author') {
+      var userID = $(event.target).attr('rel');
+      console.log(userID +' get req sending');
+
+      $.ajax({
+        url: '/view_user',
+        method: 'GET',
+        data: {
+          user_id: userID,
+        }
+      }).done(function(response){
+        console.log('user profile should be displayed');
+      });
+
+    } else {
+      var tripID = $(this).attr('rel');
+
+      if ($(event.target).attr('class') === 'trip-like') {
+        console.log(tripID+' liked post req');
+
+        $.ajax({
+          url: '/like_trip',
+          method: 'POST', 
+          data: {
+            trip_id: tripID,
+            user_id: myUserID,
+          }
+        }).done(function(response){
+          console.log('trip should be liked');
+          $(event.target).attr('class','trip-unlike');
+          $(event.target).attr('src',tripUnlikeIcon);
+        });
+
+      } else if ($(event.target).attr('class') === 'trip-unlike') {
+        console.log(tripID+' unliked post req');
+
+        $.ajax({
+          url: '/unlike_trip',
+          method: 'POST', 
+          data: {
+            trip_id: tripID,
+            user_id: myUserID,
+            // how to get my own user ID?
+          }
+        }).done(function(response){
+          console.log('trip should be unliked');
+          // correct place for updating the icon
+          $(event.target).attr('class','trip-like');
+          $(event.target).attr('src',tripLikeIcon);
+        });
+
+      }
+    }
+  });
 }
 
  $(document).ready(main);
