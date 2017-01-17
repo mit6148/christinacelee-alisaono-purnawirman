@@ -148,7 +148,7 @@
 148,MA,Morocco,212
 149,MZ,Mozambique,258
 150,MM,Myanmar,95
-151,NA,Namibia,264
+151,NAM,Namibia,264
 152,NR,Nauru,674
 153,NP,Nepal,977
 154,AN,Netherlands Antilles,599
