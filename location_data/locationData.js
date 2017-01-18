@@ -11,6 +11,7 @@ var cities = JSON.parse(fs.readFileSync('./location_data/cities.json'));
 var City = require('../schemas/locationCity');
 var State = require('../schemas/locationState');
 var Country = require('../schemas/locationCountry');
+var Destination = require('../schemas/destination');
 
 // connecting to database 
 var mongoose = require('mongoose');
@@ -21,33 +22,23 @@ connection.on('connected', function() {
   console.log('database connected!');
 });
 
-var batch = 999;
-var k;
-for(k = 0; k <= Math.floor(cities.length / batch); k++){
-	City.collection.insertMany(cities.slice(k * batch, Math.max((k + 1) * batch, cities.length),
+// fill in per batches
+var BATCH = 999;
+var fillJsonToDB = function(jsonData, model, batch=BATCH){
+	var k;
+	for(k = 0; k <= Math.floor(jsonData.length / batch); k++){
+	model.collection.insertMany(jsonData.slice(k * batch, Math.max((k + 1) * batch, jsonData.length),
 		function(err, docs){
 			if(err){
-				console.log("Error in cities insert");
-			}
-		}));
-}
-
-for(k = 0; k <= Math.floor(states.length / batch); k++){
-	State.collection.insertMany(states.slice(k * batch, Math.max((k + 1) * batch, states.length),
-		function(err, docs){
-			if(err){
-				console.log("Error in states insert");
+				console.log("Error in inserting")
 			}
 		} ));
-}
+	}
+};
+fillJsonToDB(countries, Country);
+fillJsonToDB(states, State);
+fillJsonToDB(cities, City);
 
-for(k = 0; k <= Math.floor(countries.length / batch); k++){
-	Country.collection.insertMany(countries.slice(k * batch, Math.max((k + 1) * batch, countries.length),
-		function(err, docs){
-			if(err){
-				console.log("Error in country insert")
-			}
-		} ));
-}
+
 
 mongoose.connection.close();
