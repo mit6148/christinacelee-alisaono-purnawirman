@@ -10,3 +10,5 @@
 #### For using nodemon, use the script:
 npm run startDemon
 
+#### For filling location information automatically, use the script:
+npm run fillLocation
