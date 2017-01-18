@@ -7,11 +7,19 @@ var main = function() {
 
 	//loadFakeTestingData();	
 
+  $('.edit-user-image').on('click',editUserImage)
+
   $('#user-info-edit').on('click', openEditProfile);
 
   $("#info-edit-dialog").dialog({
     autoOpen: false
   });
+
+  $("#delete-confirm-dialog").dialog({
+    autoOpen: false
+  });
+
+  $('#delete-confirm').on('click', deleteTrip);
 
   $('#trip-index').on('click', showTripsTab);
 
@@ -39,7 +47,7 @@ var main = function() {
         editTrip(tripID);
     		break;
     	case 'trip-delete':
-        deleteTrip(tripID);
+        openDeleteTrip(tripID);
     		break;
     	default:
     		showPopupTrip(tripElement);
@@ -70,7 +78,7 @@ var main = function() {
         editTrip(tripID);
     		break;
     	case 'trip-delete':
-    		deleteTrip(tripID);
+    		openDeleteTrip(tripID);
     		break;
     	default:
     		break;
@@ -80,12 +88,18 @@ var main = function() {
   $('.new-trip').on('click',addTrip);
 }
 
+function editUserImage(event){
+  event.preventDefault();
+  console.log('editting profile picture');
+  // post request here
+}
+
 function openEditProfile(event){
   event.preventDefault();
   var currentDescription = $('#user-description').text();
   var currentContact = $('#user-contact').text();
-  $("#edit-user-description").attr('placeholder',currentDescription);
-  $('#edit-user-contact').attr('placeholder',currentContact);
+  $('#edit-user-description').text(currentDescription);
+  $('#edit-user-contact').text(currentContact);
   $("#info-edit-dialog").dialog("open");
 }
 
@@ -165,12 +179,21 @@ function editTrip(tripID){
   window.location = '/edit_trip_page/' + tripID;
 }
 
-function deleteTrip(tripID){
+function openDeleteTrip(tripID){
+  $("#delete-confirm-dialog").dialog("open");
+  $("#delete-confirm").attr('rel',tripID);
+}
+
+function deleteTrip(event){
+  var tripID = $("#delete-confirm").attr('rel');
+
   $('<form>', {
     method: 'post',
     action: '/delete_trip',
     data: {
       trip_id: tripID,
+      user_id: myUserID,
+      // how to get my own user ID?
     }
   }).submit();
 }

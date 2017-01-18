@@ -60,7 +60,7 @@ router.get('/tabi_search', function(req, res, next) {
 /* GET view_user page */
 router.get('/view_user/:user_id', function(req, res, next) {
 
-  // You can access user ID by calling "req.params.user_id"
+  var userID = req.params.user_id
 
   // fake user profile data for front end testing
   var userTripsList = [{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
@@ -71,8 +71,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
   {tripID: "12350", userID: "128", tripTitle: "test6", username: "user6", description: "this is test description6", liked: true, imageURL:'http://placekitten.com/g/150/150'},
   {tripID: "12351", userID: "129", tripTitle: "test7", username: "user7", description: "this is test description7", liked:false, imageURL:'http://placekitten.com/g/150/150'},
   {tripID: "12352", userID: "130", tripTitle: "test8", username: "user8", description: "this is test description8", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12353", userID: "131", tripTitle: "test9", username: "user9", description: "this is test description9", liked:true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12354", userID: "132", tripTitle: "test10", username: "user10", description: "this is test description10", liked:true, imageURL:'http://placekitten.com/g/150/150'},];
+  {tripID: "12353", userID: "131", tripTitle: "test9", username: "user9", description: "this is test description9", liked:true, imageURL:'http://placekitten.com/g/150/150'},];
 
   var wishlistTripsList = [{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
   {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
@@ -87,13 +86,13 @@ router.get('/view_user/:user_id', function(req, res, next) {
 
   // userIsOwner = true -> edit/delete options should appear
   var fakeProfileDataOwner = {userIsOwner: true,
-  userImageURL: 'http://placekitten.com/g/150/150', username: "Cat Meow", userDescription: "this user's ID is "+req.params.user_id, userContact: 'test@gmail.com',
-  wishlistTrips: wishlistTripsList, userTrips: userTripsList};
+  userImageURL: 'http://placekitten.com/g/150/150', username: "Cat Meow", userID: userID, userDescription: "this user's ID is "+req.params.user_id, 
+  userContact: 'test@gmail.com', wishlistTrips: wishlistTripsList, userTrips: userTripsList};
 
   // userIsOwner = false -> only like/unlike option should appear
   var fakeProfileData = {userIsOwner: false,
-  userImageURL: 'http://placekitten.com/g/150/150', username: "Cat Meow", userDescription: "this user's ID is "+req.params.user_id, userContact: 'test@gmail.com',
-  wishlistTrips: wishlistTripsList, userTrips: userTripsList};
+  userImageURL: 'http://placekitten.com/g/150/150', username: "Cat Meow", userID: userID, userDescription: "this user's ID is "+req.params.user_id, 
+  userContact: 'test@gmail.com', wishlistTrips: wishlistTripsList, userTrips: userTripsList};
 
   res.render('user_profile', fakeProfileDataOwner);
 });
@@ -107,7 +106,7 @@ router.get('/add_trip_page', function(req, res, next) {
 /* GET edit_trip_page */
 router.get('/edit_trip_page/:trip_id', function(req, res, next) {
   
-  // You can access trip ID by calling "req.params.trip_id"
+  var trip_id = req.params.trip_id;
 
   res.render('edit_trip');
 });
@@ -118,9 +117,10 @@ router.post('/like_trip', function(req, res, next) {
   var likedTrip = req.body.trip_id;
   console.log(chalk.red("Hit on like trip!"));
 
-  // TODO: need to redirect to the current page!
-  // Redirecting back to the root
-  res.redirect('/tabi_search')
+  // update the database 
+
+  // if no error, send empty string message
+  res.send('');
 });
 
 /* POST like_trip*/
@@ -129,9 +129,10 @@ router.post('/unlike_trip', function(req, res, next) {
   var unlikedTrip = req.body.trip_id;
   console.log(chalk.red("Hit on unlike trip!"));
 
-  // TODO: need to redirect to the current page!
-  // Redirecting back to the root
-  res.redirect('/tabi_search')
+  // update the database 
+
+  // if no error, send empty string message
+  res.send('');
 });
 
 /* POST edit_profile_photo*/
@@ -144,13 +145,14 @@ router.post('/edit_profile_photo', function(req, res, next) {
 });
 
 /* POST edit_profile_text*/
-router.post('/edit_profile_info', function(req, res, next) {
-  // var user_id = req.body.user_id;
+router.post('/edit_profile_info/:user_id', function(req, res, next) {
+  var user_id = req.params.user_id;
   var new_text = req.body.new_profile_text;
   var new_contact = req.body.new_profile_contact;
+  console.log(chalk.red('User '+user_id+' updated with text:'+new_text+', contact:'+new_contact));
 
   // redirect to the user's own profile page
-  res.redirect('/view_user/logged-in-user-id');
+  res.redirect('/view_user/'+user_id);
 });
 
 /* POST add_trip*/

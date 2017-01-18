@@ -22,7 +22,11 @@
     <div id="user-info-container">
       <div id="user-info">
         <div id="user-image-container">
-          <img id="user-image" src="{{userImageURL}}" />
+          {{#if userIsOwner}}
+            <img id="user-image" src="{{userImageURL}}" class="edit-user-image" />
+          {{else}}
+            <img id="user-image" src="{{userImageURL}}" />
+          {{/if}}
         </div>
         <div id="user-description-container">
           <h1 id="user-name">{{username}}</h1>
@@ -32,21 +36,30 @@
             </div>
           {{/if}}
           <p id="user-description">{{userDescription}}</p>
-          <p id="user-contact">Contact: {{userContact}}</p>
+          <p>Contact: <span id="user-contact">{{userContact}}</span></p>
         </div>
       </div>
     </div>
 
-    <div id="info-edit-dialog" title="Edit Profile">
-      <form>
-        <br>
-        <input id="edit-user-description" type="text" name="new_profile_text" placeholder="">
-        <br><br>
-        <input id="edit-user-contact" type="text" name="new_profile_contact" placeholder="">
-        <br><br>
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+    {{#if userIsOwner}}
+      <div id="info-edit-dialog" title="Edit Profile">
+        <form id="info-edit-form" method="post" action="/edit_profile_info/{{userID}}">
+          <p>Introduce yourself:</p>
+          <textarea id="edit-user-description" form="info-edit-form" name="new_profile_text"></textarea>
+          <p>Your contact:</p>
+          <textarea id="edit-user-contact" form="info-edit-form" name="new_profile_contact"></textarea>
+          <br><br>
+          <button type="submit">Save</button>
+        </form>
+      </div>
+    {{/if}}
+
+    {{#if userIsOwner}}
+      <div id="delete-confirm-dialog" title="Delete Your Trip">
+        <p>Are you sure you want to delete your trip?</p>
+        <button id="delete-confirm" rel="">Confirm</button>
+      </div>
+    {{/if}}
 
     <div id="tabs-container">
 
