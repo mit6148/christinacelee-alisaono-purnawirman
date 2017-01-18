@@ -53,8 +53,9 @@ router.get('/tabi_search', function(req, res, next) {
 });
 
 /* GET view_user page */
-router.get('/view_user', function(req, res, next) {
-  // Rendering the index view with the title 'Sign Up'
+router.get('/view_user/:user_id', function(req, res, next) {
+
+  // You can access user ID by calling "req.params.user_id"
 
   // fake user profile data for front end testing
   var userTripsList = [{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
@@ -79,10 +80,17 @@ router.get('/view_user', function(req, res, next) {
   {tripID: "12353", userID: "131", tripTitle: "test9", username: "user9", description: "this is test description9", liked:true, imageURL:'http://placekitten.com/g/150/150'},
   {tripID: "12354", userID: "132", tripTitle: "test10", username: "user10", description: "this is test description10", liked:true, imageURL:'http://placekitten.com/g/150/150'},];
 
-  var fakeProfileData = {userImageURL: 'http://placekitten.com/g/150/150', username: "Cat Meow", userDescription: "this is test user description", userContact: 'test@gmail.com',
+  // userIsOwner = true -> edit/delete options should appear
+  var fakeProfileDataOwner = {userIsOwner: true,
+  userImageURL: 'http://placekitten.com/g/150/150', username: "Cat Meow", userDescription: "this user's ID is "+req.params.user_id, userContact: 'test@gmail.com',
   wishlistTrips: wishlistTripsList, userTrips: userTripsList};
 
-  res.render('user_profile', fakeProfileData);
+  // userIsOwner = false -> only like/unlike option should appear
+  var fakeProfileData = {userIsOwner: false,
+  userImageURL: 'http://placekitten.com/g/150/150', username: "Cat Meow", userDescription: "this user's ID is "+req.params.user_id, userContact: 'test@gmail.com',
+  wishlistTrips: wishlistTripsList, userTrips: userTripsList};
+
+  res.render('user_profile', fakeProfileDataOwner);
 });
 
 /* GET add_trip_page */;
@@ -103,6 +111,17 @@ router.post('/like_trip', function(req, res, next) {
   var likedUser = req.body.user_id;
   var likedTrip = req.body.trip_id;
   console.log(chalk.red("Hit on like trip!"));
+
+  // TODO: need to redirect to the current page!
+  // Redirecting back to the root
+  res.redirect('/tabi_search')
+});
+
+/* POST like_trip*/
+router.post('/unlike_trip', function(req, res, next) {
+  var unlikedUser = req.body.user_id;
+  var unlikedTrip = req.body.trip_id;
+  console.log(chalk.red("Hit on unlike trip!"));
 
   // TODO: need to redirect to the current page!
   // Redirecting back to the root
