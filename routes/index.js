@@ -9,6 +9,11 @@ var User = require('../schemas/user');
 var Trip = require('../schemas/trip');
 var Destination = require('../schemas/destination');
 
+// including the location data
+var City = require('../schemas/locationCity');
+var StateModel = require('../schemas/locationState');
+var Country = require('../schemas/locationCountry');
+
 
 // GET requests
 
