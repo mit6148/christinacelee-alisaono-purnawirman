@@ -23,7 +23,9 @@ connection.on('connected', function() {
 });
 
 // fill in per batches
+// var batch = 999;
 var BATCH = 999;
+// var fillJsonToDB = function(jsonData, model){
 var fillJsonToDB = function(jsonData, model, batch=BATCH){
 	var k;
 	for(k = 0; k <= Math.floor(jsonData.length / batch); k++){

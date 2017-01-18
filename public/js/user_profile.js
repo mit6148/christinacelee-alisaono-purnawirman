@@ -126,6 +126,11 @@ function showUserProfile(eventTarget){
 
 function showPopupTrip(tripElement){
 	var tripID = tripElement.attr('rel');
+  var offset = $('body').scrollTop();
+  var popupTripTop = 100 + offset;
+  var popupCloseTop = 75 + offset;
+  $('#trip-popup').css('top', popupTripTop+'px');
+  $('#trip-popup-close').css('top',popupCloseTop+'px');
   $('#trip-popup-container').removeClass('popup-inactive');
 	$('#trip-popup').append(tripElement.clone());
 	$('#trip-popup .trip-description').removeClass('text-hidden');
