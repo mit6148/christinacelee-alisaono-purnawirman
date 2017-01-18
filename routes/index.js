@@ -188,6 +188,35 @@ router.post('/delete_trip', function(req, res, next) {
 });
 
 
+var passport = require("passport");
+// var 
+/* Auth part */
+router.get('/login', function(req, res, next){
+  // res.send("<form method='post' action='/login'> <div> Username: <input type="text" placeholder="Enter Username" name="uname" required> </div>")
+  res.send("<form method='post' action='/login'> \
+          <div> Username: <input type='text' placeholder='Enter Username' name='uname' required> </div>\
+          <div> Password: <input type='text' placeholder='Enter Password' name='password' required> </div>");
+});
+
+router.post('/login', function(req, res, next){
+  // passport.authenticate('local', { successRedirect: '/',
+  //                                  failureRedirect: '/login',
+  //                                  failureFlash: true })
+  res.end();
+});
+
+router.get('/signup', function(req, res, next){
+  // res.send("<form method='post' action='/login'> <div> Username: <input type="text" placeholder="Enter Username" name="uname" required> </div>")
+  res.send("<form method='post' action='/signup'> \
+          <div> Username: <input type='text' placeholder='Enter Username' name='uname' required> </div>\
+          <div> Password: <input type='text' placeholder='Enter Password' name='password' required> </div>");
+});
+
+router.post('/signup',function(req, res, next){
+  // User.register(...);
+  res.end();
+});
+
 // Example to add, edit and delete in mongoose
 // /* POST to adduser */
 // router.post('/adduser', function(req, res, next) {
