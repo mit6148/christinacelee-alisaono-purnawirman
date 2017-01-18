@@ -7,6 +7,12 @@ var main = function() {
 
 	//loadFakeTestingData();	
 
+  $('#user-info-edit').on('click', openEditProfile);
+
+  $("#info-edit-dialog").dialog({
+    autoOpen: false
+  });
+
   $('#trip-index').on('click', showTripsTab);
 
  	$('#wishlist-index').on('click', showWishlistTab);
@@ -17,6 +23,7 @@ var main = function() {
     var target = $(event.target);
     var targetClass = target.attr('class');
     var tripID = $(this).attr('rel');
+    var tripElement = $(this);
 
     switch (targetClass) {
     	case 'trip-author':
@@ -29,13 +36,13 @@ var main = function() {
     		unlikeTrip(target, tripID);
     		break;
     	case 'trip-edit':
-    		console.log(tripID+' edit post req');
+        editTrip(tripID);
     		break;
     	case 'trip-delete':
-    		console.log(tripID+' delete post req');
+        deleteTrip(tripID);
     		break;
     	default:
-    		showPopupTrip($(this));
+    		showPopupTrip(tripElement);
     		break;
   	}
 	});
@@ -60,15 +67,26 @@ var main = function() {
     		unlikeTrip(target, tripID);
     		break;
     	case 'trip-edit':
-    		console.log(tripID+' edit post req');
+        editTrip(tripID);
     		break;
     	case 'trip-delete':
-    		console.log(tripID+' delete post req');
+    		deleteTrip(tripID);
     		break;
     	default:
     		break;
     }
   });
+
+  $('.new-trip').on('click',addTrip);
+}
+
+function openEditProfile(event){
+  event.preventDefault();
+  var currentDescription = $('#user-description').text();
+  var currentContact = $('#user-contact').text();
+  $("#edit-user-description").attr('placeholder',currentDescription);
+  $('#edit-user-contact').attr('placeholder',currentContact);
+  $("#info-edit-dialog").dialog("open");
 }
 
 function showTripsTab(event){
@@ -107,7 +125,7 @@ function closePopupTrip(event){
   $('#trip-popup').attr('rel',"");
 }
 
-function likeTrip (eventTarget, tripID) {
+function likeTrip(eventTarget, tripID) {
   console.log(tripID+' liked post req');
 
   $.ajax({
@@ -118,14 +136,13 @@ function likeTrip (eventTarget, tripID) {
       user_id: myUserID,
     }
   }).done(function(response){
-    //db updates trip with like
-    
+    //db updated trip with like
     eventTarget.attr('class','trip-unlike');
   	eventTarget.attr('src',unlikeIconURL);
   });
 }
 
-function unlikeTrip (eventTarget,tripID) {
+function unlikeTrip(eventTarget,tripID) {
 	console.log(tripID+' unliked post req');
 	
 	$.ajax({
@@ -138,11 +155,28 @@ function unlikeTrip (eventTarget,tripID) {
       // how to get my own user ID?
     }
   }).done(function(response){
-    //db updates trip with unlike
-
+    //db updated trip with unlike
     eventTarget.attr('class','trip-like');
   	eventTarget.attr('src',likeIconURL);
   });
+}
+
+function editTrip(tripID){
+  window.location = '/edit_trip_page/' + tripID;
+}
+
+function deleteTrip(tripID){
+  $('<form>', {
+    method: 'post',
+    action: '/delete_trip',
+    data: {
+      trip_id: tripID,
+    }
+  }).submit();
+}
+
+function addTrip(){
+  window.location = '/add_trip_page';
 }
 
 function loadFakeTestingData(){

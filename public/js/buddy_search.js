@@ -5,7 +5,7 @@ var main = function() {
 
 function showUserProfile(event){
   event.preventDefault();
-  var userID = $(event.target).attr('rel');
+  var userID = $(this).attr('rel');
   window.location = '/view_user/' + userID;
 }
 
