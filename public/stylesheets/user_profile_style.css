@@ -44,8 +44,8 @@ body {
   vertical-align: top;
 }
 
-/* user info edit popup */
-#info-edit-dialog form {
+/* edit delete dialogs */
+#info-edit-dialog, #delete-confirm-dialog {
   text-align: center;
 }
 
@@ -56,9 +56,10 @@ body {
   vertical-align:top;
 }
 .user-trip, .wishlist-trip {
-  width: 19%;
+  width: 19.5%;
   display: inline-block;
   text-align: center;
+  vertical-align: top;
 }
 .trip, .new-trip {
   margin: 10px;
