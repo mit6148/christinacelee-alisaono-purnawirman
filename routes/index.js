@@ -95,16 +95,17 @@ router.get('/view_user/:user_id', function(req, res, next) {
 
 /* GET add_trip_page */;
 router.get('/add_trip_page', function(req, res, next) {
-  // Rendering the  index view with the title 'Sign Up'
+
   res.render('add_trip');
 });
 
 /* GET edit_trip_page */
-router.get('/edit_trip_page', function(req, res, next) {
-  // Rendering the index view with the title 'Sign Up'
+router.get('/edit_trip_page/:trip_id', function(req, res, next) {
+  
+  // You can access trip ID by calling "req.params.trip_id"
+
   res.render('edit_trip');
 });
-
 
 /* POST like_trip*/
 router.post('/like_trip', function(req, res, next) {
@@ -133,19 +134,18 @@ router.post('/edit_profile_photo', function(req, res, next) {
   // var user_id = req.body.user_id;
   // TODO: get photo
 
-  // TODO: need to redirect to the current page!
-  // Redirecting back to the root
-  res.redirect('/view_user');
+  // redirect to the user's own profile page
+  res.redirect('/view_user/logged-in-user-id');
 });
 
 /* POST edit_profile_text*/
-router.post('/edit_profile_text', function(req, res, next) {
+router.post('/edit_profile_info', function(req, res, next) {
   // var user_id = req.body.user_id;
   var new_text = req.body.new_profile_text;
+  var new_contact = req.body.new_profile_contact;
 
-  // TODO: need to redirect to the current page!
-  // Redirecting back to the root
-  res.redirect('/view_user');
+  // redirect to the user's own profile page
+  res.redirect('/view_user/logged-in-user-id');
 });
 
 /* POST add_trip*/
@@ -176,7 +176,8 @@ router.post('/delete_trip', function(req, res, next) {
   var trip_id = req.body.trip_id;
   // TODO: photo
 
-  res.redirect('/user_profile');
+  // redirect to the user's own profile page
+  res.redirect('/view_user/logged-in-user-id');
 });
 
 
