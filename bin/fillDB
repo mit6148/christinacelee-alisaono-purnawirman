@@ -6,6 +6,16 @@ var Trip = require('../schemas/trip');
 var Destination = require('../schemas/destination');
 var chalk = require('chalk')
 
+/* Adding new destination to database */
+var _addNewDestination = function(destinationInfo){
+
+}
+
+/* Deleting destination in database */
+var _deleteDestination = function(destinationInfo){
+  
+}
+
 /* Adding new user to the database */
 var addNewUser = function(userInfo){
   // check if userID already exist
@@ -27,8 +37,15 @@ var addNewUser = function(userInfo){
   if(userInfo.hasOwnProperty("userDestinationID")){
     for(destinationID: userInfo.userDestinationID){
       Destination.findOne({'destinationID': destinationID}, function(err, destination){
-        destination.buddies.push(userInfo.userID);
-        destination.save();
+        if(err){
+          console.log(chalk.red("Error in addNewUser find destination"));
+        }
+        if(destination === null){
+          // create a new destination info fron the new user input
+        } else {
+          destination.buddies.push(userInfo.userID);
+          destination.save();
+        }
       });
     }
   }

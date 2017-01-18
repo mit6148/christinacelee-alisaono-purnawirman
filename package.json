@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "startDemon": "nodemon ./bin/www",
-    "fillDB": "node ./bin/fillDB"
+    "fillDB": "node ./bin/fillDB",
+    "fillLocation": "node ./location_data/locationData.js"
   },
   "dependencies": {
     "body-parser": "~1.13.2",
