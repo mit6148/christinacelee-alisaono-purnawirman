@@ -80,10 +80,17 @@ router.get('/view_user/:user_id', function(req, res, next) {
   {tripID: "12353", userID: "131", tripTitle: "test9", username: "user9", description: "this is test description9", liked:true, imageURL:'http://placekitten.com/g/150/150'},
   {tripID: "12354", userID: "132", tripTitle: "test10", username: "user10", description: "this is test description10", liked:true, imageURL:'http://placekitten.com/g/150/150'},];
 
-  var fakeProfileData = {userImageURL: 'http://placekitten.com/g/150/150', username: "Cat Meow", userDescription: "this user's ID is "+req.params.user_id, userContact: 'test@gmail.com',
+  // userIsOwner = true -> edit/delete options should appear
+  var fakeProfileDataOwner = {userIsOwner: true,
+  userImageURL: 'http://placekitten.com/g/150/150', username: "Cat Meow", userDescription: "this user's ID is "+req.params.user_id, userContact: 'test@gmail.com',
   wishlistTrips: wishlistTripsList, userTrips: userTripsList};
 
-  res.render('user_profile', fakeProfileData);
+  // userIsOwner = false -> only like/unlike option should appear
+  var fakeProfileData = {userIsOwner: false,
+  userImageURL: 'http://placekitten.com/g/150/150', username: "Cat Meow", userDescription: "this user's ID is "+req.params.user_id, userContact: 'test@gmail.com',
+  wishlistTrips: wishlistTripsList, userTrips: userTripsList};
+
+  res.render('user_profile', fakeProfileDataOwner);
 });
 
 /* GET add_trip_page */;
