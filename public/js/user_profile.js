@@ -100,7 +100,6 @@ var main = function() {
 	            }
 	          }).done(function(response){
 	            console.log('trip should be unliked');
-	            // correct place for updating the icon
 	            $(event.target).attr('class','trip-like');
             	$(event.target).attr('src',tripLikeIcon);
 	          });
@@ -170,7 +169,6 @@ var main = function() {
           }
         }).done(function(response){
           console.log('trip should be unliked');
-          // correct place for updating the icon
           $(event.target).attr('class','trip-like');
           $(event.target).attr('src',tripLikeIcon);
         });

@@ -25,15 +25,17 @@ var main = function() {
     var userID = $(this).attr('rel');
     console.log(userID +' get req sending');
 
-    $.ajax({
-        url: '/view_user',
-        method: 'GET',
-        data: {
-          user_id: userID,
-        }
-      }).done(function(response){
-        console.log('user profile should be displayed');
-    });   
+    window.location = '/view_user/' + userID;
+
+    // $.ajax({
+    //     url: '/view_user',
+    //     method: 'GET',
+    //     data: {
+    //       user_id: userID,
+    //     }
+    //   }).done(function(response){
+    //     console.log('user profile should be displayed');;
+    // });   
   });  
 } 
 
