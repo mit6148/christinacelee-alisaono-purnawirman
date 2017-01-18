@@ -7,7 +7,7 @@ var destinationSchema = new mongoose.Schema({
   destinationID: {type: String, required: true, index: {unique: true}},
   country: {type: String, required: true},
   state: {type: String},
-  city: {type: STring, required: true},
+  city: {type: String, required: true},
   tabies: [String],
   buddies: [String]
 });
