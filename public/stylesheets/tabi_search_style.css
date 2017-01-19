@@ -12,6 +12,7 @@ body {
 
 #filter-by-container {
   width: 22%;
+  height: 100%;
   display: inline-block;
   margin-top: 50px;
 }
@@ -20,6 +21,7 @@ body {
   margin: 10px;
   padding-left: 15px;
   padding-bottom: 15px;
+/*  overflow: scroll;*/
 }
 
 #search-results-container {

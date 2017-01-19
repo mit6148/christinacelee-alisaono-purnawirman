@@ -7,6 +7,11 @@ var main = function() {
 
   //loadFakeTestingData();
 
+  // var windowHeight = window.innerHeight;
+  // var filterBarHeight = windowHeight - 70;
+  // console.log(windowHeight+','+filterBarHeight);
+  // $('#filter-by-container form').css('height',filterBarHeight+'px');
+
   $('.trip').on('click',function(event){
     event.preventDefault();
 
