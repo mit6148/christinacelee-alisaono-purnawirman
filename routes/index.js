@@ -187,6 +187,9 @@ router.post('/delete_trip', function(req, res, next) {
   res.redirect('/view_user/logged-in-user-id');
 });
 
+router.get('/blob-test', function(req, res, next) {
+  res.render('blob-test');
+});
 
 router.post('/upload-blob-test', function (req, res) {
   var multiparty = require('multiparty');
@@ -212,7 +215,7 @@ router.post('/upload-blob-test', function (req, res) {
       form.handlePart(part);
     }
   });
-  
+
   form.parse(req);
   res.send('OK');
 });
