@@ -10,6 +10,12 @@ var routes = require('./routes/index');
 
 var app = express();
 
+// if (process.env.NODE_ENV == "production") {
+//   app.listen(process.env.PORT);
+// } else {
+//   app.listen(80);
+// }
+
 // database setup
 mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/test');
 var connection = mongoose.connection;

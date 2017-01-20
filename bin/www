@@ -25,7 +25,13 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+
+if (process.env.NODE_ENV == "production") {
+  app.listen(process.env.PORT);
+} else {
+  app.listen(80);
+}
+// server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
