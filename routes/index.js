@@ -188,6 +188,36 @@ router.post('/delete_trip', function(req, res, next) {
 });
 
 
+router.post('/upload-blob-test', function (req, res) {
+  var multiparty = require('multiparty');
+  var accessKey = process.env.AZURE_STORAGE_ACCESS_KEY;
+  var storageAccount = process.env.AZURE_STORAGE_ACCOUNT;
+  var container = 'test-pictures';   
+
+  var blobService = azure.createBlobService(storageAccount, accessKey);
+  var form = new multiparty.Form();
+  
+  form.on('part', function (part) {
+    if (part.filename) {               
+      var size = part.byteCount - part.byteOffset;
+      var name = part.filename;
+               
+      blobService.createBlockBlobFromStream(container, name, part, size, function (error) {
+        if (error) {
+          res.send(' Blob create: error ');
+        }
+      });
+    
+    } else {
+      form.handlePart(part);
+    }
+  });
+  
+  form.parse(req);
+  res.send('OK');
+});
+
+
 // var passport = require("passport");
 // // var 
 // /* Auth part */
