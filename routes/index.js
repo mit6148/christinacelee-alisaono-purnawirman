@@ -188,8 +188,8 @@ router.post('/delete_trip', function(req, res, next) {
   res.redirect('/view_user/logged-in-user-id');
 });
 
-router.get('/blob-test', function(req, res, next) {
-  res.render('blob-test');
+router.get('/blob_test', function(req, res, next) {
+  res.render('blob_test');
 });
 
 // router.post('/upload-blob-test', function (req, res) {
