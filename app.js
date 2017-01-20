@@ -5,19 +5,19 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var azure = require('azure');
+var azure = require('azure-storage');
 
 var routes = require('./routes/index');
 
 var app = express();
 
-// acessing blob storage ~~~
-// var accessKey = process.env.AZURE_STORAGE_ACCESS_KEY;
-// var storageAccount = process.env.AZURE_STORAGE_ACCOUNT;
-// var containerName = 'test-pictures';
+//acessing blob storage ~~~
+var accessKey = process.env.AZURE_STORAGE_ACCESS_KEY;
+var storageAccount = process.env.AZURE_STORAGE_ACCOUNT;
+var containerName = 'test-pictures';
 
-// var blobService = azure.createBlobService(storageAccount, accessKey);
-// ~~~ acessing blob storage
+var blobService = azure.createBlobService(storageAccount, accessKey);
+//~~~ acessing blob storage
 
 // database setup
 mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/test');
