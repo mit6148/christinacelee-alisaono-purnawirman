@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 // additional package
+var azure = require('azure');
 var chalk = require('chalk');
 
 // get the User, trip, and destination model
