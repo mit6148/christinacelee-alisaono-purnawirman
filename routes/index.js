@@ -70,7 +70,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
   var userID = req.params.user_id
 
   // userImageBlobUrl should have been saved in the database
-  var userImageURL = 'https://res.cloudinary.com/tabibuddy/image/upload/c_fit,h_150,w_100/'+userID+'.png';
+  var userImageURL = 'https://res.cloudinary.com/tabibuddy/image/upload/'+userID+'.png';
 
   // fake user profile data for front end testing ~~~~
   var userTripsList = [{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
