@@ -12,11 +12,10 @@ var routes = require('./routes/index');
 var app = express();
 
 //acessing blob storage ~~~
-var accessKey = process.env.AZURE_STORAGE_ACCESS_KEY;
-var storageAccount = process.env.AZURE_STORAGE_ACCOUNT;
-var containerName = 'test-pictures';
-
-var blobService = azure.createBlobService(storageAccount, accessKey);
+// var accessKey = process.env.AZURE_STORAGE_ACCESS_KEY;
+// var storageAccount = process.env.AZURE_STORAGE_ACCOUNT;
+// var containerName = 'test-pictures';
+// var blobService = azure.createBlobService(storageAccount, accessKey);
 //~~~ acessing blob storage
 
 // database setup
