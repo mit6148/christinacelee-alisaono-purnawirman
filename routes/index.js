@@ -208,9 +208,10 @@ router.post('/upload-blob-test', function (req, res) {
   var form = new multiparty.Form();
   
   form.on('part', function (part) {
-    if (part.filename) {               
-      var size = part.byteCount - part.byteOffset;
-      var name = part.filename;
+    // if (part.filename) {               
+      // var size = part.byteCount - part.byteOffset;
+      // var name = part.filename;
+      var name = 'test-file-1';
                
       blobService.createBlockBlobFromLocalFile(container, name, part, function(error, result, response){
         if(error){
@@ -226,9 +227,9 @@ router.post('/upload-blob-test', function (req, res) {
       //   }
       // });
     
-    } else {
-      form.handlePart(part);
-    }
+    // } else {
+    //   form.handlePart(part);
+    // }
   });
 
   form.parse(req);
