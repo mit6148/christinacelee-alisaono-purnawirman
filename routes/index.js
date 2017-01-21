@@ -215,6 +215,8 @@ router.post('/upload-blob-test', function (req, res) {
       blobService.createBlockBlobFromLocalFile(container, name, part, function(error, result, response){
         if(error){
           res.send(' Blob create: error ');
+        } else {
+          res.send('upload complete');
         }
       });
 
