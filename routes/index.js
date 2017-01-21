@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 // additional package
-var azure = require('azure-storage');
+var cloudinary = require('cloudinary');
 var formidable = require('formidable');
 var chalk = require('chalk');
 
@@ -16,13 +16,11 @@ var City = require('../schemas/locationCity');
 var StateModel = require('../schemas/locationState');
 var Country = require('../schemas/locationCountry');
 
-
-//acessing blob storage ~~~
-var accessKey = '1Vt0m8vRuUYGLKYUQT4+jMev+r9Die37LDQjhdolUnS3Z2LvrJq4Hn9f48D6jiXF7ivmj3PJM+jgF/ZKZDamYg==';
-var storageAccount = 'tabibuddy';
-// var containerName = 'test-pictures';
-var blobService = azure.createBlobService(storageAccount, accessKey);
-//~~~ acessing blob storage
+cloudinary.config({ 
+  cloud_name: 'tabibuddy', 
+  api_key: '455418426168721', 
+  api_secret: '0SjT0iYEFY7l_1aLBdWnqVCaS9Q' 
+});
 
 // GET requests
 
@@ -71,10 +69,8 @@ router.get('/view_user/:user_id', function(req, res, next) {
 
   var userID = req.params.user_id
 
-  var blobContainer = 'test-pictures';
-  var blobHost = 'https://tabibuddy.blob.core.windows.net/';
-  var userImageURL = blobService.getUrl(blobContainer, userID, null, blobHost);
   // userImageBlobUrl should have been saved in the database
+  var userImageURL = 'https://res.cloudinary.com/tabibuddy/image/upload/c_fit,h_150,w_100/v1485040144/'+userID+'.png';
 
   // fake user profile data for front end testing ~~~~
   var userTripsList = [{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
@@ -159,22 +155,29 @@ router.post('/edit_profile_photo/:user_id', function(req, res, next) {
   var form = new formidable.IncomingForm();
 
   form.on('file', function(field, file) {
-    blobService.createBlockBlobFromLocalFile('test-pictures', userID, file.path, function(error, result, response){
-      if(error){
-        res.send('error:'+error);
-      } else {
-        // update the db with URL
-        // var blobContainer = 'user-pictures';
-        // var blobHost = 'https://tabibuddy.blob.core.windows.net/';
-        // var userImageURL = blobService.getUrl(blobContainer, userID, null, blobHost);
-
-        // redirect to the user's own profile page
-        // show some message on top to let the user know the update was successful?
-        res.redirect('/view_user/'+userID);
-      }
-    });
+    cloudinary.uploader.upload(
+      file.path, 
+      function(result) {
+        console.log(result);
+        // Update the db with URL ~~~
+        //  var newImageURL = result.secure_url OR result.url
+        // Then redirect to the user's own profile page
+        res.redirect('/view_user/'+userID); },
+        // Show some message on top to let the user know the update was successful?
+      {
+      public_id: userID, 
+      crop: 'limit',
+      width: 200,
+      height: 200,
+      eager: [
+        { width: 200, height: 200, crop: 'thumb', gravity: 'face',
+          radius: 20, effect: 'sepia' },
+        { width: 100, height: 150, crop: 'fit', format: 'png' }
+      ],                                     
+      tags: [] }
+    );
   });
- 
+
   form.parse(req);
 });
 
