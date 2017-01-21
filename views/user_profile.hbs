@@ -55,6 +55,15 @@
     {{/if}}
 
     {{#if userIsOwner}}
+      <div id="user-photo-edit-dialog" title="Edit Profile Picture">
+        <form action="/edit_profile_photo/{{userID}}" method="post" enctype="multipart/form-data">
+          <input id="user-photo-upload" type="file" name="new_profile_photo" />
+          <input type="submit" value="Upload" />
+        </form>
+      </div>
+    {{/if}}
+
+    {{#if userIsOwner}}
       <div id="delete-confirm-dialog" title="Delete Your Trip">
         <p>Are you sure you want to delete your trip?</p>
         <button id="delete-confirm" rel="">Confirm</button>

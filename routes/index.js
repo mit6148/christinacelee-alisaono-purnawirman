@@ -3,6 +3,7 @@ var router = express.Router();
 
 // additional package
 var azure = require('azure-storage');
+var formidable = require('formidable');
 var chalk = require('chalk');
 
 // get the User, trip, and destination model
@@ -70,7 +71,12 @@ router.get('/view_user/:user_id', function(req, res, next) {
 
   var userID = req.params.user_id
 
-  // fake user profile data for front end testing
+  var blobContainer = 'test-pictures';
+  var blobHost = 'https://tabibuddy.blob.core.windows.net/';
+  var userImageURL = blobService.getUrl(blobContainer, userID, null, blobHost);
+  // userImageBlobUrl should have been saved in the database
+
+  // fake user profile data for front end testing ~~~~
   var userTripsList = [{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
   {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
   {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},
@@ -94,13 +100,15 @@ router.get('/view_user/:user_id', function(req, res, next) {
 
   // userIsOwner = true -> edit/delete options should appear
   var fakeProfileDataOwner = {userIsOwner: true,
-  userImageURL: 'http://placekitten.com/g/150/150', username: "Cat Meow", userID: userID, userDescription: "this user's ID is "+req.params.user_id, 
+  userImageURL: userImageURL, sername: "Cat Meow", userID: userID, userDescription: "this user's ID is "+req.params.user_id, 
   userContact: 'test@gmail.com', wishlistTrips: wishlistTripsList, userTrips: userTripsList};
 
   // userIsOwner = false -> only like/unlike option should appear
   var fakeProfileData = {userIsOwner: false,
-  userImageURL: 'http://placekitten.com/g/150/150', username: "Cat Meow", userID: userID, userDescription: "this user's ID is "+req.params.user_id, 
+  userImageURL: userImageURL, username: "Cat Meow", userID: userID, userDescription: "this user's ID is "+req.params.user_id, 
   userContact: 'test@gmail.com', wishlistTrips: wishlistTripsList, userTrips: userTripsList};
+
+  // ~~~~ fake data ends
 
   res.render('user_profile', fakeProfileDataOwner);
 });
@@ -144,12 +152,30 @@ router.post('/unlike_trip', function(req, res, next) {
 });
 
 /* POST edit_profile_photo*/
-router.post('/edit_profile_photo', function(req, res, next) {
-  // var user_id = req.body.user_id;
-  // TODO: get photo
+router.post('/edit_profile_photo/:user_id', function(req, res, next) {
 
-  // redirect to the user's own profile page
-  res.redirect('/view_user/logged-in-user-id');
+  var userID = req.params.user_id;
+
+  var form = new formidable.IncomingForm();
+
+  form.on('file', function(field, file) {
+    blobService.createBlockBlobFromLocalFile('test-pictures', userID, file.path, function(error, result, response){
+      if(error){
+        res.send('error:'+error);
+      } else {
+        // update the db with URL
+        // var blobContainer = 'user-pictures';
+        // var blobHost = 'https://tabibuddy.blob.core.windows.net/';
+        // var userImageURL = blobService.getUrl(blobContainer, userID, null, blobHost);
+
+        // redirect to the user's own profile page
+        // show some message on top to let the user know the update was successful?
+        res.redirect('/view_user/'+userID);
+      }
+    });
+  });
+ 
+  form.parse(req);
 });
 
 /* POST edit_profile_text*/
@@ -194,48 +220,6 @@ router.post('/delete_trip', function(req, res, next) {
   // redirect to the user's own profile page
   res.redirect('/view_user/logged-in-user-id');
 });
-
-router.get('/blob_test', function(req, res, next) {
-  res.render('blob_test');
-});
-
-router.post('/upload-blob-test', function (req, res) {
-  var multiparty = require('multiparty');
-  // var accessKey = process.env.AZURE_STORAGE_ACCESS_KEY;
-  // var storageAccount = process.env.AZURE_STORAGE_ACCOUNT;
-  var container = 'test-pictures';   
-
-  var form = new multiparty.Form();
-  
-  form.on('part', function (part) {
-    // if (part.filename) {               
-      // var size = part.byteCount - part.byteOffset;
-      // var name = part.filename;
-      var name = 'test-file-1';
-               
-      blobService.createBlockBlobFromLocalFile(container, name, part, function(error, result, response){
-        if(error){
-          res.send(' Blob create: error ');
-        } else {
-          res.send('upload complete');
-        }
-      });
-
-      // blobService.createBlockBlobFromStream(container, name, part, size, function (error) {
-      //   if (error) {
-      //     res.send(' Blob create: error ');
-      //   }
-      // });
-    
-    // } else {
-    //   form.handlePart(part);
-    // }
-  });
-
-  form.parse(req);
-  res.send('OK');
-});
-
 
 // var passport = require("passport");
 // // var 

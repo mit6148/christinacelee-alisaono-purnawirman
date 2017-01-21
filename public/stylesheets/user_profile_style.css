@@ -45,8 +45,11 @@ body {
 }
 
 /* edit delete dialogs */
-#info-edit-dialog, #delete-confirm-dialog {
+#info-edit-dialog, #delete-confirm-dialog, #user-photo-edit-dialog {
   text-align: center;
+}
+#user-photo-upload {
+  width: 90%;
 }
 
 /* trips */

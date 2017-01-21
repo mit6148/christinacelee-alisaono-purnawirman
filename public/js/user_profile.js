@@ -7,17 +7,21 @@ var main = function() {
 
 	//loadFakeTestingData();	
 
-  $('.edit-user-image').on('click',editUserImage)
+  $('#info-edit-dialog').dialog({
+    autoOpen: false
+  });
 
-  $('#user-info-edit').on('click', openEditProfile);
-
-  $("#info-edit-dialog").dialog({
+  $('#user-photo-edit-dialog').dialog({
     autoOpen: false
   });
 
   $("#delete-confirm-dialog").dialog({
     autoOpen: false
   });
+
+  $('.edit-user-image').on('click',editUserImage)
+
+  $('#user-info-edit').on('click', openEditProfile);
 
   $('#delete-confirm').on('click', deleteTrip);
 
@@ -90,8 +94,7 @@ var main = function() {
 
 function editUserImage(event){
   event.preventDefault();
-  console.log('editting profile picture');
-  // post request here
+  $('#user-photo-edit-dialog').dialog("open");
 }
 
 function openEditProfile(event){
@@ -100,7 +103,7 @@ function openEditProfile(event){
   var currentContact = $('#user-contact').text();
   $('#edit-user-description').text(currentDescription);
   $('#edit-user-contact').text(currentContact);
-  $("#info-edit-dialog").dialog("open");
+  $('#info-edit-dialog').dialog("open");
 }
 
 function showTripsTab(event){
