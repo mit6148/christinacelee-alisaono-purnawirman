@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 // additional package
-var azure = require('azure');
+var azure = require('azure-storage');
 var chalk = require('chalk');
 
 // get the User, trip, and destination model
@@ -15,6 +15,13 @@ var City = require('../schemas/locationCity');
 var StateModel = require('../schemas/locationState');
 var Country = require('../schemas/locationCountry');
 
+
+//acessing blob storage ~~~
+var accessKey = '1Vt0m8vRuUYGLKYUQT4+jMev+r9Die37LDQjhdolUnS3Z2LvrJq4Hn9f48D6jiXF7ivmj3PJM+jgF/ZKZDamYg==';
+var storageAccount = 'tabibuddy';
+// var containerName = 'test-pictures';
+var blobService = azure.createBlobService(storageAccount, accessKey);
+//~~~ acessing blob storage
 
 // GET requests
 
@@ -192,34 +199,39 @@ router.get('/blob_test', function(req, res, next) {
   res.render('blob_test');
 });
 
-// router.post('/upload-blob-test', function (req, res) {
-//   var multiparty = require('multiparty');
-//   var accessKey = process.env.AZURE_STORAGE_ACCESS_KEY;
-//   var storageAccount = process.env.AZURE_STORAGE_ACCOUNT;
-//   var container = 'test-pictures';   
+router.post('/upload-blob-test', function (req, res) {
+  var multiparty = require('multiparty');
+  // var accessKey = process.env.AZURE_STORAGE_ACCESS_KEY;
+  // var storageAccount = process.env.AZURE_STORAGE_ACCOUNT;
+  var container = 'test-pictures';   
 
-//   var blobService = azure.createBlobService(storageAccount, accessKey);
-//   var form = new multiparty.Form();
+  var form = new multiparty.Form();
   
-//   form.on('part', function (part) {
-//     if (part.filename) {               
-//       var size = part.byteCount - part.byteOffset;
-//       var name = part.filename;
+  form.on('part', function (part) {
+    if (part.filename) {               
+      var size = part.byteCount - part.byteOffset;
+      var name = part.filename;
                
-//       blobService.createBlockBlobFromStream(container, name, part, size, function (error) {
-//         if (error) {
-//           res.send(' Blob create: error ');
-//         }
-//       });
-    
-//     } else {
-//       form.handlePart(part);
-//     }
-//   });
+      blobService.createBlockBlobFromLocalFile(container, name, part, function(error, result, response){
+        if(error){
+          res.send(' Blob create: error ');
+        }
+      });
 
-//   form.parse(req);
-//   res.send('OK');
-// });
+      // blobService.createBlockBlobFromStream(container, name, part, size, function (error) {
+      //   if (error) {
+      //     res.send(' Blob create: error ');
+      //   }
+      // });
+    
+    } else {
+      form.handlePart(part);
+    }
+  });
+
+  form.parse(req);
+  res.send('OK');
+});
 
 
 // var passport = require("passport");
