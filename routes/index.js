@@ -62,7 +62,7 @@ router.get('/login/facebook', passport.authenticate('facebook'));
 router.get('/login/facebook/callback', 
     passport.authenticate('facebook', { failureRedirect: '/login' }),
     function(req, res) {
-      res.redirect('/check_login');
+      res.redirect('/');
     });
 
 router.get('/your_user_name',
