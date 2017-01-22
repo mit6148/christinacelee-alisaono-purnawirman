@@ -35,12 +35,10 @@ passport.use(new FacebookStrategy({
   clientSecret: "02c286e89257fbd0a9d180a6c6cbb09d",
   callbackURL: "https://tabibuddy.azurewebsites.net/login/facebook/callback"
 }, function(accessToken, refreshToken, profile, done) {
-  // return cb(done, profile);
-  // returning null for now, login should fail and you'd be redirected to login page
-  // return done(null, null);
   var user = new User();
-  // user.fb.id    = profile.id;               
+  // user.fb.id = profile.id;               
   // user.fb.access_token = access_token;
+  // returning empty user for now
   return done(null, user);
 }));
 
