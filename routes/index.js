@@ -39,8 +39,8 @@ passport.use(new FacebookStrategy({
   // returning null for now, login should fail and you'd be redirected to login page
   // return done(null, null);
   var user = new User();
-  user.fb.id    = profile.id;               
-  user.fb.access_token = access_token;
+  // user.fb.id    = profile.id;               
+  // user.fb.access_token = access_token;
   return done(null, user);
 }));
 
