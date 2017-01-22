@@ -93,7 +93,7 @@ router.get('/login/facebook/callback',
 router.get('/your_user_name',
   require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
-    res.send('user:'+req.user);
+    res.send('user:'+req.user.userID);
 });
 
 // GET requests
