@@ -39,8 +39,8 @@ passport.use(new FacebookStrategy({
   // console.log(profile.id);
   user.userID = profile.id;
   user.userName = profile.displayName;
-  user.userEmail = profile.email;
-  user.userPhoto = "https://graph.facebook.com/" + profile.username + "/picture" + "?width=200&height=200" + "&access_token=" + accessToken;
+  user.userEmail = profile.emails[0].value;
+  user.userPhoto = "http://res.cloudinary.com/tabibuddy/image/upload/c_thumb,g_face,h_200,w_200/v1485053998/125.jpg";
   user.save();               
   // user.fb.access_token = access_token;
   // returning empty user for now
