@@ -35,32 +35,7 @@ var main = function() {
 
   populateSearchBar(tripFilterGroups);
 
-  $('#filter-by-container input[type=checkbox]').on('click',toggleFilterButtonTags);
-
-  $('#clear-filter').on('click',clearFilter);
-
-  $('.trip').on('click',function(event){
-    event.preventDefault();
-
-    var target = $(event.target);
-    var targetClass = target.attr('class');
-    var tripID = $(this).attr('rel');
-
-    switch (targetClass) {
-      case 'trip-author':
-        showUserProfile(target);
-        break;
-      case 'trip-like':
-        likeTrip(target, tripID);
-        break;
-      case 'trip-unlike':
-        unlikeTrip(target, tripID);
-        break;
-      default:
-        showPopupTrip($(this));
-        break;
-    }
-  });  
+  addListenerToTrips();
 
   $('#trip-popup-close-icon').on('click',closePopupTrip);
 
@@ -107,6 +82,36 @@ function populateSearchBar(filter){
   $('<ul>').attr('id','filter-tags').appendTo(filterForm);
   $('<button>').attr('id','apply-filter').text('Apply Filter').appendTo(filterForm);
   $('<button>').attr('id','clear-filter').text('Clear Filter').appendTo(filterForm);
+
+  $('#filter-by-container input[type=checkbox]').on('click',toggleFilterButtonTags);
+
+  $('#clear-filter').on('click',clearFilter);
+  $('#apply-filter').on('click',applyFilter);
+}
+
+function addListenerToTrips(){
+  $('.trip').on('click',function(event){
+    event.preventDefault();
+
+    var target = $(event.target);
+    var targetClass = target.attr('class');
+    var tripID = $(this).attr('rel');
+
+    switch (targetClass) {
+      case 'trip-author':
+        showUserProfile(target);
+        break;
+      case 'trip-like':
+        likeTrip(target, tripID);
+        break;
+      case 'trip-unlike':
+        unlikeTrip(target, tripID);
+        break;
+      default:
+        showPopupTrip($(this));
+        break;
+    }
+  });  
 }
 
 function expandFilterCriteria(event){
@@ -143,6 +148,35 @@ function updateFilterTags() {
   $('#filter-by-container input[type=checkbox]:checked').each(function(){
     $('<li>').text($(this).attr('title')).appendTo('#filter-tags');
   })
+}
+
+function applyFilter(event){
+  event.preventDefault();
+
+  var filterData = {};
+
+  $('#filter-by-container input[type=checkbox]:checked').each(function(){
+
+    var groupName = $(this).attr('name');
+    var value = $(this).attr('value');
+
+    if (groupName in filterData) {
+      filterData[groupName].push(value);
+    } else {
+      filterData[groupName] = [value];
+    }
+  });
+
+  console.log(filterData);
+
+  $.ajax({
+    url: '/tabi_search_filter',
+    method: 'GET', 
+    data: filterData,
+  }).done(function(response){
+    $('#search-results-container').html(response);
+    addListenerToTrips();
+  });
 }
 
 function showUserProfile(eventTarget){

@@ -29,10 +29,6 @@ var main = function() {
 
   populateSearchBar(buddySearchGroups);
 
-  $('#filter-by-container input[type=checkbox]').on('click',toggleFilterButtonTags);
-
-  $('#clear-filter').on('click',clearFilter);
-
   $('.user').on('click', showUserProfile);
 }
 
@@ -56,6 +52,11 @@ function populateSearchBar(filter){
   $('<ul>').attr('id','filter-tags').appendTo(filterForm);
   $('<button>').attr('id','apply-filter').text('Apply Filter').appendTo(filterForm);
   $('<button>').attr('id','clear-filter').text('Clear Filter').appendTo(filterForm);
+
+  $('#filter-by-container input[type=checkbox]').on('click',toggleFilterButtonTags);
+
+  $('#clear-filter').on('click',clearFilter);
+  $('#apply-filter').on('click',applyFilter);
 }
 
 function expandFilterCriteria(event){
@@ -92,6 +93,22 @@ function updateFilterTags() {
   $('#filter-by-container input[type=checkbox]:checked').each(function(){
     $('<li>').text($(this).attr('title')).appendTo('#filter-tags');
   })
+}
+
+function applyFilter(event){
+  event.preventDefault();
+
+  $.ajax({
+    url: '/buddy_search_filter',
+    method: 'GET', 
+    data: {
+      category: 'food',
+      duration: 'long',
+    }
+  }).done(function(response){
+    $('#search-results-container').html(response);
+    $('.user').on('click', showUserProfile);
+  });
 }
 
 function showUserProfile(event){

@@ -1,0 +1,18 @@
+{{#each trips}}
+  <div class="search-result">
+    <div class="trip" rel="{{tripID}}">
+      <div class="trip-title-container">
+        <h1 class="trip-title">{{tripTitle}}</h1>
+      </div><div class="trip-like-container">
+        {{#if liked}}
+          <img class="trip-unlike" rel="{{tripID}}" src="/images/unlike.png">
+        {{else}}
+          <img class="trip-like" rel="{{tripID}}" src="/images/like.png">
+        {{/if}}
+      </div>
+      <img class="trip-image" src="{{imageURL}}">
+      <p class="trip-author" rel="{{userID}}">By {{username}}</p>
+      <p class="trip-description text-hidden">{{description}}</p>
+    </div>
+  </div>
+{{/each}}
