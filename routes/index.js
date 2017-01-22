@@ -36,10 +36,10 @@ passport.use(new FacebookStrategy({
   callbackURL: "https://tabibuddy.azurewebsites.net/login/facebook/callback"
 }, function(accessToken, refreshToken, profile, done) {
   // return cb(done, profile);
-  return (done(profile));
+  return done(null, null);
 }));
 
-passport.serializeUser(function(user, done) {
+var cb = passport.serializeUser(function(user, done) {
   done(null, user);
 });
 passport.deserializeUser(function(obj, done) {
