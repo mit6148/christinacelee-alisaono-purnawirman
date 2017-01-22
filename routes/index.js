@@ -47,7 +47,7 @@ passport.deserializeUser(function(obj, done) {
 
 router.get('/check_login', function (req, res, next) {
   if(req.isAuthenticated()) {
-    res.send("Super secret text!");
+    res.redirect("/");
   } else {
     res.redirect('/login');
   }
