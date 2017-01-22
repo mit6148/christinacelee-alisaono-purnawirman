@@ -69,7 +69,8 @@ router.get('/view_user/:user_id', function(req, res, next) {
 
   var userID = req.params.user_id
 
-  // userImageBlobUrl should have been saved in the database
+  // userImageURL should have been saved in the database
+  // userImageURL should include version number so that pictures are concurrently updated
   var userImageURL = 'https://res.cloudinary.com/tabibuddy/image/upload/'+userID+'.png';
 
   // fake user profile data for front end testing ~~~~
@@ -165,16 +166,14 @@ router.post('/edit_profile_photo/:user_id', function(req, res, next) {
         res.redirect('/view_user/'+userID); },
         // Show some message on top to let the user know the update was successful?
       {
-      public_id: userID, 
-      crop: 'limit',
-      width: 200,
-      height: 200,
-      eager: [
-        { width: 200, height: 200, crop: 'thumb', gravity: 'face',
-          radius: 20, effect: 'sepia' },
-        { width: 100, height: 150, crop: 'fit', format: 'png' }
-      ],                                     
-      tags: [] }
+        public_id: userID, 
+        quality: "auto:good",
+        eager: [{ width: 200, height: 200, crop: 'thumb', gravity: 'face', format: 'jpg'}],
+      // crop: 'limit',
+      // width: 200,
+      // height: 200,                                     
+      // tags: [] 
+      }
     );
   });
 
