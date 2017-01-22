@@ -57,7 +57,7 @@
     {{#if userIsOwner}}
       <div id="user-photo-edit-dialog" title="Edit Profile Picture">
         <form action="/edit_profile_photo/{{userID}}" method="post" enctype="multipart/form-data">
-          <input id="user-photo-upload" type="file" name="new_profile_photo" />
+          <input id="user-photo-upload" type="file" name="new_profile_photo" accept="image/png, image/jpeg"/>
           <input type="submit" value="Upload" />
         </form>
       </div>

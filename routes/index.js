@@ -6,6 +6,14 @@ var cloudinary = require('cloudinary');
 var formidable = require('formidable');
 var chalk = require('chalk');
 
+var session = require('express-session');
+var passport = require('passport');
+var FacebookStrategy = require('passport-facebook').Strategy;
+
+router.use(session({ secret: 'my super secret secret', resave: 'false', saveUninitialized: 'true' }));
+router.use(passport.initialize());
+router.use(passport.session());
+
 // get the User, trip, and destination model
 var User = require('../schemas/user');
 var Trip = require('../schemas/trip');
@@ -21,6 +29,47 @@ cloudinary.config({
   api_key: '455418426168721', 
   api_secret: '0SjT0iYEFY7l_1aLBdWnqVCaS9Q' 
 });
+
+passport.use(new FacebookStrategy({
+  clientID: "1299283770133466",
+  clientSecret: "02c286e89257fbd0a9d180a6c6cbb09d",
+  callbackURL: "http://localhost:3000/auth/facebook/callback"
+}, function(accessToken, refreshToken, profile, done) {
+  return cb(done, profile);
+}));
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+
+router.get('/check_login', function (req, res, next) {
+  if(req.isAuthenticated()) {
+    res.send("Super secret text!");
+  } else {
+    res.redirect('/login');
+  }
+});
+
+router.get('/login', function (req, res, next) {
+  res.send('<form action="/login/facebook" method="get"> <div> <input type="submit" value="Log In"/> </div> </form>');
+});
+
+router.get('/login/facebook', passport.authenticate('facebook'));
+
+router.get('/login/facebook/callback', 
+    passport.authenticate('facebook', { failureRedirect: '/login' }),
+    function(req, res) {
+      res.redirect('/check_login');
+    });
+
+router.get('/your_user_name',
+    require('connect-ensure-login').ensureLoggedIn(),
+    function(req, res){
+      res.send('user:'+req.user);
+    });
 
 // GET requests
 
@@ -161,17 +210,15 @@ router.post('/edit_profile_photo/:user_id', function(req, res, next) {
       function(result) {
         console.log(result);
         // Update the db with URL ~~~
-        //  var newImageURL = result.secure_url OR result.url
+        //  var newImageURL = result.eager[0].secure_url OR result.eager[0].url
         // Then redirect to the user's own profile page
         res.redirect('/view_user/'+userID); },
         // Show some message on top to let the user know the update was successful?
       {
         public_id: userID, 
         quality: "auto:good",
-        eager: [{ width: 200, height: 200, crop: 'thumb', gravity: 'face', format: 'jpg'}],
-      // crop: 'limit',
-      // width: 200,
-      // height: 200,                                     
+        width: 400, height: 400, crop: "limit",
+        eager: [{ width: 300, height: 300, crop: 'thumb', gravity: 'face', format: 'jpg'}],                                   
       // tags: [] 
       }
     );
