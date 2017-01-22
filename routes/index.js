@@ -33,7 +33,7 @@ cloudinary.config({
 passport.use(new FacebookStrategy({
   clientID: "1299283770133466",
   clientSecret: "02c286e89257fbd0a9d180a6c6cbb09d",
-  callbackURL: "http://localhost:3000/auth/facebook/callback"
+  callbackURL: "https://tabibuddy.azurewebsites.net/login/facebook/callback"
 }, function(accessToken, refreshToken, profile, done) {
   return cb(done, profile);
 }));
