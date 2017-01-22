@@ -38,7 +38,7 @@ passport.use(new FacebookStrategy({
   var user = new User();
   // console.log(profile.id);
   user.userID = profile.id;
-  user.userName = profile.id;
+  user.userName = profile.displayName;
   user.save();               
   // user.fb.access_token = access_token;
   // returning empty user for now
