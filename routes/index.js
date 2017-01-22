@@ -36,16 +36,20 @@ passport.use(new FacebookStrategy({
   callbackURL: "https://tabibuddy.azurewebsites.net/login/facebook/callback"
 }, function(accessToken, refreshToken, profile, done) {
   // return cb(done, profile);
-  return done(null, null);
+  // returning null for now, login should fail and you'd be redirected to login page
+  // return done(null, null);
+  var user = new User();
+  user.fb.id    = profile.id;               
+  user.fb.access_token = access_token;
+  return done(null, user);
 }));
 
-var cb = passport.serializeUser(function(user, done) {
+passport.serializeUser(function(user, done) {
   done(null, user);
 });
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
-
 
 router.get('/check_login', function (req, res, next) {
   if(req.isAuthenticated()) {
