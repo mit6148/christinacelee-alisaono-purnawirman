@@ -6,15 +6,15 @@ var Trip = require('../schemas/trip');
 var Destination = require('../schemas/destination');
 var chalk = require('chalk')
 
-/* Adding new destination to database */
-var _addNewDestination = function(destinationInfo){
-  Destination.findOne()
-}
+// /* Adding new destination to database */
+// var _addNewDestination = function(destinationInfo){
+//   Destination.findOne()
+// }
 
-/* Deleting destination in database */
-var _deleteDestination = function(destinationInfo){
+// /* Deleting destination in database */
+// var _deleteDestination = function(destinationInfo){
   
-}
+// }
 
 /* check if user exist in database */
 var isIDExist = function(Model, IDName, IDValue){
@@ -81,7 +81,7 @@ var editUserProfile = function(User, userInfo){
       return false;
     } else {
       // update each field if it exist in userInfo
-      var fieldNameList = ["userName", "userPhoto", "userDescription"];
+      var fieldNameList = ["userName", "userPhoto", "userDescription", "userEmail"];
       var fieldName;
       for(fieldName: fieldNameList){
         if(userInfo.hasOwnProperty(fieldName)){
