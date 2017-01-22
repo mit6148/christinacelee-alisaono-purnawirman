@@ -51,13 +51,23 @@ passport.deserializeUser(function(obj, done) {
 });
 
 
-router.get('/mongo_test', function(req, res, next) {
+router.get('/mongo_test_add', function(req, res, next) {
   var testUser = new User();
   testUser.userID = "12345";
   testUser.userName = "testUser";
   testUser.save();
   res.send('saved'+testUser.userID+','+testUser.userName);
 });
+
+router.get('/mongo_test_show', function(req, res, next) {
+  User.find({},function(err,record){
+    if (err) {
+      res.send('error:'+error);
+    } else {
+      res.send('success:'+record);
+    }
+  });
+})
 
 router.get('/check_login', function (req, res, next) {
   if(req.isAuthenticated()) {
