@@ -47,7 +47,7 @@ passport.deserializeUser(function(obj, done) {
 
 router.get('/check_login', function (req, res, next) {
   if(req.isAuthenticated()) {
-    res.redirect("/");
+    res.redirect('/');
   } else {
     res.redirect('/login');
   }
@@ -60,16 +60,17 @@ router.get('/login', function (req, res, next) {
 router.get('/login/facebook', passport.authenticate('facebook'));
 
 router.get('/login/facebook/callback', 
-    passport.authenticate('facebook', { failureRedirect: '/login' }),
-    function(req, res) {
-      res.redirect('/');
-    });
+  passport.authenticate('facebook', { 
+    failureRedirect: '/login',
+    successRedirect: '/check_login' 
+  })
+);
 
 router.get('/your_user_name',
-    require('connect-ensure-login').ensureLoggedIn(),
-    function(req, res){
-      res.send('user:'+req.user);
-    });
+  require('connect-ensure-login').ensureLoggedIn(),
+  function(req, res){
+    res.send('user:'+req.user);
+});
 
 // GET requests
 
