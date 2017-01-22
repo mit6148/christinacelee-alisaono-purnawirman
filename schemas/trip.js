@@ -7,13 +7,14 @@ var tripSchema = new mongoose.Schema({
   tripID: {type: String, required: true, index: {unique: true}},
   tripName: {type: String, required: true},
   tripCreator: {type: String, required: true},
-  tripDestination: {type: String, required: true},
+  tripDestinationID: {type: String, required: true},
+  tripDestinationName: {type: String, required: true},
   tripType: {type: String, required: true},
   tripPhoto: String,
   tripDescription: String,
   tripLikedUsers: [String],
-  tripStartTime: Date,
-  tripEndTime: Date,
+  tripSeason: String,
+  tripDuration: Number,
   tripStartBudget: Number,
   tripEndBudget: Number
 });

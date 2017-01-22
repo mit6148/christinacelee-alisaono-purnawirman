@@ -8,9 +8,9 @@ var userSchema = new mongoose.Schema({
   userName: {type: String, required: true},
   userPhoto: String,
   userDescription: String,
-  userDestinationID: [String],
-  userLikedTrip: [String],
-  userCreatedTrip: [String],
+  userDestinations: [String],
+  userLikedTrips: [String],
+  userCreatedTrips: [String],
 });
 
 var User = mongoose.model('User', userSchema);
