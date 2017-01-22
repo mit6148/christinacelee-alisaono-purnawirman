@@ -36,8 +36,10 @@ passport.use(new FacebookStrategy({
   callbackURL: "https://tabibuddy.azurewebsites.net/login/facebook/callback"
 }, function(accessToken, refreshToken, profile, done) {
   var user = new User();
-  console.log(profile.id);
-  // user.fb.id = profile.id;               
+  // console.log(profile.id);
+  user.userID = profile.id;
+  user.userName = profile.name.givenName;
+  user.save();               
   // user.fb.access_token = access_token;
   // returning empty user for now
   return done(null, user);
@@ -93,7 +95,7 @@ router.get('/login/facebook/callback',
 router.get('/your_user_name',
   require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
-    res.send('user:'+req.user.userID);
+    res.send('user id:'+req.user.userID+' user name:'+req.user.userName);
 });
 
 // GET requests
