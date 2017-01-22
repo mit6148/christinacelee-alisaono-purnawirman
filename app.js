@@ -19,7 +19,12 @@ var app = express();
 //~~~ acessing blob storage
 
 // database setup
-mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/test');
+if (process.env.NODE_ENV === "production") {
+  mongoose.connect('mongodb://tabibuddy:TvFNWH3gIMMC6UgsoLOoYkNeCE1KPe8OG1f7O36HdprgiN4IMId28Lp9okgnWUK3giJekFfYQMOW0hC5zg4MgA==@tabibuddy.documents.azure.com:10250/tabibuddy-db?ssl=true');
+} else {
+  mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/test');
+}
+
 var connection = mongoose.connection;
 connection.on('error', console.error.bind(console, 'connection error:'));
 connection.on('connected', function() {

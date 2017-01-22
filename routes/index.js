@@ -36,6 +36,7 @@ passport.use(new FacebookStrategy({
   callbackURL: "https://tabibuddy.azurewebsites.net/login/facebook/callback"
 }, function(accessToken, refreshToken, profile, done) {
   var user = new User();
+  console.log(profile.id);
   // user.fb.id = profile.id;               
   // user.fb.access_token = access_token;
   // returning empty user for now
@@ -47,6 +48,15 @@ passport.serializeUser(function(user, done) {
 });
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
+});
+
+
+router.get('/mongo_test', function(req, res, next) {
+  var testUser = new User();
+  testUser.userID = "12345";
+  testUser.userName = "testUser";
+  testUser.save();
+  res.send('saved'+testUser.userID+','+testUser.userName);
 });
 
 router.get('/check_login', function (req, res, next) {
