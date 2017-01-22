@@ -39,6 +39,8 @@ passport.use(new FacebookStrategy({
   // console.log(profile.id);
   user.userID = profile.id;
   user.userName = profile.displayName;
+  user.userEmail = profile.email;
+  user.userPhoto = "https://graph.facebook.com/" + profile.username + "/picture" + "?width=200&height=200" + "&access_token=" + accessToken;
   user.save();               
   // user.fb.access_token = access_token;
   // returning empty user for now
@@ -95,7 +97,7 @@ router.get('/login/facebook/callback',
 router.get('/your_user_name',
   require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
-    res.send('user id:'+req.user.userID+' user name:'+req.user.userName);
+    res.send('user id:'+req.user.userID+' user name:'+req.user.userName+' user photo:'+req.user.userPhoto+' user email'+req.user.userEmail);
 });
 
 // GET requests
