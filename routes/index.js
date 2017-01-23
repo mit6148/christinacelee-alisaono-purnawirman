@@ -129,16 +129,14 @@ router.get('/add_trip_test', function (req, res, next) {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  // Rendering the index view with the title 'Sign Up'
-  helperFunction.isIDExist(User,'userID','123');
-  res.render('home');
+  res.render('home_temp');
 });
 
 /* GET buddy search page */
 router.get('/buddy_search', function(req, res, next) {
-  // Rendering the index view with the title 'Sign Up'
 
-  var placeID = req.body.location_id;
+  var placeID = req.body.buddy_destination_id;
+  var placeName = req.body.buddy_destination_name;
 
   // fake buddy data for front end testing
   var fakeBuddyData = {users:[{userID: "123", username: "user1", userImageURL: 'http://placekitten.com/g/150/150',
@@ -152,6 +150,7 @@ router.get('/buddy_search', function(req, res, next) {
   {userID: "127", username: "user5", userImageURL: 'http://placekitten.com/g/150/150',
   tripImages: [{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'}]},
   ]};
+
   res.render('buddy_search', fakeBuddyData);
 });
 
@@ -173,12 +172,12 @@ router.get('/buddy_search_filter', function(req, res, next) {
   res.render('buddy_search_result', fakeBuddyData);
 });
 
-/* GET tabi search page */
+/* GET tabi search result */
+// This GET req should return ALL trips of the same location 
 router.get('/tabi_search', function(req, res, next) {
-  // This GET req should return all trips of corresponding location
 
-  var placeID = req.body.location_id;
-  // return all trips of this placeID.
+  var placeID = req.body.tabi_destination_id;
+  var placeName = req.body.tabi_destination_name;
 
   // fake trip data for front end testing
   var fakeTripData = {trips:[{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
@@ -191,7 +190,8 @@ router.get('/tabi_search', function(req, res, next) {
   res.render('tabi_search', fakeTripData);
 });
 
-/* GET tabi search page */
+/* GET tabi search result (filtered) */
+// This GET req should return FILTERED trips of the same location
 router.get('/tabi_search_filter', function(req, res, next) {
 
   // front end will send req.body should include location, filter object
@@ -213,20 +213,21 @@ router.get('/tabi_search_filter', function(req, res, next) {
   res.render('tabi_search_result', fakeTripData);
 });
 
-/* GET view_user page */
+/* GET user profile page by user ID */
 router.get('/view_user/:user_id', function(req, res, next) {
 
+  // userID is user ID of the profile we are accessing
   var userID = req.params.user_id;
 
+  // req.user.userID is user ID of the person who is viewing the profile
+  // set userIsOwner to true, if the person is viewing his/her own profile
   var userIsOwner = false;
-
   if (userID === req.user.userID) {
     userIsOwner = true;
   }
 
   // userImageURL should have been saved in the database
   // userImageURL should include version number so that pictures are concurrently updated
-  // var userImageURL = 'https://res.cloudinary.com/tabibuddy/image/upload/'+userID+'.png';
   var userImageURL = "https://res.cloudinary.com/tabibuddy/image/upload/c_thumb,g_face,h_200,w_200/v1485053998/125.jpg";
 
   // fake user profile data for front end testing ~~~~
@@ -251,28 +252,23 @@ router.get('/view_user/:user_id', function(req, res, next) {
   {tripID: "12353", userID: "131", tripTitle: "test9", username: "user9", description: "this is test description9", liked:true, imageURL:'http://placekitten.com/g/150/150'},
   {tripID: "12354", userID: "132", tripTitle: "test10", username: "user10", description: "this is test description10", liked:true, imageURL:'http://placekitten.com/g/150/150'},];
 
-  // userIsOwner = true -> edit/delete options should appear
-  var fakeProfileDataOwner = {userIsOwner: userIsOwner,
-  userImageURL: userImageURL, username: "Cat Meow", userID: userID, userDescription: "this user's ID is "+req.params.user_id, 
+  // userIsOwner = true -> edit/delete options should appear, false -> only like option
+  var fakeProfileData = {userIsOwner: userIsOwner,
+  userImageURL: userImageURL, username: "Cat Meow", userID: userID, userDescription: "this user's ID is "+userID, 
   userContact: 'test@gmail.com', wishlistTrips: wishlistTripsList, userTrips: userTripsList};
-
-  // userIsOwner = false -> only like/unlike option should appear
-  // var fakeProfileData = {userIsOwner: false,
-  // userImageURL: userImageURL, username: "Cat Meow", userID: userID, userDescription: "this user's ID is "+req.params.user_id, 
-  // userContact: 'test@gmail.com', wishlistTrips: wishlistTripsList, userTrips: userTripsList};
 
   // ~~~~ fake data ends
 
-  res.render('user_profile', fakeProfileDataOwner);
+  res.render('user_profile', fakeProfileData);
 });
 
-/* GET add_trip_page */;
+/* GET add trip page */;
 router.get('/add_trip_page', function(req, res, next) {
 
-  res.render('add_trip');
+  res.render('add_trip_temp');
 });
 
-/* GET edit_trip_page */
+/* GET edit trip page by trip ID */
 router.get('/edit_trip_page/:trip_id', function(req, res, next) {
   
   var trip_id = req.params.trip_id;
@@ -347,35 +343,73 @@ router.post('/edit_profile_info/:user_id', function(req, res, next) {
 
 /* POST add_trip*/
 router.post('/add_trip', function(req, res, next) {
-  // var user_id = req.body.user_id;
-  var user_id = req.body.user_id;
+
+  var userID = req.user.userID;
   var title = req.body.title;
   var description = req.body.description;
-  // TODO: photo
+  var placeID = req.body.destination_id;
+  var placeName = req.body.destination_name;
+  // ... and so on 
 
-  res.redirect('/add_trip');
+  var tripID = '????' //how do we come up with trip IDs? auto-increment?
+
+  var form = new formidable.IncomingForm();
+
+  form.on('file', function(field, file) {
+    cloudinary.uploader.upload(
+      file.path, 
+      function(result) {
+        var tripPhotoURL = result.eager[0].secure_url 
+        // Save the trip to database now.
+      {
+        public_id: tripID, 
+        quality: "auto:good",
+        width: 600, height: 600, crop: "limit",
+        eager: [{ width: 500, height: 500, crop: 'thumb', gravity: 'face', format: 'jpg'}],                                   
+      // tags: [] 
+      }
+    });
+  });
+
+  form.parse(req);  
+
+  // Show some message on top to let the user know the update was successful?
+  res.redirect('/view_user/'+userID);
 });
 
 /* POST edit_trip*/
 router.post('/edit_trip', function(req, res, next) {
-  // var user_id = req.body.user_id;
-  var trip_id = req.body.trip_id;
+
+  var userID = req.user.userID;
+  var tripID = req.body.tripID; 
   var title = req.body.title;
   var description = req.body.description;
-  // TODO: photo
+  // ... and so on. Photo & location shouldn't be changed
 
-  res.redirect('/user_profile');
+  // If userID matches creatorID of the trip, update database
+  // then redirect them to their own profile.
+  // (Show some message on top to let the user know the update was successful?)
+  res.redirect('/view_user/'+userID);
+
+  // else redirect them to error page
 });
 
 /* POST delete_trip*/
 router.post('/delete_trip', function(req, res, next) {
-  // var user_id = req.body.user_id;
-  var trip_id = req.body.trip_id;
-  // TODO: photo
+  
+  var userID = req.user.userID;
+  var tripID = req.body.tripID;
 
-  // redirect to the user's own profile page
-  res.redirect('/view_user/logged-in-user-id');
+  // If userID matches creatorID of the trip, update database
+  // then redirect them to their own profile.
+  // (Show some message on top to let the user know the update was successful?)
+  res.redirect('/view_user/'+userID);
+
+  // else redirect them to error page
 });
+
+
+module.exports = router;
 
 // var passport = require("passport");
 // // var 
@@ -467,5 +501,3 @@ router.post('/delete_trip', function(req, res, next) {
 //     }
 //   });
 // });
-
-module.exports = router;
