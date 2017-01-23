@@ -36,24 +36,22 @@ passport.use(new FacebookStrategy({
   clientSecret: "02c286e89257fbd0a9d180a6c6cbb09d",
   callbackURL: "https://tabibuddy.azurewebsites.net/login/facebook/callback"
 }, function(accessToken, refreshToken, profile, done) {
-  var helperFunction = require('../bin/fillDB.js');
-  if (helperFunction.isIDExist(User,'userID',profile.id)) {
-    User.findOne({"userID": profile.id}, function(err, user){
-      if(err){
+  User.findOne({"userID": profile.id}, function(err, user){
+      if (err) {
         console.log(err);
         return done(null, null);
+      } else if (user === null) {
+        var newUserInfo = new User();
+        newUserInfo.userID = profile.id;
+        newUserInfo.userName = profile.displayName;
+        newUserInfo.userPhoto = "http://res.cloudinary.com/tabibuddy/image/upload/c_thumb,g_face,h_200,w_200/v1485053998/125.jpg";
+      // user.fb.access_token = access_token;
+        newUserInfo.save()              
+        return done(null, newUserInfo);
+      } else {
+        return done(null, user);
       }
-      return done(null, user);
     });
-  } else {
-    var newUserInfo = {};
-    newUserInfo.userID = profile.id;
-    newUserInfo.userName = profile.displayName;
-    newUserInfo.userPhoto = "http://res.cloudinary.com/tabibuddy/image/upload/c_thumb,g_face,h_200,w_200/v1485053998/125.jpg";
-  // user.fb.access_token = access_token;
-    var newUser = helperFunction.addNewUser(User, newUserInfo);               
-    return done(null, newUser);
-  }
 }));
 
 passport.serializeUser(function(user, done) {
