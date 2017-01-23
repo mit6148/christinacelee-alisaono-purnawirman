@@ -7,29 +7,29 @@ var main = function() {
 
 	//loadFakeTestingData();	
 
-  (function () {
+  $(function () {
     $('#user-photo-edit-dialog').dialog({
       autoOpen: false
     });
   
     $('.edit-user-image').on('click',editUserImage);
-  })(jQuery);
+  });
 
-  (function ($) {
+  $(function () {
     $('#info-edit-dialog').dialog({
       autoOpen: false
     });
   
     $('#user-info-edit').on('click', openEditProfile);
-  })(jQuery);
+  });
 
-  (function ($) {
+  $(function () {
     $('#delete-confirm-dialog').dialog({
       autoOpen: false
     });
   
     $('#delete-confirm').on('click', deleteTrip);
-  })(jQuery);
+  });
 
   // $('#info-edit-dialog').dialog({
   //   autoOpen: false

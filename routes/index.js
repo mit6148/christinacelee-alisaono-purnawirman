@@ -218,11 +218,11 @@ router.get('/view_user/:user_id', function(req, res, next) {
 
   var userID = req.params.user_id;
 
-  var userIsOwner = false;
+  var userIsOwner = true;
 
-  if (userID === req.user.userID) {
-    userIsOwner = true;
-  }
+  // if (userID === req.user.userID) {
+  //   userIsOwner = true;
+  // }
 
   // userImageURL should have been saved in the database
   // userImageURL should include version number so that pictures are concurrently updated
