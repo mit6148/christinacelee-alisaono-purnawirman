@@ -6,15 +6,15 @@ var Trip = require('../schemas/trip');
 var Destination = require('../schemas/destination');
 var chalk = require('chalk')
 
-/* Adding new destination to database */
-var _addNewDestination = function(destinationInfo){
-  Destination.findOne()
-}
+// /* Adding new destination to database */
+// var _addNewDestination = function(destinationInfo){
+//   Destination.findOne()
+// }
 
-/* Deleting destination in database */
-var _deleteDestination = function(destinationInfo){
+// /* Deleting destination in database */
+// var _deleteDestination = function(destinationInfo){
   
-}
+// }
 
 /* check if user exist in database */
 var isIDExist = function(Model, IDName, IDValue){
@@ -30,14 +30,14 @@ var isIDExist = function(Model, IDName, IDValue){
 }
 
 /* 
-Adding new user to the database, return true if success, false otherwise
+Adding new user to the database, return the user if success, null otherwise
 */
 var addNewUser = function(User, userInfo){
   var chalk = require('chalk');
   // check if userID already exist
   if(isIDExist(User, "userID", userInfo.userID)){
     console.log(chalk.red("user already exist, can not add new user"));
-    return false;
+    return null;
   }
   var requiredFieldList = ["userDestinations", "userCreatedTrips", "userLikedTrips"];
   for(var fieldName: requiredFieldList){
@@ -46,7 +46,7 @@ var addNewUser = function(User, userInfo){
   // if not existed before, create a new user
   var newUser = new User(userInfo);
   newUser.save();
-  return true;
+  return newUser;
 }
 
 /* helper function to update one field in user profile */
@@ -81,7 +81,7 @@ var editUserProfile = function(User, userInfo){
       return false;
     } else {
       // update each field if it exist in userInfo
-      var fieldNameList = ["userName", "userPhoto", "userDescription"];
+      var fieldNameList = ["userName", "userPhoto", "userDescription", "userEmail"];
       var fieldName;
       for(fieldName: fieldNameList){
         if(userInfo.hasOwnProperty(fieldName)){
