@@ -1,10 +1,10 @@
 /* This is to fill the fake data in the database */
 
-// get the User, trip, and destination model
-var User = require('../schemas/user');
-var Trip = require('../schemas/trip');
-var Destination = require('../schemas/destination');
-var chalk = require('chalk')
+// // get the User, trip, and destination model
+// var User = require('../schemas/user');
+// var Trip = require('../schemas/trip');
+// var Destination = require('../schemas/destination');
+// var chalk = require('chalk')
 
 // /* Adding new destination to database */
 // var _addNewDestination = function(destinationInfo){
@@ -15,9 +15,9 @@ var chalk = require('chalk')
 // var _deleteDestination = function(destinationInfo){
   
 // }
-var helper = function(){
+module.exports = {
   /* check if user exist in database */
-  var isIDExist = function(Model, IDName, IDValue){
+  isIDExist: function(Model, IDName, IDValue){
     Model.findOne({IDName: IDValue}, function(err, record){
       if(err){
         console.log(chalk.red("error in finding " + IDName));
@@ -32,7 +32,7 @@ var helper = function(){
   /* 
   Adding new user to the database, return the user if success, null otherwise
   */
-  var addNewUser = function(User, userInfo){
+  addNewUser: function(User, userInfo){
     var chalk = require('chalk');
     // check if userID already exist
     if(isIDExist(User, "userID", userInfo.userID)){
@@ -50,7 +50,7 @@ var helper = function(){
   }
 
   /* helper function to update one field in user profile */
-  var _updateField = function(Model, IDName, IDValue, fieldName, fieldValue){
+  _updateField: function(Model, IDName, IDValue, fieldName, fieldValue){
     var chalk = require('chalk');
     Model.update({IDName: IDValue}, {$set : {fieldName: fieldValue}},
       function(err, result){
@@ -68,7 +68,7 @@ var helper = function(){
   editing user profile is restricted to changing information related to users only
   e.g. can only edit userName, userPhoto, userDescription
   */
-  var editUserProfile = function(User, userInfo){
+  editUserProfile: function(User, userInfo){
     var chalk = require('chalk');
     // update user profile
     User.findOne({'userID': userInfo.userID}, function(err, user){
@@ -96,7 +96,7 @@ var helper = function(){
   }
 
   /* helper function find and add element list */
-  var _findAndAddToList = function(Model, IDName, IDValue, fieldName, newElement){
+  _findAndAddToList: function(Model, IDName, IDValue, fieldName, newElement){
     Model.findOne({IDName: IDValue}, function(err, record){
       if(err){
         console.log(chalk.red("Error in update for " + IDName));
@@ -116,7 +116,7 @@ var helper = function(){
     return true;
   }
 
-  var removeAllOccurenceFromList = function(list, elementToRemove){
+  removeAllOccurenceFromList: function(list, elementToRemove){
     for(var k = list.length - 1; k >= 0; k--){
       if(list[k] === elementToRemove){
         list.splice(k, 1);
@@ -125,7 +125,7 @@ var helper = function(){
   }
 
   /* helper function find and remove element from list */
-  var _findAndRemoveFromList = function(Model, IDName, IDValue, fieldName, elementToRemove){
+  _findAndRemoveFromList: function(Model, IDName, IDValue, fieldName, elementToRemove){
     Model.findOne({IDName: IDValue}, function(err, record){
       if(err){
         console.log(chalk.red("Error in update for " + IDName));
@@ -150,7 +150,7 @@ var helper = function(){
   User: userLikedTrips, userDestinations
   Trip: tripLikedUsers
   Destination: buddies */
-  var likeTrip = function(User, Trip, Destination, userID, tripID, destinationID){
+  likeTrip: function(User, Trip, Destination, userID, tripID, destinationID){
     var chalk = require('chalk');
     
     if(!_findAndAddToList(Trip, "tripID", tripID, "tripLikedUsers", userID) ||
@@ -167,7 +167,7 @@ var helper = function(){
   User: userLikedTrips, userDestinations
   Trip: tripLikedUsers
   Destination: buddies */
-  var dislikeTrip = function(User, Trip, Destination, userID, tripID, destinationID){
+  dislikeTrip: function(User, Trip, Destination, userID, tripID, destinationID){
     var chalk = require('chalk');
     
     // update Trip
@@ -183,7 +183,7 @@ var helper = function(){
 
   /* Deleting user to the database, return true if success, false otherwise
   Trip: remove all trips created by user*/
-  var deleteUser = function(User, Trip, Destination, userID){
+  deleteUser: function(User, Trip, Destination, userID){
     var chalk = require('chalk');
     
     return true; 
@@ -193,7 +193,7 @@ var helper = function(){
   Trip
   User: userCreatedTrips, userDestinations
   Destination: new or just tabies, buddies */
-  var addTrip = function(Trip, tripInfo){
+  addTrip: function(Trip, tripInfo){
     var chalk = require('chalk');
     var requiredFields = ["tripID", "tripName", "tripCreator", "tripDestinationID", "tripDestinationName", "tripType"];
     var fieldName;
@@ -238,17 +238,16 @@ var helper = function(){
 
 
   /* Editing trips to the database */
-  var editTrip = function(tripID, tripName, tripCreator, tripDestination, tripType, tripInfo){
+  editTrip: function(tripID, tripName, tripCreator, tripDestination, tripType, tripInfo){
 
   }
 
   /* Deleting trips to the database */
-  var deleteTrip = function(tripID, tripName, tripCreator, tripDestination, tripType, tripInfo){
+  deleteTrip: function(tripID, tripName, tripCreator, tripDestination, tripType, tripInfo){
 
   }
 }
 
-module.exports = helper;
 // var userSchema = new mongoose.Schema({
 //   userID: {type: String, required: true, index: {unique: true}},
 //   userName: {type: String, required: true},
