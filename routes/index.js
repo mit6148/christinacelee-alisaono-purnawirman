@@ -36,6 +36,7 @@ passport.use(new FacebookStrategy({
   clientSecret: "02c286e89257fbd0a9d180a6c6cbb09d",
   callbackURL: "https://tabibuddy.azurewebsites.net/login/facebook/callback"
 }, function(accessToken, refreshToken, profile, done) {
+  var helperFunction = require('../bin/fillDB.js');
   if (helperFunction.isIDExist(User,'userID',profile.id)) {
     User.findOne({"userID": profile.id}, function(err, user){
       if(err){
@@ -114,6 +115,7 @@ router.get('/your_user_name',
 /* GET home page. */
 router.get('/', function(req, res, next) {
   // Rendering the index view with the title 'Sign Up'
+  helperFunction.isIDExist(User,'userID','123');
   res.render('home');
 });
 

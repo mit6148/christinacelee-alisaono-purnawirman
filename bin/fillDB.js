@@ -17,6 +17,10 @@
 // }
 module.exports = {
   /* check if user exist in database */
+  checkModule: function(){
+    console.log('working~');
+  }
+  ,
   isIDExist: function(Model, IDName, IDValue){
     Model.findOne({IDName: IDValue}, function(err, record){
       if(err){
