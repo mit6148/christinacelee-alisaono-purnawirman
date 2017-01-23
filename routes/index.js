@@ -108,6 +108,11 @@ router.get('/your_user_name',
     res.send('user id:'+req.user.userID+' user name:'+req.user.userName+' user photo:'+req.user.userPhoto+' user email'+req.user.userEmail);
 });
 
+
+router.get('/add_trip_temp', function (req, res, next) {
+  // in req.body.place_id = place id from google map
+});
+
 router.get('/add_trip_test', function (req, res, next) {
   var tripInfo = {
     'tripID' : '123456',
@@ -132,6 +137,8 @@ router.get('/', function(req, res, next) {
 /* GET buddy search page */
 router.get('/buddy_search', function(req, res, next) {
   // Rendering the index view with the title 'Sign Up'
+
+  var placeID = req.body.location_id;
 
   // fake buddy data for front end testing
   var fakeBuddyData = {users:[{userID: "123", username: "user1", userImageURL: 'http://placekitten.com/g/150/150',
@@ -168,7 +175,10 @@ router.get('/buddy_search_filter', function(req, res, next) {
 
 /* GET tabi search page */
 router.get('/tabi_search', function(req, res, next) {
-  // Rendering the index view with the title 'Sign Up'
+  // This GET req should return all trips of corresponding location
+
+  var placeID = req.body.location_id;
+  // return all trips of this placeID.
 
   // fake trip data for front end testing
   var fakeTripData = {trips:[{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
@@ -183,9 +193,16 @@ router.get('/tabi_search', function(req, res, next) {
 
 /* GET tabi search page */
 router.get('/tabi_search_filter', function(req, res, next) {
-  // Rendering the index view with the title 'Sign Up'
+
+  // front end will send req.body should include location, filter object
+  // {
+  //   placeID: '12345',
+  //   category: ['food', 'art'],
+  //   duration: ['short'],
+  // }
 
   // fake trip data for front end testing
+  // you return something like below to the front end 
   var fakeTripData = {trips:[{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "Filter success!", liked: true, imageURL:'http://placekitten.com/g/150/150'},
   {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
   {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},
@@ -201,7 +218,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
 
   var userID = req.params.user_id;
 
-  var userIsOwner = false;
+  var userIsOwner = true;
 
   if (userID === req.user.userID) {
     userIsOwner = true;
@@ -235,7 +252,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
 
   // userIsOwner = true -> edit/delete options should appear
   var fakeProfileDataOwner = {userIsOwner: userIsOwner,
-  userImageURL: userImageURL, sername: "Cat Meow", userID: userID, userDescription: "this user's ID is "+req.params.user_id, 
+  userImageURL: userImageURL, username: "Cat Meow", userID: userID, userDescription: "this user's ID is "+req.params.user_id, 
   userContact: 'test@gmail.com', wishlistTrips: wishlistTripsList, userTrips: userTripsList};
 
   // userIsOwner = false -> only like/unlike option should appear

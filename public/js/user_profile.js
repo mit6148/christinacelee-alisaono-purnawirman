@@ -7,23 +7,65 @@ var main = function() {
 
 	//loadFakeTestingData();	
 
-  $('#info-edit-dialog').dialog({
-    autoOpen: false
+  // $('#info-edit-dialog').dialog({
+  //   autoOpen: false
+  // });
+
+  // $('#user-photo-edit-dialog').dialog({
+  //   autoOpen: false
+  // });
+
+  // $("#delete-confirm-dialog").dialog({
+  //   autoOpen: false
+  // });
+
+  $(function () {
+    $('#user-photo-edit-dialog').dialog({
+      autoOpen: false
+    });
+  
+    $('.edit-user-image').on('click',editUserImage);
   });
 
-  $('#user-photo-edit-dialog').dialog({
-    autoOpen: false
+  $(function () {
+    $('#info-edit-dialog').dialog({
+      autoOpen: false
+    });
+  
+    $('#user-info-edit').on('click', openEditProfile);
   });
 
-  $("#delete-confirm-dialog").dialog({
-    autoOpen: false
+  $(function () {
+    $('#delete-confirm-dialog').dialog({
+      autoOpen: false
+    });
+  
+    $('#delete-confirm').on('click', deleteTrip);
   });
 
-  $('.edit-user-image').on('click',editUserImage)
+  // $('#info-edit-dialog').dialog({
+  //   autoOpen: false
+  // });
 
-  $('#user-info-edit').on('click', openEditProfile);
+  // $('#user-photo-edit-dialog').dialog({
+  //   autoOpen: false
+  // });
 
-  $('#delete-confirm').on('click', deleteTrip);
+  // $("#delete-confirm-dialog").dialog({
+  //   autoOpen: false
+  // });
+
+  // $('#info-edit-dialog').modal('hide');
+
+  // $('#user-photo-edit-dialog').modal('hide');
+
+  // $("#delete-confirm-dialog").modal('hide');
+
+  // $('.edit-user-image').on('click',editUserImage)
+
+  // $('#user-info-edit').on('click', openEditProfile);
+
+  // $('#delete-confirm').on('click', deleteTrip);
 
   $('#trip-index').on('click', showTripsTab);
 
@@ -95,6 +137,7 @@ var main = function() {
 function editUserImage(event){
   event.preventDefault();
   $('#user-photo-edit-dialog').dialog("open");
+  // $('#user-photo-edit-dialog').modal('show');
 }
 
 function openEditProfile(event){
@@ -104,6 +147,7 @@ function openEditProfile(event){
   $('#edit-user-description').text(currentDescription);
   $('#edit-user-contact').text(currentContact);
   $('#info-edit-dialog').dialog("open");
+  // $('#info-edit-dialog').modal('show');
 }
 
 function showTripsTab(event){
@@ -189,6 +233,7 @@ function editTrip(tripID){
 
 function openDeleteTrip(tripID){
   $("#delete-confirm-dialog").dialog("open");
+  // $("#delete-confirm-dialog").modal('show');
   $("#delete-confirm").attr('rel',tripID);
 }
 
