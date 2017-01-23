@@ -3,7 +3,7 @@ var myUserID = 'tempUserID';
 var likeIconURL = "/images/like.png";
 var unlikeIconURL = "/images/unlike.png";
 
-var $j = jQuery.noConflict();
+// var $j = jQuery.noConflict();
 
 var main = function() {
 
@@ -33,35 +33,35 @@ var main = function() {
   //   $('#delete-confirm').on('click', deleteTrip);
   // });
 
-  $j('#info-edit-dialog').dialog({
+  $('#info-edit-dialog').dialog({
     autoOpen: false
   });
 
-  $j('#user-photo-edit-dialog').dialog({
+  $('#user-photo-edit-dialog').dialog({
     autoOpen: false
   });
 
-  $j("#delete-confirm-dialog").dialog({
+  $("#delete-confirm-dialog").dialog({
     autoOpen: false
   });
 
-  $j('.edit-user-image').on('click',editUserImage)
+  jQuery('.edit-user-image').on('click',editUserImage)
 
-  $j('#user-info-edit').on('click', openEditProfile);
+  jQuery('#user-info-edit').on('click', openEditProfile);
 
-  $j('#delete-confirm').on('click', deleteTrip);
+  jQuery('#delete-confirm').on('click', deleteTrip);
 
-  $j('#trip-index').on('click', showTripsTab);
+  jQuery('#trip-index').on('click', showTripsTab);
 
- 	$j('#wishlist-index').on('click', showWishlistTab);
+ 	jQuery('#wishlist-index').on('click', showWishlistTab);
 
- 	$j('.trip').on('click',function(event){
+ 	jQuery('.trip').on('click',function(event){
     event.preventDefault();
 
-    var target = $j(event.target);
+    var target = jQuery(event.target);
     var targetClass = target.attr('class');
-    var tripID = $j(this).attr('rel');
-    var tripElement = $j(this);
+    var tripID = jQuery(this).attr('rel');
+    var tripElement = jQuery(this);
 
     switch (targetClass) {
     	case 'trip-author':
@@ -85,14 +85,14 @@ var main = function() {
   	}
 	});
 
-  $j('#trip-popup-close-icon').on('click',closePopupTrip);
+  jQuery('#trip-popup-close-icon').on('click',closePopupTrip);
 
-  $j('#trip-popup').on('click',function(event){
+  jQuery('#trip-popup').on('click',function(event){
     event.preventDefault();
 
-    var target = $j(event.target);
-    var targetClass = $j(event.target).attr('class');
-    var tripID = $j(this).attr('rel');
+    var target = jQuery(event.target);
+    var targetClass = jQuery(event.target).attr('class');
+    var tripID = jQuery(this).attr('rel');
 
     switch (targetClass) {
     	case 'trip-author':
@@ -115,39 +115,39 @@ var main = function() {
     }
   });
 
-  $j('.new-trip').on('click',addTrip);
+  jQuery('.new-trip').on('click',addTrip);
 }
 
 function editUserImage(event){
   event.preventDefault();
-  $j('#user-photo-edit-dialog').dialog("open");
+  $('#user-photo-edit-dialog').dialog("open");
   // $('#user-photo-edit-dialog').modal('show');
 }
 
 function openEditProfile(event){
   event.preventDefault();
-  var currentDescription = $j('#user-description').text();
-  var currentContact = $j('#user-contact').text();
-  $j('#edit-user-description').text(currentDescription);
-  $j('#edit-user-contact').text(currentContact);
-  $j('#info-edit-dialog').dialog("open");
+  var currentDescription = jQuery('#user-description').text();
+  var currentContact = jQuery('#user-contact').text();
+  jQuery('#edit-user-description').text(currentDescription);
+  jQuery('#edit-user-contact').text(currentContact);
+  $('#info-edit-dialog').dialog("open");
   // $('#info-edit-dialog').modal('show');
 }
 
 function showTripsTab(event){
 	event.preventDefault();
- 	$j('#trip-index').removeClass('inactive').addClass('active');
- 	$j('#trip-content').removeClass('inactive').addClass('active');
- 	$j('#wishlist-index').removeClass('active').addClass('inactive');
- 	$j('#wishlist-content').removeClass('active').addClass('inactive');
+ 	jQuery('#trip-index').removeClass('inactive').addClass('active');
+ 	jQuery('#trip-content').removeClass('inactive').addClass('active');
+ 	jQuery('#wishlist-index').removeClass('active').addClass('inactive');
+ 	jQuery('#wishlist-content').removeClass('active').addClass('inactive');
 }
 
 function showWishlistTab(event){
 	event.preventDefault();
-	$j('#wishlist-index').removeClass('inactive').addClass('active');
-	$j('#wishlist-content').removeClass('inactive').addClass('active');
-	$j('#trip-index').removeClass('active').addClass('inactive');
-	$j('#trip-content').removeClass('active').addClass('inactive');
+	jQuery('#wishlist-index').removeClass('inactive').addClass('active');
+	jQuery('#wishlist-content').removeClass('inactive').addClass('active');
+	jQuery('#trip-index').removeClass('active').addClass('inactive');
+	jQuery('#trip-content').removeClass('active').addClass('inactive');
 }
 
 function showUserProfile(eventTarget){
@@ -157,28 +157,28 @@ function showUserProfile(eventTarget){
 
 function showPopupTrip(tripElement){
 	var tripID = tripElement.attr('rel');
-  var offset = $j('body').scrollTop();
+  var offset = jQuery('body').scrollTop();
   var popupTripTop = 100 + offset;
   var popupCloseTop = 75 + offset;
-  $j('#trip-popup').css('top', popupTripTop+'px');
-  $j('#trip-popup-close').css('top',popupCloseTop+'px');
-  $j('#trip-popup-container').removeClass('popup-inactive');
-	$j('#trip-popup').append(tripElement.clone());
-	$j('#trip-popup .trip-description').removeClass('text-hidden');
-	$j('#trip-popup').attr('rel',tripID);
+  jQuery('#trip-popup').css('top', popupTripTop+'px');
+  jQuery('#trip-popup-close').css('top',popupCloseTop+'px');
+  jQuery('#trip-popup-container').removeClass('popup-inactive');
+	jQuery('#trip-popup').append(tripElement.clone());
+	jQuery('#trip-popup .trip-description').removeClass('text-hidden');
+	jQuery('#trip-popup').attr('rel',tripID);
 }
 
 function closePopupTrip(event){
 	event.preventDefault();
-	$j('#trip-popup-container').addClass('popup-inactive');
-  $j('#trip-popup').children('.trip').remove();
-  $j('#trip-popup').attr('rel',"");
+	jQuery('#trip-popup-container').addClass('popup-inactive');
+  jQuery('#trip-popup').children('.trip').remove();
+  jQuery('#trip-popup').attr('rel',"");
 }
 
 function likeTrip(eventTarget, tripID) {
   console.log(tripID+' liked post req');
 
-  $j.ajax({
+  jQuery.ajax({
     url: '/like_trip',
     method: 'POST', 
     data: {
@@ -195,7 +195,7 @@ function likeTrip(eventTarget, tripID) {
 function unlikeTrip(eventTarget,tripID) {
 	console.log(tripID+' unliked post req');
 	
-	$j.ajax({
+	jQuery.ajax({
     url: '/unlike_trip',
     method: 'POST', 
     data: {
@@ -216,15 +216,15 @@ function editTrip(tripID){
 }
 
 function openDeleteTrip(tripID){
-  $j("#delete-confirm-dialog").dialog("open");
+  $("#delete-confirm-dialog").dialog("open");
   // $("#delete-confirm-dialog").modal('show');
-  $j("#delete-confirm").attr('rel',tripID);
+  jQuery("#delete-confirm").attr('rel',tripID);
 }
 
 function deleteTrip(event){
-  var tripID = $j("#delete-confirm").attr('rel');
+  var tripID = jQuery("#delete-confirm").attr('rel');
 
-  $j('<form>', {
+  jQuery('<form>', {
     method: 'post',
     action: '/delete_trip',
     data: {
@@ -266,11 +266,11 @@ function loadFakeTestingData(){
 	userImageURL: 'http://placekitten.com/g/150/150', username: "Cat Meow", userDescription: "this is test user description", userContact: 'test@gmail.com',
 	wishlistTrips: wishlistTripsList, userTrips: userTripsList};
 
-	var source = $j("#hbtemplate").html();
+	var source = jQuery("#hbtemplate").html();
 	var template = Handlebars.compile(source);
-	$j('body').append(template(fakeData));
+	jQuery('body').append(template(fakeData));
 }
 
-$j(document).ready(main);
+jQuery(document).ready(main);
 
 
