@@ -1,5 +1,3 @@
-var myUserID = 'tempUserID';
-
 var likeIconURL = "/images/like.png";
 var unlikeIconURL = "/images/unlike.png";
 
@@ -173,7 +171,6 @@ function likeTrip(eventTarget, tripID) {
     method: 'POST', 
     data: {
       trip_id: tripID,
-      user_id: myUserID,
     }
   }).done(function(response){
     //db updated trip with like
@@ -190,9 +187,6 @@ function unlikeTrip(eventTarget,tripID) {
     method: 'POST', 
     data: {
       trip_id: tripID,
-      user_id: myUserID,
-
-      // how to get my own user ID?
     }
   }).done(function(response){
     //db updated trip with unlike
@@ -213,8 +207,6 @@ function deleteTrip(event){
     action: '/delete_trip',
     data: {
       trip_id: tripID,
-      user_id: myUserID,
-      // how to get my own user ID?
     }
   }).submit();
 }

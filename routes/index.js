@@ -80,16 +80,28 @@ passport.deserializeUser(function(obj, done) {
 //   });
 // })
 
-router.get('/check_login', function (req, res, next) {
-  if(req.isAuthenticated()) {
-    res.send('user id:'+req.user.userID);
-  } else {
-    res.send('not isAuthenticated');
-  }
-});
+// router.get('/check_login', function (req, res, next) {
+//   if(req.isAuthenticated()) {
+//     res.send('user id:'+req.user.userID);
+//   } else {
+//     res.send('not isAuthenticated');
+//   }
+// });
+
+// router.get('/add_trip_test', function (req, res, next) {
+//   var tripInfo = {
+//     'tripID' : '123456',
+//     'tripName' : 'Test Trip',
+//     'tripCreator' : req.user.userID,
+//     'tripDestinationID' : '123',
+//     'tripDestinationName' : 'UK',
+//     'tripType' : 'adventure',
+//   };
+//   var success = helperFunction.addTrip(User, Trip, tripInfo);
+//   res.send(success);
+// });
 
 router.get('/login', function (req, res, next) {
-  // res.send('<form action="/login/facebook" method="get"> <div> <input type="submit" value="Log In"/> </div> </form>');
   res.render('login');
 });
 
@@ -98,33 +110,16 @@ router.get('/login/facebook', passport.authenticate('facebook'));
 router.get('/login/facebook/callback', 
   passport.authenticate('facebook', { 
     failureRedirect: '/login',
-    successRedirect: '/check_login' 
+    successRedirect: '/' 
   })
 );
 
-router.get('/your_user_name',
+router.get('/my_user_name',
   require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
     res.send('user id:'+req.user.userID+' user name:'+req.user.userName+' user photo:'+req.user.userPhoto+' user email'+req.user.userEmail);
 });
 
-
-router.get('/add_trip_temp', function (req, res, next) {
-  // in req.body.place_id = place id from google map
-});
-
-router.get('/add_trip_test', function (req, res, next) {
-  var tripInfo = {
-    'tripID' : '123456',
-    'tripName' : 'Test Trip',
-    'tripCreator' : req.user.userID,
-    'tripDestinationID' : '123',
-    'tripDestinationName' : 'UK',
-    'tripType' : 'adventure',
-  };
-  var success = helperFunction.addTrip(User, Trip, tripInfo);
-  res.send(success);
-});
 // GET requests
 
 /* GET home page. */
@@ -132,7 +127,8 @@ router.get('/', function(req, res, next) {
   res.render('home_temp');
 });
 
-/* GET buddy search page */
+/* GET buddy search result */
+// This GET req should return ALL buddies of the same location 
 router.get('/buddy_search', function(req, res, next) {
 
   var placeID = req.body.buddy_destination_id;
@@ -154,8 +150,10 @@ router.get('/buddy_search', function(req, res, next) {
   res.render('buddy_search', fakeBuddyData);
 });
 
+/* GET buddy search result (filtered) */
+// This GET req should return FILTERED buddies of the same location 
 router.get('/buddy_search_filter', function(req, res, next) {
-  // Rendering the index view with the title 'Sign Up'
+
 
   // fake buddy data for front end testing
   var fakeBuddyData = {users:[{userID: "123", username: "filter success!", userImageURL: 'http://placekitten.com/g/150/150',
@@ -208,10 +206,14 @@ router.get('/tabi_search_filter', function(req, res, next) {
   {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},
   {tripID: "12348", userID: "126", tripTitle: "test4", username: "user4", description: "this is test description4", liked:true, imageURL:'http://placekitten.com/g/150/150'},
   {tripID: "12349", userID: "127", tripTitle: "test5", username: "user5", description: "this is test description5", liked:true, imageURL:'http://placekitten.com/g/150/150'},]};
-  console.log(req);
-  console.log("BBBB");
+
   res.render('tabi_search_result', fakeTripData);
 });
+
+
+router.get('/view_own_profile', function(req, res, next) {
+  res.redirect('/view_user/'+req.user.userID);
+})
 
 /* GET user profile page by user ID */
 router.get('/view_user/:user_id', function(req, res, next) {
@@ -271,14 +273,25 @@ router.get('/add_trip_page', function(req, res, next) {
 /* GET edit trip page by trip ID */
 router.get('/edit_trip_page/:trip_id', function(req, res, next) {
   
-  var trip_id = req.params.trip_id;
+  var userID = req.user.userID;
+  var tripID = req.params.trip_id;  
 
-  res.render('edit_trip');
+  // check userID matches the creator ID of the trip
+
+  // get the current data about the trip 
+
+  var fakeTripData = {
+    tripID: tripID, title: 'test title', description: 'test description', category: 'food', season: 'summer',
+    duration: 3, budget: 200
+  }
+  // send empty string if season has no input, 
+
+  res.render('edit_trip_temp',fakeTripData);
 });
 
 /* POST like_trip*/
 router.post('/like_trip', function(req, res, next) {
-  var likedUser = req.body.user_id;
+  var likedUser = req.user.userID;
   var likedTrip = req.body.trip_id;
   console.log(chalk.red("Hit on like trip!"));
 
@@ -286,11 +299,12 @@ router.post('/like_trip', function(req, res, next) {
 
   // if no error, send empty string message
   res.send('');
+  // else redirect to error screen
 });
 
 /* POST like_trip*/
 router.post('/unlike_trip', function(req, res, next) {
-  var unlikedUser = req.body.user_id;
+  var unlikedUser = req.user.userID;
   var unlikedTrip = req.body.trip_id;
   console.log(chalk.red("Hit on unlike trip!"));
 
@@ -298,6 +312,7 @@ router.post('/unlike_trip', function(req, res, next) {
 
   // if no error, send empty string message
   res.send('');
+  // else redirect to error screen
 });
 
 /* POST edit_profile_photo*/
@@ -305,16 +320,17 @@ router.post('/edit_profile_photo/:user_id', function(req, res, next) {
 
   var userID = req.params.user_id;
 
+  // check userID matches req.user.userID
+
   var form = new formidable.IncomingForm();
 
   form.on('file', function(field, file) {
     cloudinary.uploader.upload(
       file.path, 
       function(result) {
-        console.log(result);
-        // Update the db with URL ~~~
-        //  var newImageURL = result.eager[0].secure_url 
-        // Then redirect to the user's own profile page
+        // then update the db with new image URL ~~~
+        var newImageURL = result.eager[0].secure_url 
+        // then redirect to the user's own profile page
         res.redirect('/view_user/'+userID); },
         // Show some message on top to let the user know the update was successful?
       {
@@ -332,10 +348,12 @@ router.post('/edit_profile_photo/:user_id', function(req, res, next) {
 
 /* POST edit_profile_text*/
 router.post('/edit_profile_info/:user_id', function(req, res, next) {
-  var user_id = req.params.user_id;
-  var new_text = req.body.new_profile_text;
-  var new_contact = req.body.new_profile_contact;
-  console.log(chalk.red('User '+user_id+' updated with text:'+new_text+', contact:'+new_contact));
+  var userID = req.params.user_id;
+  var newText = req.body.new_profile_text;
+  var newContact = req.body.new_profile_contact;
+
+  // make sure userID matches req.user.userID
+  // update the db
 
   // redirect to the user's own profile page
   res.redirect('/view_user/'+user_id);
@@ -359,8 +377,9 @@ router.post('/add_trip', function(req, res, next) {
     cloudinary.uploader.upload(
       file.path, 
       function(result) {
-        var tripPhotoURL = result.eager[0].secure_url 
-        // Save the trip to database now.
+        var tripPhotoURL = result.eager[0].secure_url;
+        // Save the trip to database.
+      },
       {
         public_id: tripID, 
         quality: "auto:good",
@@ -368,7 +387,7 @@ router.post('/add_trip', function(req, res, next) {
         eager: [{ width: 500, height: 500, crop: 'thumb', gravity: 'face', format: 'jpg'}],                                   
       // tags: [] 
       }
-    });
+    );
   });
 
   form.parse(req);  
@@ -396,7 +415,7 @@ router.post('/edit_trip', function(req, res, next) {
 
 /* POST delete_trip*/
 router.post('/delete_trip', function(req, res, next) {
-  
+
   var userID = req.user.userID;
   var tripID = req.body.tripID;
 
