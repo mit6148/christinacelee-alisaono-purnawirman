@@ -40,7 +40,7 @@ var addNewUser = function(User, userInfo){
     return null;
   }
   var requiredFieldList = ["userDestinations", "userCreatedTrips", "userLikedTrips"];
-  for(var fieldName: requiredFieldList){
+  for(var fieldName in requiredFieldList){
     userInfo[fieldName] = [];
   }
   // if not existed before, create a new user
@@ -55,7 +55,7 @@ var _updateField = function(Model, IDName, IDValue, fieldName, fieldValue){
   Model.update({IDName: IDValue}, {$set : {fieldName: fieldValue}},
     function(err, result){
       if(err){
-        console.log(chalk.red("error in updating Model with ID type of: " \
+        console.log(chalk.red("error in updating Model with ID type of: "
                               + IDName + " for field: " + fieldName));
         return false;
       }
@@ -83,7 +83,7 @@ var editUserProfile = function(User, userInfo){
       // update each field if it exist in userInfo
       var fieldNameList = ["userName", "userPhoto", "userDescription", "userEmail"];
       var fieldName;
-      for(fieldName: fieldNameList){
+      for(fieldName in fieldNameList){
         if(userInfo.hasOwnProperty(fieldName)){
           if(!_updateField(User, "userID", user.userID, fieldName, userInfo[fieldName])){
             return false;
@@ -197,7 +197,7 @@ var addTrip = function(Trip, tripInfo){
   var chalk = require('chalk');
   var requiredFields = ["tripID", "tripName", "tripCreator", "tripDestinationID", "tripDestinationName", "tripType"];
   var fieldName;
-  for(fieldName: requiredFields){
+  for(fieldName in requiredFields){
     if(!tripInfo.hasOwnProperty(fieldName)){
       console.log(chalk.red("incomplete input fields for add trip"));
       return false;
@@ -210,7 +210,7 @@ var addTrip = function(Trip, tripInfo){
 
   // if not existed, add new trip
   var requiredFieldList = ["tripLikedUsers"];
-  for(fieldName: requiredFieldList){
+  for(fieldName in requiredFieldList){
     tripInfo[fieldName] = [];
   }
   var newTrip = new Trip(tripInfo);
@@ -249,25 +249,25 @@ var deleteTrip = function(tripID, tripName, tripCreator, tripDestination, tripTy
 
 
 
-var userSchema = new mongoose.Schema({
-  userID: {type: String, required: true, index: {unique: true}},
-  userName: {type: String, required: true},
-  userPhoto: String,
-  userDescription: String,
-  userDestinations: [String],
-  userLikedTrips: [String],
-  userCreatedTrips: [String],
-});
+// var userSchema = new mongoose.Schema({
+//   userID: {type: String, required: true, index: {unique: true}},
+//   userName: {type: String, required: true},
+//   userPhoto: String,
+//   userDescription: String,
+//   userDestinations: [String],
+//   userLikedTrips: [String],
+//   userCreatedTrips: [String],
+// });
 
 
 
-// test addNewUser
-var testAddNewUser1 = {
-  "userID": "testAddNewUser1",
-  "userName": "testAddNewUser1",
-  "userPhoto": "http://placekitten.com/g/200/200",
-}
-addNewUser(testAddNewUser1);
+// // test addNewUser
+// var testAddNewUser1 = {
+//   "userID": "testAddNewUser1",
+//   "userName": "testAddNewUser1",
+//   "userPhoto": "http://placekitten.com/g/200/200",
+// }
+// addNewUser(testAddNewUser1);
 
 
 
