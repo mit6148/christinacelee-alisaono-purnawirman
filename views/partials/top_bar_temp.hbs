@@ -1,0 +1,27 @@
+<div id="top-bar">
+  <div id="logo-container">
+    <img id="logo" src="http://placehold.it/200x50">
+  </div>
+
+  {{#if showSearchBar}}
+    <div id="top-search-bar-container">
+      search bar
+    </div>
+  {{/if}}
+
+  <div id="user-option">
+    <div id="top-user-image-container">
+      <img id="top-user-image" src="http://placehold.it/300x300">
+    </div>
+
+    <div id="user-dropdown-container">
+      {{#if loggedIn}}
+        <div id="user-dropdown-profile" class="user-dropdown">My Profile</div>
+        <div id="user-dropdown-create" class="user-dropdown">Create Trip</div>
+        <div id="user-dropdown-logout" class="user-dropdown">Log Out</div>
+      {{else}}
+        <div id="user-dropdown-login" class="user-dropdown">Log In with Facebook</div>
+      {{/if}}
+    </div>
+  </div>
+</div>
