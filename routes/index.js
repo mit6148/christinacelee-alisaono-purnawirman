@@ -83,14 +83,15 @@ passport.deserializeUser(function(obj, done) {
 
 router.get('/check_login', function (req, res, next) {
   if(req.isAuthenticated()) {
-    res.redirect('/');
+    res.send('user id:'+req.user.userID);
   } else {
-    res.redirect('/login');
+    res.send('not isAuthenticated');
   }
 });
 
 router.get('/login', function (req, res, next) {
-  res.send('<form action="/login/facebook" method="get"> <div> <input type="submit" value="Log In"/> </div> </form>');
+  // res.send('<form action="/login/facebook" method="get"> <div> <input type="submit" value="Log In"/> </div> </form>');
+  res.render('login');
 });
 
 router.get('/login/facebook', passport.authenticate('facebook'));
@@ -98,7 +99,7 @@ router.get('/login/facebook', passport.authenticate('facebook'));
 router.get('/login/facebook/callback', 
   passport.authenticate('facebook', { 
     failureRedirect: '/login',
-    successRedirect: '/' 
+    successRedirect: '/check_login' 
   })
 );
 
