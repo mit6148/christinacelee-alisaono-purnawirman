@@ -7,41 +7,29 @@ var main = function() {
 
 	//loadFakeTestingData();	
 
-  // $('#info-edit-dialog').dialog({
-  //   autoOpen: false
-  // });
-
-  // $('#user-photo-edit-dialog').dialog({
-  //   autoOpen: false
-  // });
-
-  // $("#delete-confirm-dialog").dialog({
-  //   autoOpen: false
-  // });
-
-  $(function () {
+  (function () {
     $('#user-photo-edit-dialog').dialog({
       autoOpen: false
     });
   
     $('.edit-user-image').on('click',editUserImage);
-  });
+  })(jQuery);
 
-  $(function () {
+  (function ($) {
     $('#info-edit-dialog').dialog({
       autoOpen: false
     });
   
     $('#user-info-edit').on('click', openEditProfile);
-  });
+  })(jQuery);
 
-  $(function () {
+  (function ($) {
     $('#delete-confirm-dialog').dialog({
       autoOpen: false
     });
   
     $('#delete-confirm').on('click', deleteTrip);
-  });
+  })(jQuery);
 
   // $('#info-edit-dialog').dialog({
   //   autoOpen: false
@@ -54,12 +42,6 @@ var main = function() {
   // $("#delete-confirm-dialog").dialog({
   //   autoOpen: false
   // });
-
-  // $('#info-edit-dialog').modal('hide');
-
-  // $('#user-photo-edit-dialog').modal('hide');
-
-  // $("#delete-confirm-dialog").modal('hide');
 
   // $('.edit-user-image').on('click',editUserImage)
 

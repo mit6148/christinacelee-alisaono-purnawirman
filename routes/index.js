@@ -218,7 +218,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
 
   var userID = req.params.user_id;
 
-  var userIsOwner = true;
+  var userIsOwner = false;
 
   if (userID === req.user.userID) {
     userIsOwner = true;
