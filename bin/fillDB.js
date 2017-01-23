@@ -225,8 +225,8 @@ module.exports = {
     var newTrip = new Trip(tripInfo);
     newTrip.save();
     // update user
-    if(!_findAndAddToList(User, "userID", tripInfo.tripCreator, "userCreatedTrips", tripInfo.tripID) ||
-       !_findAndAddToList(User, "userID", tripInfo.tripCreator, "userDestinations", tripInfo.tripDestinationID)){
+    if(!this._findAndAddToList(User, "userID", tripInfo.tripCreator, "userCreatedTrips", tripInfo.tripID) ||
+       !this._findAndAddToList(User, "userID", tripInfo.tripCreator, "userDestinations", tripInfo.tripDestinationID)){
       return "update user failed";
     }
     // update destination
@@ -237,8 +237,8 @@ module.exports = {
                              "buddies": tripInfo.tripCreator};
       var newDestination = new Destination(destinationInfo);
       newDestination.save();
-    } else if (!_findAndAddToList(Destination, "destinationID", tripInfo.tripDestinationID, "buddies", trip.tripCreator) ||
-               !_findAndAddToList(Destination, "destinationID", tripInfo.tripDestinationID, "tabies", trip.tripID)){
+    } else if (!this._findAndAddToList(Destination, "destinationID", tripInfo.tripDestinationID, "buddies", trip.tripCreator) ||
+               !this._findAndAddToList(Destination, "destinationID", tripInfo.tripDestinationID, "tabies", trip.tripID)){
       return "update destination failed";
     }
 
