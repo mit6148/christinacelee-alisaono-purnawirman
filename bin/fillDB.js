@@ -208,12 +208,12 @@ module.exports = {
     for(fieldName in requiredFields){
       if(!tripInfo.hasOwnProperty(fieldName)){
         console.log(chalk.red("incomplete input fields for add trip"));
-        return false;
+        return "incomplete input fields for add trip";
       }
     }
     if(isIDExist(Trip, "tripID", tripInfo.tripID)){
       console.log(chalk.red("trip already exist, can not add new trips"));
-      return false;
+      return "trip already exist, can not add new trips";
     }
 
     // if not existed, add new trip
@@ -226,7 +226,7 @@ module.exports = {
     // update user
     if(!_findAndAddToList(User, "userID", tripInfo.tripCreator, "userCreatedTrips", tripInfo.tripID) ||
        !_findAndAddToList(User, "userID", tripInfo.tripCreator, "userDestinations", tripInfo.tripDestinationID)){
-      return false;
+      return "update user failed";
     }
     // update destination
     if(!isIDExist(Destination, "destinationID", tripInfo.tripDestinationID)){
@@ -238,10 +238,10 @@ module.exports = {
       newDestination.save();
     } else if (!_findAndAddToList(Destination, "destinationID", tripInfo.tripDestinationID, "buddies", trip.tripCreator) ||
                !_findAndAddToList(Destination, "destinationID", tripInfo.tripDestinationID, "tabies", trip.tripID)){
-      return false;
+      return "update destination failed";
     }
 
-    return true;
+    return "update success";
   }
   ,
 

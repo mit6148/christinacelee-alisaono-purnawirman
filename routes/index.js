@@ -118,11 +118,7 @@ router.get('/add_trip_test', function (req, res, next) {
     'tripType' : 'adventure',
   };
   var success = helperFunction.addTrip(Trip, tripInfo);
-  if (success) {
-    res.send('sucess');
-  } else {
-    res.send('fail');
-  }
+  res.send(success);
 });
 // GET requests
 
