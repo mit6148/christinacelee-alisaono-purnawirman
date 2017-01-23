@@ -1,9 +1,9 @@
 /* This is to fill the fake data in the database */
 
-// // get the User, trip, and destination model
-// var User = require('../schemas/user');
-// var Trip = require('../schemas/trip');
-// var Destination = require('../schemas/destination');
+// get the User, trip, and destination model
+var User = require('../schemas/user');
+var Trip = require('../schemas/trip');
+var Destination = require('../schemas/destination');
 // var chalk = require('chalk')
 
 // /* Adding new destination to database */
@@ -201,8 +201,9 @@ module.exports = {
   Trip
   User: userCreatedTrips, userDestinations
   Destination: new or just tabies, buddies */
-  addTrip: function(Trip, tripInfo){
+  addTrip: function(User, Trip, tripInfo){
     var chalk = require('chalk');
+    
     var requiredFields = ["tripID", "tripName", "tripCreator", "tripDestinationID", "tripDestinationName", "tripType"];
     var fieldName;
     // for(fieldName in requiredFields){
@@ -212,7 +213,7 @@ module.exports = {
         return "incomplete input fields for add trip";
       }
     }
-    if(isIDExist(Trip, "tripID", tripInfo.tripID)){
+    if(this.isIDExist(Trip, "tripID", tripInfo.tripID)){
       console.log(chalk.red("trip already exist, can not add new trips"));
       return "trip already exist, can not add new trips";
     }
@@ -225,20 +226,20 @@ module.exports = {
     var newTrip = new Trip(tripInfo);
     newTrip.save();
     // update user
-    if(!_findAndAddToList(User, "userID", tripInfo.tripCreator, "userCreatedTrips", tripInfo.tripID) ||
-       !_findAndAddToList(User, "userID", tripInfo.tripCreator, "userDestinations", tripInfo.tripDestinationID)){
+    if(!this._findAndAddToList(User, "userID", tripInfo.tripCreator, "userCreatedTrips", tripInfo.tripID) ||
+       !this._findAndAddToList(User, "userID", tripInfo.tripCreator, "userDestinations", tripInfo.tripDestinationID)){
       return "update user failed";
     }
     // update destination
-    if(!isIDExist(Destination, "destinationID", tripInfo.tripDestinationID)){
+    if(!this.isIDExist(Destination, "destinationID", tripInfo.tripDestinationID)){
       var destinationInfo = {"destinationID": tripInfo.tripDestinationID,
                              "destinationName": tripInfo.tripDestinationName,
                              "tabies": tripInfo.tripID,
                              "buddies": tripInfo.tripCreator};
       var newDestination = new Destination(destinationInfo);
       newDestination.save();
-    } else if (!_findAndAddToList(Destination, "destinationID", tripInfo.tripDestinationID, "buddies", trip.tripCreator) ||
-               !_findAndAddToList(Destination, "destinationID", tripInfo.tripDestinationID, "tabies", trip.tripID)){
+    } else if (!this._findAndAddToList(Destination, "destinationID", tripInfo.tripDestinationID, "buddies", trip.tripCreator) ||
+               !this._findAndAddToList(Destination, "destinationID", tripInfo.tripDestinationID, "tabies", trip.tripID)){
       return "update destination failed";
     }
 
