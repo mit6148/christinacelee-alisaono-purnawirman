@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <title>Add Trip</title>
+    <style>
+      body {
+        margin: auto;
+        text-align: center;
+      }
+      .invisible {
+        display: none;
+      }
+    </style>
+
+  </head>
+  <body>
+
+    <h1>Add Trip</h1>
+    <form name="add_trip_form" method="post" action="/add_trip">
+      <span>(*)Upload Photo: </span>
+      <input id="trip-image" type="file" name="trip_image" accept="image/png, image/jpeg"/>
+      <br><br>
+      <span>(*)Location: </span>
+      <input id="place-autocomplete" type="text" required>
+      <input id="place-name" type="text" name="destination_name" class="invisible">
+      <input id="place-id" type="text" name="destination_id" class="invisible">
+      <br><br>
+      <span>(*)Title: </span>
+      <input id="title-input" type="text" name="title" required>
+      <br><br>
+      <span>(*)Description: </span>
+      <input id="description-input" type="text" name="description" required>
+      <br><br>
+      <span>(*)Category: </span>
+      <select id="category-input" name="category" form="add_trip_form" required>
+        <option value="adventure">Adventure</option>
+        <option value="food">Food</option>
+        <option value="art">Art</option>
+        <option value="history">History</option>
+      </select>
+      <br><br>
+      <span>Season: </span>
+      <select id="season-input" name="season" form="add_trip_form">
+        <option value="spring">Spring</option>
+        <option value="summer">Summer</option>
+        <option value="fall">Fall</option>
+        <option value="winter">Winter</option>
+      </select>
+      <br><br>
+      <input id="duration-input" type="number" min="1" placeholder="Duration" name="duration"><span> day(s)</span>
+      <br><br>
+      <span>&#36;</span><input id="budget-input" type="number" min="0" placeholder="Budget" name="budget">
+      <br><br>
+      <button id="save-trip" type="submit">Save</button>
+    </form>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript">
+      function initMap() {
+        var input = $('#place-autocomplete')[0];
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.setTypes(['(cities)']);
+
+        autocomplete.addListener('place_changed', function() {
+
+          var place = autocomplete.getPlace();
+          var placeID = place.place_id;
+          var placeName = place.formatted_address;
+
+          $('#place-id').val(placeID);
+          $('#place-name').val(placeName);
+        });
+      }
+
+      $(document).ready(function(){
+        $('form input').on('keypress', function(e) {
+          return e.which !== 13;
+        });
+        $('#tabi-submit').on('click', function(e) {
+          return $('#place-id').val().length > 0;
+        });
+      });
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8lG_CLlQVPpyRbKhHHUe0vZYjFnCPTNs&libraries=places&callback=initMap" async defer></script>
+  </body>
+</html>

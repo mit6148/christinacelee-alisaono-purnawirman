@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <title>Add Trip</title>
+    <style>
+      body {
+        margin: auto;
+        text-align: center;
+      }
+      .invisible {
+        display: none;
+      }
+    </style>
+
+  </head>
+  <body>
+
+    <h1>Add Trip</h1>
+    <form name="edit_trip_form" method="post" action="/edit_trip/{{tripID}}">
+      <span>(*)Title: </span>
+      <input id="title-input" type="text" name="title" placeholder="{{title}}" required>
+      <br><br>
+      <span>(*)Description: </span>
+      <input id="description-input" type="text" name="description" placeholder="{{description}}" required>
+      <br><br>
+      <span>(*)Category: </span>
+      <select id="category-input" name="category" form="add_trip_form" current="{{category}}" required>
+        <option value="adventure">Adventure</option>
+        <option value="food">Food</option>
+        <option value="art">Art</option>
+        <option value="history">History</option>
+      </select>
+      <br><br>
+      <span>Season: </span>
+      <select id="season-input" name="season" form="add_trip_form" current="{{season}}">
+        <option value="spring">Spring</option>
+        <option value="summer">Summer</option>
+        <option value="fall">Fall</option>
+        <option value="winter">Winter</option>
+      </select>
+      <br><br>
+      <input id="duration-input" type="number" min="1" placeholder="{{duration}}" name="duration"><span> day(s)</span>
+      <br><br>
+      <span>&#36;</span><input id="budget-input" type="number" min="0" placeholder="{{budget}}" name="budget">
+      <br><br>
+      <button id="save-trip" type="submit">Save</button>
+    </form>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        var category = $('#category-input').attr('current');
+        var season = $('#season-input').attr('current');
+        $('#category-input option[value="'+category+'"]').prop('selected',true);
+        if (season !== "") {
+          $('#season-input option[value="'+season+'"]').prop('selected',true);
+        }
+      });
+    </script>
+  </body>
+</html>
