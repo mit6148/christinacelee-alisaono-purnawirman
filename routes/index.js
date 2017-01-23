@@ -187,7 +187,13 @@ router.get('/tabi_search_filter', function(req, res, next) {
 /* GET view_user page */
 router.get('/view_user/:user_id', function(req, res, next) {
 
-  var userID = req.params.user_id
+  var userID = req.params.user_id;
+
+  var userIsOwner = false;
+
+  if (userID === req.user.userID) {
+    userIsOwner = true;
+  }
 
   // userImageURL should have been saved in the database
   // userImageURL should include version number so that pictures are concurrently updated
@@ -216,14 +222,14 @@ router.get('/view_user/:user_id', function(req, res, next) {
   {tripID: "12354", userID: "132", tripTitle: "test10", username: "user10", description: "this is test description10", liked:true, imageURL:'http://placekitten.com/g/150/150'},];
 
   // userIsOwner = true -> edit/delete options should appear
-  var fakeProfileDataOwner = {userIsOwner: true,
+  var fakeProfileDataOwner = {userIsOwner: userIsOwner,
   userImageURL: userImageURL, sername: "Cat Meow", userID: userID, userDescription: "this user's ID is "+req.params.user_id, 
   userContact: 'test@gmail.com', wishlistTrips: wishlistTripsList, userTrips: userTripsList};
 
   // userIsOwner = false -> only like/unlike option should appear
-  var fakeProfileData = {userIsOwner: false,
-  userImageURL: userImageURL, username: "Cat Meow", userID: userID, userDescription: "this user's ID is "+req.params.user_id, 
-  userContact: 'test@gmail.com', wishlistTrips: wishlistTripsList, userTrips: userTripsList};
+  // var fakeProfileData = {userIsOwner: false,
+  // userImageURL: userImageURL, username: "Cat Meow", userID: userID, userDescription: "this user's ID is "+req.params.user_id, 
+  // userContact: 'test@gmail.com', wishlistTrips: wishlistTripsList, userTrips: userTripsList};
 
   // ~~~~ fake data ends
 
