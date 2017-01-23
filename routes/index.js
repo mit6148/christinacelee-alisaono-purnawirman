@@ -145,7 +145,8 @@ router.get('/buddy_search', function(req, res, next) {
   tripImages: [{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'}]},
   {userID: "127", username: "user5", userImageURL: 'http://placekitten.com/g/150/150',
   tripImages: [{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'}]},
-  ]};
+  ],
+  showSearchBar: false, loggedIn: true};
 
   res.render('buddy_search', fakeBuddyData);
 });
@@ -166,7 +167,8 @@ router.get('/buddy_search_filter', function(req, res, next) {
   tripImages: [{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'}]},
   {userID: "127", username: "user5", userImageURL: 'http://placekitten.com/g/150/150',
   tripImages: [{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'}]},
-  ]};
+  ],
+  showSearchBar: false, loggedIn: true};
   res.render('buddy_search_result', fakeBuddyData);
 });
 
@@ -182,7 +184,9 @@ router.get('/tabi_search', function(req, res, next) {
   {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
   {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},
   {tripID: "12348", userID: "126", tripTitle: "test4", username: "user4", description: "this is test description4", liked:true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12349", userID: "127", tripTitle: "test5", username: "user5", description: "this is test description5", liked:true, imageURL:'http://placekitten.com/g/150/150'},]};
+  {tripID: "12349", userID: "127", tripTitle: "test5", username: "user5", description: "this is test description5", liked:true, imageURL:'http://placekitten.com/g/150/150'},],
+  showSearchBar: false, loggedIn: true};
+
   console.log(req);
   console.log("BBBB");
   res.render('tabi_search', fakeTripData);
@@ -205,7 +209,8 @@ router.get('/tabi_search_filter', function(req, res, next) {
   {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
   {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},
   {tripID: "12348", userID: "126", tripTitle: "test4", username: "user4", description: "this is test description4", liked:true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12349", userID: "127", tripTitle: "test5", username: "user5", description: "this is test description5", liked:true, imageURL:'http://placekitten.com/g/150/150'},]};
+  {tripID: "12349", userID: "127", tripTitle: "test5", username: "user5", description: "this is test description5", liked:true, imageURL:'http://placekitten.com/g/150/150'},],
+  showSearchBar: false, loggedIn: true};
 
   res.render('tabi_search_result', fakeTripData);
 });
@@ -224,9 +229,9 @@ router.get('/view_user/:user_id', function(req, res, next) {
   // req.user.userID is user ID of the person who is viewing the profile
   // set userIsOwner to true, if the person is viewing his/her own profile
   var userIsOwner = false;
-  if (userID === req.user.userID) {
-    userIsOwner = true;
-  }
+  // if (userID === req.user.userID) {
+  //   userIsOwner = true;
+  // }
 
   // userImageURL should have been saved in the database
   // userImageURL should include version number so that pictures are concurrently updated
@@ -257,7 +262,8 @@ router.get('/view_user/:user_id', function(req, res, next) {
   // userIsOwner = true -> edit/delete options should appear, false -> only like option
   var fakeProfileData = {userIsOwner: userIsOwner,
   userImageURL: userImageURL, username: "Cat Meow", userID: userID, userDescription: "this user's ID is "+userID, 
-  userContact: 'test@gmail.com', wishlistTrips: wishlistTripsList, userTrips: userTripsList};
+  userContact: 'test@gmail.com', wishlistTrips: wishlistTripsList, userTrips: userTripsList,
+  showSearchBar: false, loggedIn: true};
 
   // ~~~~ fake data ends
 
