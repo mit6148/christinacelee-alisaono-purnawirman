@@ -43,35 +43,6 @@
       </div>
     </div>
 
-    {{#if userIsOwner}}
-      <div id="info-edit-dialog" title="Edit Profile">
-        <form id="info-edit-form" method="post" action="/edit_profile_info/{{userID}}">
-          <p>Introduce yourself:</p>
-          <textarea id="edit-user-description" form="info-edit-form" name="new_profile_text"></textarea>
-          <p>Your contact:</p>
-          <textarea id="edit-user-contact" form="info-edit-form" name="new_profile_contact"></textarea>
-          <br><br>
-          <button type="submit">Save</button>
-        </form>
-      </div>
-    {{/if}}
-
-    {{#if userIsOwner}}
-      <div id="user-photo-edit-dialog" title="Edit Profile Picture">
-        <form action="/edit_profile_photo/{{userID}}" method="post" enctype="multipart/form-data">
-          <input id="user-photo-upload" type="file" name="new_profile_photo" accept="image/png, image/jpeg"/>
-          <input type="submit" value="Upload" />
-        </form>
-      </div>
-    {{/if}}
-
-    {{#if userIsOwner}}
-      <div id="delete-confirm-dialog" title="Delete Your Trip">
-        <p>Are you sure you want to delete your trip?</p>
-        <button id="delete-confirm" rel="">Confirm</button>
-      </div>
-    {{/if}}
-
     <div id="tabs-container">
 
       <div id="trip-index" class="tab-index active">
@@ -161,6 +132,39 @@
       <div id="trip-popup" rel="">
       </div>
     </div>
+
+
+    {{#if userIsOwner}}
+      <div id="background-black" class="dialog popup-inactive">
+      </div>
+
+      <div id="info-edit-dialog" title="Edit Profile" class="dialog popup-inactive">
+        <form id="info-edit-form" method="post" action="/edit_profile_info/{{userID}}">
+          <h1>Edit Profile</h1>
+          <p>Introduce yourself:</p>
+          <textarea id="edit-user-description" form="info-edit-form" name="new_profile_text"></textarea>
+          <p>Your contact:</p>
+          <textarea id="edit-user-contact" form="info-edit-form" name="new_profile_contact"></textarea>
+          <br><br>
+          <button class="close-dialog">Cancel</button>
+          <button type="submit">Save</button>
+        </form>
+      </div>
+
+      <div id="user-photo-edit-dialog" title="Edit Profile Picture" class="dialog popup-inactive">
+        <form action="/edit_profile_photo/{{userID}}" method="post" enctype="multipart/form-data">
+          <input id="user-photo-upload" type="file" name="new_profile_photo" accept="image/png, image/jpeg"/>
+          <button class="close-dialog">Cancel</button>
+          <input type="submit" value="Upload" />
+        </form>
+      </div>
+
+      <div id="delete-confirm-dialog" title="Delete Your Trip" class="dialog popup-inactive">
+        <p>Are you sure you want to delete your trip?</p>
+        <button class="close-dialog">Cancel</button>
+        <button id="delete-confirm" rel="">Confirm</button>
+      </div>
+    {{/if}}
 <!--     </script> -->
   </body>
 </html>

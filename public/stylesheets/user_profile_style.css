@@ -44,14 +44,6 @@ body {
   vertical-align: top;
 }
 
-/* edit delete dialogs */
-#info-edit-dialog, #delete-confirm-dialog, #user-photo-edit-dialog {
-  text-align: center;
-}
-#user-photo-upload {
-  width: 90%;
-}
-
 /* trips */
 #user-trips-container, #wishlist-trips-container {
   width: 100%;
@@ -146,10 +138,31 @@ body {
   display: none;
 }
 
-/* popup window */
+
+/* popup dialogs */
 .popup-inactive {
   display: none;
 }
+#background-black {
+  position: fixed;
+  top: 50px;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  text-align: center;
+}
+#info-edit-dialog, #delete-confirm-dialog, #user-photo-edit-dialog {
+  position: fixed;
+  top: 100px;
+  left: 24%;
+  width: 50%;
+  padding: 2%;
+  margin-bottom: 25px;
+  background-color: white;
+  text-align: center;
+}
+
+/* popup trip window */
 #background-blur {
   position: fixed;
   top: 50px;

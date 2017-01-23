@@ -3,65 +3,41 @@ var myUserID = 'tempUserID';
 var likeIconURL = "/images/like.png";
 var unlikeIconURL = "/images/unlike.png";
 
-// var $j = jQuery.noConflict();
-
 var main = function() {
 
 	//loadFakeTestingData();	
 
-  // $(function () {
-  //   $('#user-photo-edit-dialog').dialog({
-  //     autoOpen: false
-  //   });
-  
-  //   $('.edit-user-image').on('click',editUserImage);
+  // $('#info-edit-dialog').dialog({
+  //   autoOpen: false
   // });
 
-  // $(function () {
-  //   $('#info-edit-dialog').dialog({
-  //     autoOpen: false
-  //   });
-  
-  //   $('#user-info-edit').on('click', openEditProfile);
+  // $('#user-photo-edit-dialog').dialog({
+  //   autoOpen: false
   // });
 
-  // $(function () {
-  //   $('#delete-confirm-dialog').dialog({
-  //     autoOpen: false
-  //   });
-  
-  //   $('#delete-confirm').on('click', deleteTrip);
+  // $("#delete-confirm-dialog").dialog({
+  //   autoOpen: false
   // });
 
-  $('#info-edit-dialog').dialog({
-    autoOpen: false
-  });
+  $('.edit-user-image').on('click',openEditUserImage)
 
-  $('#user-photo-edit-dialog').dialog({
-    autoOpen: false
-  });
+  $('#user-info-edit').on('click', openEditProfile);
 
-  $("#delete-confirm-dialog").dialog({
-    autoOpen: false
-  });
+  $('#delete-confirm').on('click', deleteTrip);
 
-  jQuery('.edit-user-image').on('click',editUserImage)
+  $('.close-dialog').on('click', closeDialog);
 
-  jQuery('#user-info-edit').on('click', openEditProfile);
+  $('#trip-index').on('click', showTripsTab);
 
-  jQuery('#delete-confirm').on('click', deleteTrip);
+ 	$('#wishlist-index').on('click', showWishlistTab);
 
-  jQuery('#trip-index').on('click', showTripsTab);
-
- 	jQuery('#wishlist-index').on('click', showWishlistTab);
-
- 	jQuery('.trip').on('click',function(event){
+ 	$('.trip').on('click',function(event){
     event.preventDefault();
 
-    var target = jQuery(event.target);
+    var target = $(event.target);
     var targetClass = target.attr('class');
-    var tripID = jQuery(this).attr('rel');
-    var tripElement = jQuery(this);
+    var tripID = $(this).attr('rel');
+    var tripElement = $(this);
 
     switch (targetClass) {
     	case 'trip-author':
@@ -85,14 +61,14 @@ var main = function() {
   	}
 	});
 
-  jQuery('#trip-popup-close-icon').on('click',closePopupTrip);
+  $('#trip-popup-close-icon').on('click',closePopupTrip);
 
-  jQuery('#trip-popup').on('click',function(event){
+  $('#trip-popup').on('click',function(event){
     event.preventDefault();
 
-    var target = jQuery(event.target);
-    var targetClass = jQuery(event.target).attr('class');
-    var tripID = jQuery(this).attr('rel');
+    var target = $(event.target);
+    var targetClass = $(event.target).attr('class');
+    var tripID = $(this).attr('rel');
 
     switch (targetClass) {
     	case 'trip-author':
@@ -115,39 +91,53 @@ var main = function() {
     }
   });
 
-  jQuery('.new-trip').on('click',addTrip);
+  $('.new-trip').on('click',addTrip);
 }
 
-function editUserImage(event){
+function openEditUserImage(event){
   event.preventDefault();
-  $('#user-photo-edit-dialog').dialog("open");
-  // $('#user-photo-edit-dialog').modal('show');
+  // $('#user-photo-edit-dialog').dialog("open");
+  $('#background-black').removeClass('popup-inactive');
+  $('#user-photo-edit-dialog').removeClass('popup-inactive');
 }
 
 function openEditProfile(event){
   event.preventDefault();
-  var currentDescription = jQuery('#user-description').text();
-  var currentContact = jQuery('#user-contact').text();
-  jQuery('#edit-user-description').text(currentDescription);
-  jQuery('#edit-user-contact').text(currentContact);
-  $('#info-edit-dialog').dialog("open");
-  // $('#info-edit-dialog').modal('show');
+  var currentDescription = $('#user-description').text();
+  var currentContact = $('#user-contact').text();
+  $('#edit-user-description').text(currentDescription);
+  $('#edit-user-contact').text(currentContact);
+  // $('#info-edit-dialog').dialog("open");
+  $('#background-black').removeClass('popup-inactive');
+  $('#info-edit-dialog').removeClass('popup-inactive');
+}
+
+function openDeleteTrip(tripID){
+  // $("#delete-confirm-dialog").dialog("open");
+  $("#delete-confirm").attr('rel',tripID);
+  $('#background-black').removeClass('popup-inactive');
+  $('#delete-confirm-dialog').removeClass('popup-inactive');
+}
+
+function closeDialog(event) {
+  event.preventDefault();
+  $('.dialog').addClass('popup-inactive');
 }
 
 function showTripsTab(event){
 	event.preventDefault();
- 	jQuery('#trip-index').removeClass('inactive').addClass('active');
- 	jQuery('#trip-content').removeClass('inactive').addClass('active');
- 	jQuery('#wishlist-index').removeClass('active').addClass('inactive');
- 	jQuery('#wishlist-content').removeClass('active').addClass('inactive');
+ 	$('#trip-index').removeClass('inactive').addClass('active');
+ 	$('#trip-content').removeClass('inactive').addClass('active');
+ 	$('#wishlist-index').removeClass('active').addClass('inactive');
+ 	$('#wishlist-content').removeClass('active').addClass('inactive');
 }
 
 function showWishlistTab(event){
 	event.preventDefault();
-	jQuery('#wishlist-index').removeClass('inactive').addClass('active');
-	jQuery('#wishlist-content').removeClass('inactive').addClass('active');
-	jQuery('#trip-index').removeClass('active').addClass('inactive');
-	jQuery('#trip-content').removeClass('active').addClass('inactive');
+	$('#wishlist-index').removeClass('inactive').addClass('active');
+	$('#wishlist-content').removeClass('inactive').addClass('active');
+	$('#trip-index').removeClass('active').addClass('inactive');
+	$('#trip-content').removeClass('active').addClass('inactive');
 }
 
 function showUserProfile(eventTarget){
@@ -157,28 +147,28 @@ function showUserProfile(eventTarget){
 
 function showPopupTrip(tripElement){
 	var tripID = tripElement.attr('rel');
-  var offset = jQuery('body').scrollTop();
+  var offset = $('body').scrollTop();
   var popupTripTop = 100 + offset;
   var popupCloseTop = 75 + offset;
-  jQuery('#trip-popup').css('top', popupTripTop+'px');
-  jQuery('#trip-popup-close').css('top',popupCloseTop+'px');
-  jQuery('#trip-popup-container').removeClass('popup-inactive');
-	jQuery('#trip-popup').append(tripElement.clone());
-	jQuery('#trip-popup .trip-description').removeClass('text-hidden');
-	jQuery('#trip-popup').attr('rel',tripID);
+  $('#trip-popup').css('top', popupTripTop+'px');
+  $('#trip-popup-close').css('top',popupCloseTop+'px');
+  $('#trip-popup-container').removeClass('popup-inactive');
+	$('#trip-popup').append(tripElement.clone());
+	$('#trip-popup .trip-description').removeClass('text-hidden');
+	$('#trip-popup').attr('rel',tripID);
 }
 
 function closePopupTrip(event){
 	event.preventDefault();
-	jQuery('#trip-popup-container').addClass('popup-inactive');
-  jQuery('#trip-popup').children('.trip').remove();
-  jQuery('#trip-popup').attr('rel',"");
+	$('#trip-popup-container').addClass('popup-inactive');
+  $('#trip-popup').children('.trip').remove();
+  $('#trip-popup').attr('rel',"");
 }
 
 function likeTrip(eventTarget, tripID) {
   console.log(tripID+' liked post req');
 
-  jQuery.ajax({
+  $.ajax({
     url: '/like_trip',
     method: 'POST', 
     data: {
@@ -195,7 +185,7 @@ function likeTrip(eventTarget, tripID) {
 function unlikeTrip(eventTarget,tripID) {
 	console.log(tripID+' unliked post req');
 	
-	jQuery.ajax({
+	$.ajax({
     url: '/unlike_trip',
     method: 'POST', 
     data: {
@@ -215,16 +205,10 @@ function editTrip(tripID){
   window.location = '/edit_trip_page/' + tripID;
 }
 
-function openDeleteTrip(tripID){
-  $("#delete-confirm-dialog").dialog("open");
-  // $("#delete-confirm-dialog").modal('show');
-  jQuery("#delete-confirm").attr('rel',tripID);
-}
-
 function deleteTrip(event){
-  var tripID = jQuery("#delete-confirm").attr('rel');
+  var tripID = $("#delete-confirm").attr('rel');
 
-  jQuery('<form>', {
+  $('<form>', {
     method: 'post',
     action: '/delete_trip',
     data: {
@@ -266,11 +250,11 @@ function loadFakeTestingData(){
 	userImageURL: 'http://placekitten.com/g/150/150', username: "Cat Meow", userDescription: "this is test user description", userContact: 'test@gmail.com',
 	wishlistTrips: wishlistTripsList, userTrips: userTripsList};
 
-	var source = jQuery("#hbtemplate").html();
+	var source = $("#hbtemplate").html();
 	var template = Handlebars.compile(source);
-	jQuery('body').append(template(fakeData));
+	$('body').append(template(fakeData));
 }
 
-jQuery(document).ready(main);
+$(document).ready(main);
 
 
