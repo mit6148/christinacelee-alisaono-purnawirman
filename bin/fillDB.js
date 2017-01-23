@@ -212,7 +212,7 @@ module.exports = {
         return "incomplete input fields for add trip";
       }
     }
-    if(isIDExist(Trip, "tripID", tripInfo.tripID)){
+    if(this.isIDExist(Trip, "tripID", tripInfo.tripID)){
       console.log(chalk.red("trip already exist, can not add new trips"));
       return "trip already exist, can not add new trips";
     }
@@ -230,7 +230,7 @@ module.exports = {
       return "update user failed";
     }
     // update destination
-    if(!isIDExist(Destination, "destinationID", tripInfo.tripDestinationID)){
+    if(!this.isIDExist(Destination, "destinationID", tripInfo.tripDestinationID)){
       var destinationInfo = {"destinationID": tripInfo.tripDestinationID,
                              "destinationName": tripInfo.tripDestinationName,
                              "tabies": tripInfo.tripID,
