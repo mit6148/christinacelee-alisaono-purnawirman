@@ -18,7 +18,8 @@ router.use(passport.session());
 var User = require('../schemas/user');
 var Trip = require('../schemas/trip');
 var Destination = require('../schemas/destination');
-var helperFunction = require('../bin/fillDB');
+var helper = require('../bin/fillDB');
+var helperFunction = new helper();
 
 // including the location data
 var City = require('../schemas/locationCity');
