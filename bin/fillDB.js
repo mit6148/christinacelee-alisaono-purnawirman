@@ -28,7 +28,7 @@ module.exports = {
     });
     return false;
   }
-
+  ,
   /* 
   Adding new user to the database, return the user if success, null otherwise
   */
@@ -48,7 +48,7 @@ module.exports = {
     newUser.save();
     return newUser;
   }
-
+  ,
   /* helper function to update one field in user profile */
   _updateField: function(Model, IDName, IDValue, fieldName, fieldValue){
     var chalk = require('chalk');
@@ -62,7 +62,7 @@ module.exports = {
       });
     return true;
   }
-
+  ,
   /* 
   Editing user profile to the database, return true if success, false otherwise
   editing user profile is restricted to changing information related to users only
@@ -94,6 +94,7 @@ module.exports = {
     });
     return true;
   }
+  ,
 
   /* helper function find and add element list */
   _findAndAddToList: function(Model, IDName, IDValue, fieldName, newElement){
@@ -115,6 +116,7 @@ module.exports = {
     });
     return true;
   }
+  ,
 
   removeAllOccurenceFromList: function(list, elementToRemove){
     for(var k = list.length - 1; k >= 0; k--){
@@ -123,6 +125,7 @@ module.exports = {
       }
     }
   }
+  ,
 
   /* helper function find and remove element from list */
   _findAndRemoveFromList: function(Model, IDName, IDValue, fieldName, elementToRemove){
@@ -144,7 +147,7 @@ module.exports = {
     });
     return true;
   }
-
+  ,
 
   /* likes a trip, true if success, false otherwise 
   User: userLikedTrips, userDestinations
@@ -161,7 +164,7 @@ module.exports = {
     }
     return true;
   }
-
+  ,
 
   /* disliking trip, true if success, false otherwise 
   User: userLikedTrips, userDestinations
@@ -179,7 +182,7 @@ module.exports = {
     }
     return true;
   }
-
+  ,
 
   /* Deleting user to the database, return true if success, false otherwise
   Trip: remove all trips created by user*/
@@ -188,6 +191,7 @@ module.exports = {
     
     return true; 
   }
+  ,
 
   /* Adding trips created by an user to the database, return true if succesful
   Trip
@@ -235,13 +239,14 @@ module.exports = {
 
     return true;
   }
-
+  ,
 
   /* Editing trips to the database */
   editTrip: function(tripID, tripName, tripCreator, tripDestination, tripType, tripInfo){
 
   }
-
+  ,
+  
   /* Deleting trips to the database */
   deleteTrip: function(tripID, tripName, tripCreator, tripDestination, tripType, tripInfo){
 
