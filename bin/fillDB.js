@@ -43,10 +43,7 @@ module.exports = {
       console.log(chalk.red("user already exist, can not add new user"));
       return null;
     }
-    var requiredFieldList = ["userDestinations", "userCreatedTrips", "userLikedTrips"];
-    for(var fieldName in requiredFieldList){
-      userInfo[fieldName] = [];
-    }
+    
     // if not existed before, create a new user
     var newUser = new User(userInfo);
     newUser.save();
@@ -112,7 +109,10 @@ module.exports = {
         return false;
       } else {
         var newFieldValue = record[fieldName];
-        newFieldValue.push(newElement);
+        // if element does not exist in the list, then add it
+        if(newFieldValue.indexOf(newElement) > 0){
+          newFieldValue.push(newElement);
+        }
         if(!_updateField(Model, IDName, IDValue, fieldName, newFieldValue)){
           return false;
         }
@@ -203,7 +203,7 @@ module.exports = {
   Destination: new or just tabies, buddies */
   addTrip: function(User, Trip, tripInfo){
     var chalk = require('chalk');
-    
+
     var requiredFields = ["tripID", "tripName", "tripCreator", "tripDestinationID", "tripDestinationName", "tripType"];
     var fieldName;
     // for(fieldName in requiredFields){

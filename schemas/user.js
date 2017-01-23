@@ -9,9 +9,10 @@ var userSchema = new mongoose.Schema({
   userEmail: String,
   userPhoto: String,
   userDescription: String,
-  userDestinations: [String],
-  userLikedTrips: [String],
-  userCreatedTrips: [String],
+  userActive: {type: Boolean, default: true},
+  userDestinations: {type: [String], default: []},
+  userLikedTrips: {type: [String], default: []},
+  userCreatedTrips: {type: [String], default: []},
 });
 
 var User = mongoose.model('User', userSchema);

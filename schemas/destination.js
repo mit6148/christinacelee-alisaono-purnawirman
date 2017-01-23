@@ -6,8 +6,8 @@ var mongoose = require('mongoose');
 var destinationSchema = new mongoose.Schema({
   destinationID: {type: String, required: true, index: {unique: true}},
   destinationName: {type: String, required: true},
-  tabies: [String],
-  buddies: [String]
+  tabies: {type: [String], default: []},
+  buddies: {type: [String], default: []},
 });
 
 var Destination = mongoose.model('Destination', destinationSchema);

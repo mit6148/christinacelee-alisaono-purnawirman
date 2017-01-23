@@ -10,13 +10,13 @@ var tripSchema = new mongoose.Schema({
   tripDestinationID: {type: String, required: true},
   tripDestinationName: {type: String, required: true},
   tripType: {type: String, required: true},
+  tripActive: {type: Boolean, default: true},
   tripPhoto: String,
   tripDescription: String,
-  tripLikedUsers: [String],
+  tripLikedUsers: {type: [String], default: []},
   tripSeason: String,
-  tripDuration: Number,
-  tripStartBudget: Number,
-  tripEndBudget: Number
+  tripDuration: String,
+  tripBudget: String,
 });
 
 var Trip = mongoose.model('Trip', tripSchema);

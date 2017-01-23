@@ -101,6 +101,46 @@ passport.deserializeUser(function(obj, done) {
 //   res.send(success);
 // });
 
+router.get('/__addFakeUsersAndTrips', function(req, res, next){
+  var fake = require("../routes/fakeUsersAndTrips.js");
+
+  User.collection.insertMany(fake.users, function(err, docs){
+    if(err){
+      console.log("Error in inserting user for fake data");
+    }
+  });
+  Trip.collection.insertMany(fake.trips, function(err, docs){
+    if(err){
+      console.log("Error in inserting trip for fake data");
+    }
+  });
+  Destination.collection.insertMany(fake.destinations, function(err, docs){
+    if(err){
+      console.log("Error in inserting destination for fake data");
+    }
+  });
+  res.send('Success');
+});
+
+router.get('/__removeAll', function(req, res, next){
+  User.remove({}, function(err, docs){
+    if(err){
+      console.log("Error in deleting user for fake data");
+    }
+  });
+  Trip.remove({}, function(err, docs){
+    if(err){
+      console.log("Error in deleting trip for fake data");
+    }
+  });
+  Destination.remove({}, function(err, docs){
+    if(err){
+      console.log("Error in deleting destination for fake data");
+    }
+  });
+  res.send('Success');
+});
+
 router.get('/login', function (req, res, next) {
   res.render('login');
 });
@@ -131,8 +171,9 @@ router.get('/', function(req, res, next) {
 // This GET req should return ALL buddies of the same location 
 router.get('/buddy_search', function(req, res, next) {
 
-  var placeID = req.body.buddy_destination_id;
-  var placeName = req.body.buddy_destination_name;
+  var placeID = req.query.buddy_destination_id;
+  var placeName = req.query.buddy_destination_name;
+  console.log("AAA "+ placeName);
 
   // fake buddy data for front end testing
   var fakeBuddyData = {users:[{userID: "123", username: "user1", userImageURL: 'http://placekitten.com/g/150/150',
