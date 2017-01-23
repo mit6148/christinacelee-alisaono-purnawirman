@@ -1,9 +1,9 @@
 /* This is to fill the fake data in the database */
 
-// // get the User, trip, and destination model
-// var User = require('../schemas/user');
-// var Trip = require('../schemas/trip');
-// var Destination = require('../schemas/destination');
+// get the User, trip, and destination model
+var User = require('../schemas/user');
+var Trip = require('../schemas/trip');
+var Destination = require('../schemas/destination');
 // var chalk = require('chalk')
 
 // /* Adding new destination to database */
@@ -203,6 +203,7 @@ module.exports = {
   Destination: new or just tabies, buddies */
   addTrip: function(User, Trip, tripInfo){
     var chalk = require('chalk');
+    
     var requiredFields = ["tripID", "tripName", "tripCreator", "tripDestinationID", "tripDestinationName", "tripType"];
     var fieldName;
     // for(fieldName in requiredFields){
