@@ -314,9 +314,9 @@ router.get('/view_user/:user_id', function(req, res, next) {
   // req.user.userID is user ID of the person who is viewing the profile
   // set userIsOwner to true, if the person is viewing his/her own profile
   var userIsOwner = false;
-  // if (userID === req.user.userID) {
-  //   userIsOwner = true;
-  // }
+  if (userID === req.user.userID) {
+    userIsOwner = true;
+  }
 
   // userImageURL should have been saved in the database
   // userImageURL should include version number so that pictures are concurrently updated
