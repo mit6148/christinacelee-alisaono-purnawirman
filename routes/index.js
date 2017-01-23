@@ -356,7 +356,7 @@ router.post('/edit_profile_info/:user_id', function(req, res, next) {
   // update the db
 
   // redirect to the user's own profile page
-  res.redirect('/view_user/'+user_id);
+  res.redirect('/view_user/'+userID);
 });
 
 /* POST add_trip*/
