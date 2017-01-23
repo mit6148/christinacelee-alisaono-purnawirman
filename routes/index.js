@@ -18,6 +18,7 @@ router.use(passport.session());
 var User = require('../schemas/user');
 var Trip = require('../schemas/trip');
 var Destination = require('../schemas/destination');
+var helperFunction = require('../bin/fillDB');
 
 // including the location data
 var City = require('../schemas/locationCity');
@@ -35,15 +36,23 @@ passport.use(new FacebookStrategy({
   clientSecret: "02c286e89257fbd0a9d180a6c6cbb09d",
   callbackURL: "https://tabibuddy.azurewebsites.net/login/facebook/callback"
 }, function(accessToken, refreshToken, profile, done) {
-  var user = new User();
-  // console.log(profile.id);
-  user.userID = profile.id;
-  user.userName = profile.displayName;
-  user.userPhoto = "http://res.cloudinary.com/tabibuddy/image/upload/c_thumb,g_face,h_200,w_200/v1485053998/125.jpg";
-  user.save();               
+  if (helperFunction.isIDExist(User,'userID',profile.id)) {
+    User.findOne({"userID": profile.id}, function(err, user){
+      if(err){
+        console.log(err);
+        return done(null, null);
+      }
+      return done(null, user);
+    });
+  } else {
+    var newUserInfo = {};
+    newUserInfo.userID = profile.id;
+    newUserInfo.userName = profile.displayName;
+    newUserInfo.userPhoto = "http://res.cloudinary.com/tabibuddy/image/upload/c_thumb,g_face,h_200,w_200/v1485053998/125.jpg";
   // user.fb.access_token = access_token;
-  // returning empty user for now
-  return done(null, user);
+    var newUser = helperFunction.addNewUser(User, newUserInfo);               
+    return done(null, newUser);
+  }
 }));
 
 passport.serializeUser(function(user, done) {
@@ -54,23 +63,23 @@ passport.deserializeUser(function(obj, done) {
 });
 
 
-router.get('/mongo_test_add', function(req, res, next) {
-  var testUser = new User();
-  testUser.userID = "12345";
-  testUser.userName = "testUser";
-  testUser.save();
-  res.send('saved'+testUser.userID+','+testUser.userName);
-});
+// router.get('/mongo_test_add', function(req, res, next) {
+//   var testUser = new User();
+//   testUser.userID = "12345";
+//   testUser.userName = "testUser";
+//   testUser.save();
+//   res.send('saved'+testUser.userID+','+testUser.userName);
+// });
 
-router.get('/mongo_test_show', function(req, res, next) {
-  User.find({},function(err,record){
-    if (err) {
-      res.send('error:'+error);
-    } else {
-      res.send('success:'+record);
-    }
-  });
-})
+// router.get('/mongo_test_show', function(req, res, next) {
+//   User.find({},function(err,record){
+//     if (err) {
+//       res.send('error:'+error);
+//     } else {
+//       res.send('success:'+record);
+//     }
+//   });
+// })
 
 router.get('/check_login', function (req, res, next) {
   if(req.isAuthenticated()) {
