@@ -19,7 +19,7 @@ var User = require('../schemas/user');
 var Trip = require('../schemas/trip');
 var Destination = require('../schemas/destination');
 var helper = require('../bin/fillDB');
-var helperFunction = new helper();
+var helperFunction = require('../bin/fillDB').helper;
 
 // including the location data
 var City = require('../schemas/locationCity');
