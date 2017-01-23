@@ -201,7 +201,7 @@ module.exports = {
   Trip
   User: userCreatedTrips, userDestinations
   Destination: new or just tabies, buddies */
-  addTrip: function(Trip, tripInfo){
+  addTrip: function(User, Trip, tripInfo){
     var chalk = require('chalk');
     var requiredFields = ["tripID", "tripName", "tripCreator", "tripDestinationID", "tripDestinationName", "tripType"];
     var fieldName;

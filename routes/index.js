@@ -117,7 +117,7 @@ router.get('/add_trip_test', function (req, res, next) {
     'tripDestinationName' : 'UK',
     'tripType' : 'adventure',
   };
-  var success = helperFunction.addTrip(Trip, tripInfo);
+  var success = helperFunction.addTrip(User, Trip, tripInfo);
   res.send(success);
 });
 // GET requests
