@@ -3,63 +3,65 @@ var myUserID = 'tempUserID';
 var likeIconURL = "/images/like.png";
 var unlikeIconURL = "/images/unlike.png";
 
+var $j = jQuery.noConflict();
+
 var main = function() {
 
 	//loadFakeTestingData();	
 
-  $(function () {
-    $('#user-photo-edit-dialog').dialog({
-      autoOpen: false
-    });
+  // $(function () {
+  //   $('#user-photo-edit-dialog').dialog({
+  //     autoOpen: false
+  //   });
   
-    $('.edit-user-image').on('click',editUserImage);
-  });
-
-  $(function () {
-    $('#info-edit-dialog').dialog({
-      autoOpen: false
-    });
-  
-    $('#user-info-edit').on('click', openEditProfile);
-  });
-
-  $(function () {
-    $('#delete-confirm-dialog').dialog({
-      autoOpen: false
-    });
-  
-    $('#delete-confirm').on('click', deleteTrip);
-  });
-
-  // $('#info-edit-dialog').dialog({
-  //   autoOpen: false
+  //   $('.edit-user-image').on('click',editUserImage);
   // });
 
-  // $('#user-photo-edit-dialog').dialog({
-  //   autoOpen: false
+  // $(function () {
+  //   $('#info-edit-dialog').dialog({
+  //     autoOpen: false
+  //   });
+  
+  //   $('#user-info-edit').on('click', openEditProfile);
   // });
 
-  // $("#delete-confirm-dialog").dialog({
-  //   autoOpen: false
+  // $(function () {
+  //   $('#delete-confirm-dialog').dialog({
+  //     autoOpen: false
+  //   });
+  
+  //   $('#delete-confirm').on('click', deleteTrip);
   // });
 
-  // $('.edit-user-image').on('click',editUserImage)
+  $j('#info-edit-dialog').dialog({
+    autoOpen: false
+  });
 
-  // $('#user-info-edit').on('click', openEditProfile);
+  $j('#user-photo-edit-dialog').dialog({
+    autoOpen: false
+  });
 
-  // $('#delete-confirm').on('click', deleteTrip);
+  $j("#delete-confirm-dialog").dialog({
+    autoOpen: false
+  });
 
-  $('#trip-index').on('click', showTripsTab);
+  $j('.edit-user-image').on('click',editUserImage)
 
- 	$('#wishlist-index').on('click', showWishlistTab);
+  $j('#user-info-edit').on('click', openEditProfile);
 
- 	$('.trip').on('click',function(event){
+  $j('#delete-confirm').on('click', deleteTrip);
+
+  $j('#trip-index').on('click', showTripsTab);
+
+ 	$j('#wishlist-index').on('click', showWishlistTab);
+
+ 	$j('.trip').on('click',function(event){
     event.preventDefault();
 
-    var target = $(event.target);
+    var target = $j(event.target);
     var targetClass = target.attr('class');
-    var tripID = $(this).attr('rel');
-    var tripElement = $(this);
+    var tripID = $j(this).attr('rel');
+    var tripElement = $j(this);
 
     switch (targetClass) {
     	case 'trip-author':
@@ -83,14 +85,14 @@ var main = function() {
   	}
 	});
 
-  $('#trip-popup-close-icon').on('click',closePopupTrip);
+  $j('#trip-popup-close-icon').on('click',closePopupTrip);
 
-  $('#trip-popup').on('click',function(event){
+  $j('#trip-popup').on('click',function(event){
     event.preventDefault();
 
-    var target = $(event.target);
-    var targetClass = $(event.target).attr('class');
-    var tripID = $(this).attr('rel');
+    var target = $j(event.target);
+    var targetClass = $j(event.target).attr('class');
+    var tripID = $j(this).attr('rel');
 
     switch (targetClass) {
     	case 'trip-author':
@@ -113,39 +115,39 @@ var main = function() {
     }
   });
 
-  $('.new-trip').on('click',addTrip);
+  $j('.new-trip').on('click',addTrip);
 }
 
 function editUserImage(event){
   event.preventDefault();
-  $('#user-photo-edit-dialog').dialog("open");
+  $j('#user-photo-edit-dialog').dialog("open");
   // $('#user-photo-edit-dialog').modal('show');
 }
 
 function openEditProfile(event){
   event.preventDefault();
-  var currentDescription = $('#user-description').text();
-  var currentContact = $('#user-contact').text();
-  $('#edit-user-description').text(currentDescription);
-  $('#edit-user-contact').text(currentContact);
-  $('#info-edit-dialog').dialog("open");
+  var currentDescription = $j('#user-description').text();
+  var currentContact = $j('#user-contact').text();
+  $j('#edit-user-description').text(currentDescription);
+  $j('#edit-user-contact').text(currentContact);
+  $j('#info-edit-dialog').dialog("open");
   // $('#info-edit-dialog').modal('show');
 }
 
 function showTripsTab(event){
 	event.preventDefault();
- 	$('#trip-index').removeClass('inactive').addClass('active');
- 	$('#trip-content').removeClass('inactive').addClass('active');
- 	$('#wishlist-index').removeClass('active').addClass('inactive');
- 	$('#wishlist-content').removeClass('active').addClass('inactive');
+ 	$j('#trip-index').removeClass('inactive').addClass('active');
+ 	$j('#trip-content').removeClass('inactive').addClass('active');
+ 	$j('#wishlist-index').removeClass('active').addClass('inactive');
+ 	$j('#wishlist-content').removeClass('active').addClass('inactive');
 }
 
 function showWishlistTab(event){
 	event.preventDefault();
-	$('#wishlist-index').removeClass('inactive').addClass('active');
-	$('#wishlist-content').removeClass('inactive').addClass('active');
-	$('#trip-index').removeClass('active').addClass('inactive');
-	$('#trip-content').removeClass('active').addClass('inactive');
+	$j('#wishlist-index').removeClass('inactive').addClass('active');
+	$j('#wishlist-content').removeClass('inactive').addClass('active');
+	$j('#trip-index').removeClass('active').addClass('inactive');
+	$j('#trip-content').removeClass('active').addClass('inactive');
 }
 
 function showUserProfile(eventTarget){
@@ -155,28 +157,28 @@ function showUserProfile(eventTarget){
 
 function showPopupTrip(tripElement){
 	var tripID = tripElement.attr('rel');
-  var offset = $('body').scrollTop();
+  var offset = $j('body').scrollTop();
   var popupTripTop = 100 + offset;
   var popupCloseTop = 75 + offset;
-  $('#trip-popup').css('top', popupTripTop+'px');
-  $('#trip-popup-close').css('top',popupCloseTop+'px');
-  $('#trip-popup-container').removeClass('popup-inactive');
-	$('#trip-popup').append(tripElement.clone());
-	$('#trip-popup .trip-description').removeClass('text-hidden');
-	$('#trip-popup').attr('rel',tripID);
+  $j('#trip-popup').css('top', popupTripTop+'px');
+  $j('#trip-popup-close').css('top',popupCloseTop+'px');
+  $j('#trip-popup-container').removeClass('popup-inactive');
+	$j('#trip-popup').append(tripElement.clone());
+	$j('#trip-popup .trip-description').removeClass('text-hidden');
+	$j('#trip-popup').attr('rel',tripID);
 }
 
 function closePopupTrip(event){
 	event.preventDefault();
-	$('#trip-popup-container').addClass('popup-inactive');
-  $('#trip-popup').children('.trip').remove();
-  $('#trip-popup').attr('rel',"");
+	$j('#trip-popup-container').addClass('popup-inactive');
+  $j('#trip-popup').children('.trip').remove();
+  $j('#trip-popup').attr('rel',"");
 }
 
 function likeTrip(eventTarget, tripID) {
   console.log(tripID+' liked post req');
 
-  $.ajax({
+  $j.ajax({
     url: '/like_trip',
     method: 'POST', 
     data: {
@@ -193,7 +195,7 @@ function likeTrip(eventTarget, tripID) {
 function unlikeTrip(eventTarget,tripID) {
 	console.log(tripID+' unliked post req');
 	
-	$.ajax({
+	$j.ajax({
     url: '/unlike_trip',
     method: 'POST', 
     data: {
@@ -214,15 +216,15 @@ function editTrip(tripID){
 }
 
 function openDeleteTrip(tripID){
-  $("#delete-confirm-dialog").dialog("open");
+  $j("#delete-confirm-dialog").dialog("open");
   // $("#delete-confirm-dialog").modal('show');
-  $("#delete-confirm").attr('rel',tripID);
+  $j("#delete-confirm").attr('rel',tripID);
 }
 
 function deleteTrip(event){
-  var tripID = $("#delete-confirm").attr('rel');
+  var tripID = $j("#delete-confirm").attr('rel');
 
-  $('<form>', {
+  $j('<form>', {
     method: 'post',
     action: '/delete_trip',
     data: {
@@ -264,11 +266,11 @@ function loadFakeTestingData(){
 	userImageURL: 'http://placekitten.com/g/150/150', username: "Cat Meow", userDescription: "this is test user description", userContact: 'test@gmail.com',
 	wishlistTrips: wishlistTripsList, userTrips: userTripsList};
 
-	var source = $("#hbtemplate").html();
+	var source = $j("#hbtemplate").html();
 	var template = Handlebars.compile(source);
-	$('body').append(template(fakeData));
+	$j('body').append(template(fakeData));
 }
 
-$(document).ready(main);
+$j(document).ready(main);
 
 
