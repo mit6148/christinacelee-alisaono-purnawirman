@@ -38,7 +38,8 @@ var trips = [
 			{
 			  "tripID": "newYorkTestA",
 			  "tripName": "newYorkTestA",
-			  "tripCreator": "userA",
+			  "tripCreatorID": "userA",
+			  "tripCreatorName": "userA",
 			  "tripDestinationID": "ChIJOwg_06VPwokRYv534QaPC8g",
 			  "tripDestinationName": "New York, NY, USA",
 			  "tripType": "Food",
@@ -53,7 +54,8 @@ var trips = [
 			{
 			  "tripID": "newYorkTestB",
 			  "tripName": "newYorkTestB",
-			  "tripCreator": "userB",
+			  "tripCreatorID": "userB",
+			  "tripCreatorName": "userB",
 			  "tripDestinationID": "ChIJOwg_06VPwokRYv534QaPC8g",
 			  "tripDestinationName": "New York, NY, USA",
 			  "tripType": "Food",
@@ -68,7 +70,8 @@ var trips = [
 			{
 			  "tripID": "cambridgeTestA",
 			  "tripName": "cambridgeTestA",
-			  "tripCreator": "userC",
+			  "tripCreatorID": "userC",
+			  "tripCreatorName": "userC",
 			  "tripDestinationID": "ChIJX8wwy6Vw44kRh2xoiWSOOsU",
 			  "tripDestinationName": "Cambridge, MA, USA",
 			  "tripType": "History",
@@ -83,7 +86,8 @@ var trips = [
 			{
 			  "tripID": "cambridgeTestB",
 			  "tripName": "cambridgeTestB",
-			  "tripCreator": "userA",
+			  "tripCreatorID": "userA",
+			  "tripCreatorName": "userA",
 			  "tripDestinationID": "ChIJX8wwy6Vw44kRh2xoiWSOOsU",
 			  "tripDestinationName": "Cambridge, MA, USA",
 			  "tripType": "Food",
@@ -98,7 +102,8 @@ var trips = [
 			{
 			  "tripID": "seattleTestA",
 			  "tripName": "seattleTestA",
-			  "tripCreator": "userC",
+			  "tripCreatorID": "userC",
+			  "tripCreatorName": "userC",
 			  "tripDestinationID": "ChIJVTPokywQkFQRmtVEaUZlJRA",
 			  "tripDestinationName": "Seattle, WA, USA",
 			  "tripType": "Food",
@@ -113,7 +118,8 @@ var trips = [
 			{
 			  "tripID": "seattleTestB",
 			  "tripName": "seattleTestB",
-			  "tripCreator": "userA",
+			  "tripCreatorID": "userA",
+			  "tripCreatorName": "userA",
 			  "tripDestinationID": "ChIJVTPokywQkFQRmtVEaUZlJRA",
 			  "tripDestinationName": "Seattle, WA, USA",
 			  "tripType": "Food",

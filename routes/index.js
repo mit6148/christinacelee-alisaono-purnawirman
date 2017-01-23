@@ -101,6 +101,8 @@ passport.deserializeUser(function(obj, done) {
 //   res.send(success);
 // });
 
+
+/* this is to populate database with fake users and trips, using fakeUsersAndTrips.js file */
 router.get('/__addFakeUsersAndTrips', function(req, res, next){
   var fake = require("../routes/fakeUsersAndTrips.js");
 
@@ -122,24 +124,27 @@ router.get('/__addFakeUsersAndTrips', function(req, res, next){
   res.send('Success');
 });
 
-router.get('/__removeAll', function(req, res, next){
-  User.remove({}, function(err, docs){
-    if(err){
-      console.log("Error in deleting user for fake data");
-    }
-  });
-  Trip.remove({}, function(err, docs){
-    if(err){
-      console.log("Error in deleting trip for fake data");
-    }
-  });
-  Destination.remove({}, function(err, docs){
-    if(err){
-      console.log("Error in deleting destination for fake data");
-    }
-  });
-  res.send('Success');
-});
+/* WARNING!! This is to clear ALL database */
+// router.get('/__removeAll', function(req, res, next){
+//   User.remove({}, function(err, docs){
+//     if(err){
+//       console.log("Error in deleting user for fake data");
+//     }
+//   });
+//   Trip.remove({}, function(err, docs){
+//     if(err){
+//       console.log("Error in deleting trip for fake data");
+//     }
+//   });
+//   Destination.remove({}, function(err, docs){
+//     if(err){
+//       console.log("Error in deleting destination for fake data");
+//     }
+//   });
+//   res.send('Success');
+// });
+
+
 
 router.get('/login', function (req, res, next) {
   res.render('login');
@@ -173,22 +178,34 @@ router.get('/buddy_search', function(req, res, next) {
 
   var placeID = req.query.buddy_destination_id;
   var placeName = req.query.buddy_destination_name;
-  console.log("AAA "+ placeName);
-
-  // fake buddy data for front end testing
-  var fakeBuddyData = {users:[{userID: "123", username: "user1", userImageURL: 'http://placekitten.com/g/150/150',
-  tripImages: [{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'}]},
-  {userID: "124", username: "user2", userImageURL: 'http://placekitten.com/g/150/150', 
-  tripImages: [{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'}]},
-  {userID: "125", username: "user3", userImageURL: 'http://placekitten.com/g/150/150',
-  tripImages: [{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'}]},
-  {userID: "126", username: "user4", userImageURL: 'http://placekitten.com/g/150/150',
-  tripImages: [{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'}]},
-  {userID: "127", username: "user5", userImageURL: 'http://placekitten.com/g/150/150',
-  tripImages: [{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'}]},
-  ]};
-
-  res.render('buddy_search', fakeBuddyData);
+  var buddies = [];
+  Destination.findOne({"destinationID": placeID}, function(err, foundDestination){
+    if(err){
+      console.log("Errof in finding destination");
+    }
+    if(foundDestination != null){
+      buddies = foundDestination["buddies"];
+    }
+    var buddyList = [];
+    var query = User.
+                find({}).
+                where("userID").in(buddies).
+                select("userID userName userPhoto")
+    query.exec(function(err, users){
+      if(err) console.log("Error");
+      if(users != null){
+        for(var k = 0; k < users.length; k++){
+          // console.log("ID: " + users[k].userID + " userName: " + users[k].userName);
+          buddyList.push({userID: users[k].userID,
+                          username: users[k].userName,
+                          userImageURL: users[k].userPhoto,
+                          tripImages: []
+          });
+        }
+      }
+      res.render('buddy_search', {users: buddyList});   
+    })
+  });
 });
 
 /* GET buddy search result (filtered) */
@@ -215,24 +232,54 @@ router.get('/buddy_search_filter', function(req, res, next) {
 // This GET req should return ALL trips of the same location 
 router.get('/tabi_search', function(req, res, next) {
 
-  var placeID = req.body.tabi_destination_id;
-  var placeName = req.body.tabi_destination_name;
-
+  var placeID = req.query.tabi_destination_id;
+  var placeName = req.query.tabi_destination_name;
+  var tabies = [];
+  Destination.findOne({"destinationID": placeID}, function(err, foundDestination){
+    if(err){
+      console.log("Error in finding destination");
+    }
+    if(foundDestination != null){
+      tabies = foundDestination["tabies"];
+    }
+    var tabiList = [];
+    var query = Trip.
+                find({}).
+                where("tripID").in(tabies).
+                select("tripID tripCreatorID tripName tripCreatorName tripDescription tripPhoto")
+    query.exec(function(err, trips){
+      if(err) console.log("Error");
+      if(trips != null){
+        for(var k = 0; k < trips.length; k++){
+          // console.log("ID: " + trips[k].userID + " userName: " + trips[k].userName);
+          tabiList.push({tripID: trips[k].tripID,
+                          userID: trips[k].tripCreatorID,
+                          tripTitle: trips[k].tripName,
+                          username: trips[k].tripCreatorName,
+                          description: trips[k].tripDescription,
+                          liked: false,
+                          imageURL: trips[k].tripPhoto
+          });
+        }
+      }
+      console.log(tabies);
+      res.render('tabi_search', {trips: tabiList});   
+    })
+  });
   // fake trip data for front end testing
-  var fakeTripData = {trips:[{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12348", userID: "126", tripTitle: "test4", username: "user4", description: "this is test description4", liked:true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12349", userID: "127", tripTitle: "test5", username: "user5", description: "this is test description5", liked:true, imageURL:'http://placekitten.com/g/150/150'},]};
-  console.log(req);
-  console.log("BBBB");
-  res.render('tabi_search', fakeTripData);
+  // var fakeTripData = {trips:[{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12348", userID: "126", tripTitle: "test4", username: "user4", description: "this is test description4", liked:true, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12349", userID: "127", tripTitle: "test5", username: "user5", description: "this is test description5", liked:true, imageURL:'http://placekitten.com/g/150/150'},]};
+  
+  // res.render('tabi_search', fakeTripData);
 });
 
 /* GET tabi search result (filtered) */
 // This GET req should return FILTERED trips of the same location
 router.get('/tabi_search_filter', function(req, res, next) {
-
+  console.log(req.query.Budget);
   // front end will send req.body should include location, filter object
   // {
   //   placeID: '12345',

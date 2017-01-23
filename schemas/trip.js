@@ -6,7 +6,8 @@ var mongoose = require('mongoose');
 var tripSchema = new mongoose.Schema({
   tripID: {type: String, required: true, index: {unique: true}},
   tripName: {type: String, required: true},
-  tripCreator: {type: String, required: true},
+  tripCreatorID: {type: String, required: true},
+  tripCreatorName: {type: String, required: true},
   tripDestinationID: {type: String, required: true},
   tripDestinationName: {type: String, required: true},
   tripType: {type: String, required: true},
