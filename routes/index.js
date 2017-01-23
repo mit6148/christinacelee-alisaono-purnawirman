@@ -110,12 +110,12 @@ router.get('/your_user_name',
 
 router.get('/add_trip_test', function (req, res, next) {
   var tripInfo = {
-    tripID : '123456',
-    tripName : 'Test Trip',
-    tripCreator: req.user.userID,
-    tripDestinationID: '123',
-    tripDestinationName: 'UK',
-    tripType: 'adventure',
+    'tripID' : '123456',
+    'tripName' : 'Test Trip',
+    'tripCreator' : req.user.userID,
+    'tripDestinationID' : '123',
+    'tripDestinationName' : 'UK',
+    'tripType' : 'adventure',
   };
   var success = helperFunction.addTrip(Trip, tripInfo);
   if (success) {
