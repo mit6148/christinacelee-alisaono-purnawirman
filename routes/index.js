@@ -81,24 +81,24 @@ router.get('/__addFakeUsersAndTrips', function(req, res, next){
 });
 
 /* WARNING!! This is to clear ALL database */
-// router.get('/__removeAll', function(req, res, next){
-//   User.remove({}, function(err, docs){
-//     if(err){
-//       console.log("Error in deleting user for fake data");
-//     }
-//   });
-//   Trip.remove({}, function(err, docs){
-//     if(err){
-//       console.log("Error in deleting trip for fake data");
-//     }
-//   });
-//   Destination.remove({}, function(err, docs){
-//     if(err){
-//       console.log("Error in deleting destination for fake data");
-//     }
-//   });
-//   res.send('Success');
-// });
+router.get('/__removeAll', function(req, res, next){
+  User.remove({}, function(err, docs){
+    if(err){
+      console.log("Error in deleting user for fake data");
+    }
+  });
+  Trip.remove({}, function(err, docs){
+    if(err){
+      console.log("Error in deleting trip for fake data");
+    }
+  });
+  Destination.remove({}, function(err, docs){
+    if(err){
+      console.log("Error in deleting destination for fake data");
+    }
+  });
+  res.send('Success');
+});
 
 // GET requests
 
@@ -449,7 +449,7 @@ router.post('/add_trip', function(req, res, next) {
         tripInfo["tripPhoto"] = result.eager[0].secure_url;
         // Save the trip to database.
         if(helperFunction.addTrip(tripInfo)){
-          res.redirect('/view_user/'+userID);
+          res.redirect('/view_user/'+ userID);
         } else {
           res.send("Error in adding trips");
         }
