@@ -116,6 +116,19 @@ router.get('/__database', function(req, res, next){
   });
 });
 
+/* view all database status now */
+router.get('/__auth', function(req, res, next){
+  var data = {isAuthenticated: req.isAuthenticated()};
+  if(req.isAuthenticated()){
+    for(var key in req.user){
+      if(p.hasOwnProperty(key)){
+        data[key] = req.user[key];
+      }
+    }
+  }
+  res.send(JSON.stringify(data, null, 2));
+});
+
 // GET requests
 
 /* GET home page. */
