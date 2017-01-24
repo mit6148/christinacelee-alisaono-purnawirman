@@ -81,24 +81,40 @@ router.get('/__addFakeUsersAndTrips', function(req, res, next){
 });
 
 /* WARNING!! This is to clear ALL database */
-// router.get('/__removeAll', function(req, res, next){
-//   User.remove({}, function(err, docs){
-//     if(err){
-//       console.log("Error in deleting user for fake data");
-//     }
-//   });
-//   Trip.remove({}, function(err, docs){
-//     if(err){
-//       console.log("Error in deleting trip for fake data");
-//     }
-//   });
-//   Destination.remove({}, function(err, docs){
-//     if(err){
-//       console.log("Error in deleting destination for fake data");
-//     }
-//   });
-//   res.send('Success');
-// });
+router.get('/__removeAll', function(req, res, next){
+  User.remove({}, function(err, docs){
+    if(err){
+      console.log("Error in deleting user for fake data");
+    }
+  });
+  Trip.remove({}, function(err, docs){
+    if(err){
+      console.log("Error in deleting trip for fake data");
+    }
+  });
+  Destination.remove({}, function(err, docs){
+    if(err){
+      console.log("Error in deleting destination for fake data");
+    }
+  });
+  res.send('Success');
+});
+
+/* view all database status now */
+router.get('/__database', function(req, res, next){
+  User.find({}, function(err, users){
+    if(err) console.log("err in user database");
+    Trip.find({}, function(err, trips){
+      if(err) console.log("err in trip database");
+      Destination.find({}, function(err, destinations){
+        if(err) console.log("err in destination database");
+        res.send(JSON.stringify({users: users,
+                                 trips: trips,
+                                 destinations: destinations}, null, 2));
+      });
+    });
+  });
+});
 
 // GET requests
 
@@ -408,59 +424,53 @@ router.post('/add_trip', function(req, res, next) {
   //   return;
   // }
   var userID;
+  var userName;
   if (process.env.NODE_ENV === "production") {
     userID = req.user.userID;
+    userName = req.user.userName;
+    if(!req.isAuthenticated()){
+      res.redirect('/login/facebook');
+      return;
+    }
   } else {
     userID = "userA";
+    userName = "userA";
   }
+
+  // add trip to db
   var tripInfo;
   var tripID = new mongoose.Types.ObjectId;
   // parse from the form
   var form = new formidable.IncomingForm();
-
   form.parse(req, function(err, fields, files) {
     tripInfo = {tripID: tripID,
                 tripName: fields.title,
-                tripCreator: userID,
+                tripCreatorID: userID,
+                tripCreatorName: userName,
                 tripDestinationID: fields.destination_id,
                 tripDestinationName: fields.destination_name,
-                tripType: ""}
-    var title = fields.title;
-    var description = fields.description;
-    var placeID = fields.destination_id;
-    var placeName = fields.destination_name;
-    console.log(JSON.stringify(fields));
-    console.log(fields.category);
-
+                tripType: fields.category,
+                tripActive: true,
+                tripPhoto: "http://placekitten.com/g/200/200",
+                tripDescription: fields.description,
+                tripLikedUsers: [userID],
+                tripSeason: fields.season,
+                tripDuration: fields.duration,
+                tripBudget: fields.budget,}
   });
 
-  var userID = "userA";
-  var title = req.body.title;
-  var description = req.body.description;
-  var placeID = req.body.destination_id;
-  var placeName = req.body.destination_name;
-  var trip_image = req.body.trip_image;
-  var duration = parseInt(req.body.duration);
-  var budget = parseInt(req.body.budget);
-  var tripPhotoURL = "http://placekitten.com/g/200/200"; // placeholder
-  var tripID = new mongoose.Types.ObjectId;
-  console.log("AAA " + JSON.stringify(req.isAuthenticated()));
-  var requiredFields = ["tripID", "tripName", "tripCreator", "tripDestinationID", "tripDestinationName", "tripType"];
-  // var tripInfo = {tripID: tripID,
-  //                 tripName: title,
-  //                 tripCreator: userID,
-  //                 tripDestinationID: placeID,
-  //                 tripDestinationName: placeName,
-  //                 tripType: ""}
-
+  // edit the photourl to db
   form.on('file', function(field, file) {
     cloudinary.uploader.upload(
       file.path, 
       function(result) {
-        var tripPhotoURL = result.eager[0].secure_url;
-
-        console.log(tripPhotoURL);
+        tripInfo["tripPhoto"] = result.eager[0].secure_url;
         // Save the trip to database.
+        if(helperFunction.addTrip(tripInfo)){
+          res.redirect('/view_user/'+ userID);
+        } else {
+          res.send("Error in adding trips");
+        }
       },
       {
         public_id: tripID, 
@@ -471,15 +481,6 @@ router.post('/add_trip', function(req, res, next) {
       }
     );
   });
-
-  form.parse(req, function(err, fields, files) {
-    console.log(fields);
-    var title = fields.title;
-    var description = fields.description;
-    var placeID = fields.destination_id;
-    var placeName = fields.destination_name;
-    console.log(title);
-  });  
 
   // Show some message on top to let the user know the update was successful?
   // res.redirect('/view_user/'+userID);
