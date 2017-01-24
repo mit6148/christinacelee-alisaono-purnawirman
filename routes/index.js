@@ -301,8 +301,12 @@ router.get('/tabi_search_filter', function(req, res, next) {
 });
 
 
-router.get('/view_own_profile', function(req, res, next) {
-  res.redirect('/view_user/'+req.user.userID);
+router.get('/view_my_profile', function(req, res, next) {
+  if (req.isAuthenticated()) {
+    res.redirect('/view_user/'+req.user.userID);
+  } else {
+    res.redirect('/login');
+  }
 })
 
 /* GET user profile page by user ID */

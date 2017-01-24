@@ -12,5 +12,21 @@ var main = function() {
   }).mouseout(function(event){
     $(this).css('background-color','white');
   });
+  $('#user-dropdown-profile').on('click',function(event){
+    window.location = '/view_my_profile';
+  });
+  $('#user-dropdown-create').on('click',function(event){
+    window.location = '/add_trip_page';
+  });
+  $('#user-dropdown-logout').on('click',function(event){
+    window.location = '/logout';
+  });
+  $('#user-dropdown-login').on('click',function(event){
+    window.location = '/login/facebook';
+  //   $('<form>', {
+  //     method: 'get',
+  //     action: '/login/facebook',
+  //   }).submit();
+  // });
 }
 $(document).ready(main);
