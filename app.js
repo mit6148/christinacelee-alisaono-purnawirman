@@ -11,13 +11,6 @@ var routes = require('./routes/index');
 
 var app = express();
 
-//acessing blob storage ~~~
-// var accessKey = '1Vt0m8vRuUYGLKYUQT4+jMev+r9Die37LDQjhdolUnS3Z2LvrJq4Hn9f48D6jiXF7ivmj3PJM+jgF/ZKZDamYg==';
-// var storageAccount = 'tabibuddy';
-// var containerName = 'test-pictures';
-// var blobService = azure.createBlobService(storageAccount, accessKey);
-//~~~ acessing blob storage
-
 // database setup
 if (process.env.NODE_ENV === "production") {
   mongoose.connect('mongodb://tabibuddy:TvFNWH3gIMMC6UgsoLOoYkNeCE1KPe8OG1f7O36HdprgiN4IMId28Lp9okgnWUK3giJekFfYQMOW0hC5zg4MgA==@tabibuddy.documents.azure.com:10250/tabibuddy-db?ssl=true');
