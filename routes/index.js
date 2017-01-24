@@ -403,51 +403,39 @@ router.post('/add_trip', function(req, res, next) {
   //   return;
   // }
   var userID;
+  var userName;
   if (process.env.NODE_ENV === "production") {
     userID = req.user.userID;
+    userName = req.user.userName;
   } else {
     userID = "userA";
+    userName = "userA";
   }
+
+  // add trip to db
   var tripInfo;
   var tripID = new mongoose.Types.ObjectId;
   // parse from the form
   var form = new formidable.IncomingForm();
-
   form.parse(req, function(err, fields, files) {
     tripInfo = {tripID: tripID,
                 tripName: fields.title,
-                tripCreator: userID,
+                tripCreatorID: userID,
+                tripCreatorName: userName,
                 tripDestinationID: fields.destination_id,
                 tripDestinationName: fields.destination_name,
-                tripType: ""}
-    var title = fields.title;
-    var description = fields.description;
-    var placeID = fields.destination_id;
-    var placeName = fields.destination_name;
-    console.log(JSON.stringify(fields));
-    console.log(fields.category);
-
+                tripType: fields.category,
+                tripActive: true,
+                tripPhoto: "http://placekitten.com/g/200/200",
+                tripDescription: fields.description,
+                tripLikedUsers: [userID],
+                tripSeason: fields.season,
+                tripDuration: fields.duration,
+                tripBudget: fields.budget,}
   });
+  helperFunction.addTrip(tripInfo);
 
-  var userID = "userA";
-  var title = req.body.title;
-  var description = req.body.description;
-  var placeID = req.body.destination_id;
-  var placeName = req.body.destination_name;
-  var trip_image = req.body.trip_image;
-  var duration = parseInt(req.body.duration);
-  var budget = parseInt(req.body.budget);
-  var tripPhotoURL = "http://placekitten.com/g/200/200"; // placeholder
-  var tripID = new mongoose.Types.ObjectId;
-  console.log("AAA " + JSON.stringify(req.isAuthenticated()));
-  var requiredFields = ["tripID", "tripName", "tripCreator", "tripDestinationID", "tripDestinationName", "tripType"];
-  // var tripInfo = {tripID: tripID,
-  //                 tripName: title,
-  //                 tripCreator: userID,
-  //                 tripDestinationID: placeID,
-  //                 tripDestinationName: placeName,
-  //                 tripType: ""}
-
+  // edit the photourl to db
   form.on('file', function(field, file) {
     cloudinary.uploader.upload(
       file.path, 
