@@ -15,11 +15,20 @@ body {
   display: none;
 }
 
+.body-container {
+  display: inline-block;
+  margin-top: 50px;
+  width: 100%;
+  background-image: url(/images/sf-background.jpg);
+  background-repeat: no-repeat; 
+  background-position: left top;
+  background-attachment: fixed;
+  background-size: cover; 
+}
+
 .hero {
 /*  color: #1abc9c;*/
   color: #2c3e50;
-  position: relative;
-  top: 50px;
   line-height: 44px;
   padding: 22px 80px 44px 80px;
   text-align: center;

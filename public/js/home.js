@@ -27,6 +27,22 @@ function initMap() {
     $('#buddy-place-id').val(placeID);
     $('#buddy-place-name').val(placeName);
   });
+
+  // $(function(){
+  // var backgrounds = ['/images/people.jpg','/images/city1.jpg','/images/city2.jpg','/images/forest.jpg','/images/city3.jpg'];
+  // var current = 0;
+
+  // function nextBackground(){
+  //   $('#background').fadeOut('300');
+  //   current++;
+  //   $('#background').attr('src',backgrounds[current%backgrounds.length]);
+  //   $('#background').fadeIn('600');
+  //   setTimeout(nextBackground,5000);
+  // };
+
+  // setTimeout(nextBackground,5000);
+  //   $('#background').attr('src', backgrounds[0]);
+  // });
 }
 
 $(document).ready(function(){
