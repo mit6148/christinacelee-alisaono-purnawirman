@@ -27,6 +27,6 @@ var main = function() {
   //     method: 'get',
   //     action: '/login/facebook',
   //   }).submit();
-  // });
+  });
 }
 $(document).ready(main);
