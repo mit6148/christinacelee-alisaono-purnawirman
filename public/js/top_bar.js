@@ -23,10 +23,6 @@ var main = function() {
   });
   $('#user-dropdown-login').on('click',function(event){
     window.location = '/login/facebook';
-  //   $('<form>', {
-  //     method: 'get',
-  //     action: '/login/facebook',
-  //   }).submit();
   });
 }
 $(document).ready(main);
