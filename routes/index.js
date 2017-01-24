@@ -119,6 +119,11 @@ router.get('/login/facebook/callback',
   })
 );
 
+router.get('/logout', function(req, res, next) {
+  req.logout();
+  res.redirect('/');
+});
+
 /* GET buddy search result */
 // This GET req should return ALL buddies of the same location 
 router.get('/buddy_search', function(req, res, next) {
