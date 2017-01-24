@@ -48,8 +48,8 @@ var trips = [
 			  "tripDescription": "This is a test trip for new york A",
 			  "tripLikedUsers": ["userA", "userB", "userC"],
 			  "tripSeason": "Spring",
-			  "tripDuration": "Short",
-			  "tripBudget": "Low",
+			  "tripDuration": 3,
+			  "tripBudget": 200,
 			},
 			{
 			  "tripID": "newYorkTestB",
@@ -64,8 +64,8 @@ var trips = [
 			  "tripDescription": "This is a test trip for new york B",
 			  "tripLikedUsers": ["userA", "userB"],
 			  "tripSeason": "Winter",
-			  "tripDuration": "Medium",
-			  "tripBudget": "High",
+			  "tripDuration": 1,
+			  "tripBudget": 50,
 			},
 			{
 			  "tripID": "cambridgeTestA",
@@ -80,8 +80,8 @@ var trips = [
 			  "tripDescription": "This is a test trip for cambridge A",
 			  "tripLikedUsers": ["userA", "userC"],
 			  "tripSeason": "Fall",
-			  "tripDuration": "Short",
-			  "tripBudget": "Adventure",
+			  "tripDuration": 4,
+			  "tripBudget": 150,
 			},
 			{
 			  "tripID": "cambridgeTestB",
@@ -96,8 +96,8 @@ var trips = [
 			  "tripDescription": "This is a test trip for cambridge B",
 			  "tripLikedUsers": ["userA", "userC"],
 			  "tripSeason": "Spring",
-			  "tripDuration": "Long",
-			  "tripBudget": "High",
+			  "tripDuration": 8,
+			  "tripBudget": 10000,
 			},
 			{
 			  "tripID": "seattleTestA",
@@ -112,8 +112,8 @@ var trips = [
 			  "tripDescription": "This is a test trip for seattle A",
 			  "tripLikedUsers": ["userA", "userC"],
 			  "tripSeason": "Summer",
-			  "tripDuration": "Medium",
-			  "tripBudget": "Medium",
+			  "tripDuration": 3,
+			  "tripBudget": 650,
 			},
 			{
 			  "tripID": "seattleTestB",
@@ -128,8 +128,8 @@ var trips = [
 			  "tripDescription": "This is a test trip for seattle B",
 			  "tripLikedUsers": ["userA", "userC"],
 			  "tripSeason": "Spring",
-			  "tripDuration": "Short",
-			  "tripBudget": "Low",
+			  "tripDuration": 9,
+			  "tripBudget": 10,
 			},]
 
 
