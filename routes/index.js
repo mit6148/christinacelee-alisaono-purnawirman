@@ -448,14 +448,13 @@ router.post('/add_trip', function(req, res, next) {
   //                 tripDestinationName: placeName,
   //                 tripType: ""}
 
-
   form.on('file', function(field, file) {
     cloudinary.uploader.upload(
       file.path, 
       function(result) {
         var tripPhotoURL = result.eager[0].secure_url;
-        // tripPhoto = tripPhotoURL;
-        res.send(tripPhotoURL);
+
+        console.log(tripPhotoURL);
         // Save the trip to database.
       },
       {
