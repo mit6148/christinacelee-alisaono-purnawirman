@@ -416,7 +416,7 @@ router.post('/add_trip', function(req, res, next) {
   var placeName = req.body.destination_name;
   // ... and so on 
 
-  var tripID = '????' //how do we come up with trip IDs? auto-increment?
+  var tripID = '1234testtest' //how do we come up with trip IDs? auto-increment?
 
   var form = new formidable.IncomingForm();
 
@@ -425,6 +425,7 @@ router.post('/add_trip', function(req, res, next) {
       file.path, 
       function(result) {
         var tripPhotoURL = result.eager[0].secure_url;
+        console.log(tripPhotoURL);
         // Save the trip to database.
       },
       {

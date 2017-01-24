@@ -21,7 +21,7 @@ body {
   width: 100%;
   background-image: url(/images/sf-background.jpg);
   background-repeat: no-repeat; 
-  background-position: left top;
+  background-position: center bottom;
   background-attachment: fixed;
   background-size: cover; 
 }
