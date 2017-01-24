@@ -410,6 +410,10 @@ router.post('/add_trip', function(req, res, next) {
   if (process.env.NODE_ENV === "production") {
     userID = req.user.userID;
     userName = req.user.userName;
+    if(!req.isAuthenticated()){
+      res.redirect('/login/facebook');
+      return;
+    }
   } else {
     userID = "userA";
     userName = "userA";
@@ -436,17 +440,19 @@ router.post('/add_trip', function(req, res, next) {
                 tripDuration: fields.duration,
                 tripBudget: fields.budget,}
   });
-  helperFunction.addTrip(tripInfo);
 
   // edit the photourl to db
   form.on('file', function(field, file) {
     cloudinary.uploader.upload(
       file.path, 
       function(result) {
-        var tripPhotoURL = result.eager[0].secure_url;
-
-        console.log(tripPhotoURL);
+        tripInfo["tripPhoto"] = result.eager[0].secure_url;
         // Save the trip to database.
+        if(helperFunction.addTrip(tripInfo)){
+          res.redirect('/view_user/'+userID);
+        } else {
+          res.send("Error in adding trips");
+        }
       },
       {
         public_id: tripID, 
@@ -457,15 +463,6 @@ router.post('/add_trip', function(req, res, next) {
       }
     );
   });
-
-  form.parse(req, function(err, fields, files) {
-    console.log(fields);
-    var title = fields.title;
-    var description = fields.description;
-    var placeID = fields.destination_id;
-    var placeName = fields.destination_name;
-    console.log(title);
-  });  
 
   // Show some message on top to let the user know the update was successful?
   // res.redirect('/view_user/'+userID);

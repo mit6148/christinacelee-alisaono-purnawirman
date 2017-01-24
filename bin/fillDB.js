@@ -242,8 +242,25 @@ module.exports = {
   }
   ,
 
-  /* Editing trips to the database */
-  editTrip: function(tripID, tripName, tripCreator, tripDestination, tripType, tripInfo){
+tripName: {type: String, required: true},
+  tripCreatorID: {type: String, required: true},
+  tripCreatorName: {type: String, required: true},
+  tripDestinationID: {type: String, required: true},
+  tripDestinationName: {type: String, required: true},
+  tripType: {type: String, required: true},
+  tripActive: {type: Boolean, default: true},
+  tripPhoto: String,
+  tripDescription: String,
+  tripLikedUsers: {type: [String], default: []},
+  tripSeason: String,
+  tripDuration: {type: Number, default: 0},
+  tripBudget: {type: Number, default: 0},
+  /* Editing trips to the database 
+  Editing trips to the database, return true if success, false otherwise
+  editing trips is restricted to changing information related to trips only
+  e.g. can only edit tripName, tripType, tripActive, tripPhoto, tripDescription, tripSeason, tripDuration, tripBudget
+  */
+  editTrip: function(tripInfo){
 
   }
   ,
