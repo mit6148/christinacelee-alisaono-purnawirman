@@ -61,47 +61,6 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
-
-// router.get('/mongo_test_add', function(req, res, next) {
-//   var testUser = new User();
-//   testUser.userID = "12345";
-//   testUser.userName = "testUser";
-//   testUser.save();
-//   res.send('saved'+testUser.userID+','+testUser.userName);
-// });
-
-// router.get('/mongo_test_show', function(req, res, next) {
-//   User.find({},function(err,record){
-//     if (err) {
-//       res.send('error:'+error);
-//     } else {
-//       res.send('success:'+record);
-//     }
-//   });
-// })
-
-// router.get('/check_login', function (req, res, next) {
-//   if(req.isAuthenticated()) {
-//     res.send('user id:'+req.user.userID);
-//   } else {
-//     res.send('not isAuthenticated');
-//   }
-// });
-
-// router.get('/add_trip_test', function (req, res, next) {
-//   var tripInfo = {
-//     'tripID' : '123456',
-//     'tripName' : 'Test Trip',
-//     'tripCreator' : req.user.userID,
-//     'tripDestinationID' : '123',
-//     'tripDestinationName' : 'UK',
-//     'tripType' : 'adventure',
-//   };
-//   var success = helperFunction.addTrip(User, Trip, tripInfo);
-//   res.send(success);
-// });
-
-
 /* this is to populate database with fake users and trips, using fakeUsersAndTrips.js file */
 router.get('/__addFakeUsersAndTrips', function(req, res, next){
   var fake = require("../routes/fakeUsersAndTrips.js");
@@ -144,10 +103,11 @@ router.get('/__addFakeUsersAndTrips', function(req, res, next){
 //   res.send('Success');
 // });
 
+// GET requests
 
-
-router.get('/login', function (req, res, next) {
-  res.render('login');
+/* GET home page. */
+router.get('/', function(req, res, next) {
+  res.render('home_temp', {showSearchBar: false, loggedIn: user.isAuthenticated()});
 });
 
 router.get('/login/facebook', passport.authenticate('facebook'));
@@ -158,19 +118,6 @@ router.get('/login/facebook/callback',
     successRedirect: '/' 
   })
 );
-
-router.get('/my_user_name',
-  require('connect-ensure-login').ensureLoggedIn(),
-  function(req, res){
-    res.send('user id:'+req.user.userID+' user name:'+req.user.userName+' user photo:'+req.user.userPhoto+' user email'+req.user.userEmail);
-});
-
-// GET requests
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('home_temp');
-});
 
 /* GET buddy search result */
 // This GET req should return ALL buddies of the same location 
