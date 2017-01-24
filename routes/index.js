@@ -100,6 +100,22 @@ router.get('/__removeAll', function(req, res, next){
   res.send('Success');
 });
 
+/* view all database status now */
+router.get('/__database', function(req, res, next){
+  User.find({}, function(err, users){
+    if(err) console.log("err in user database");
+    Trip.find({}, function(err, trips){
+      if(err) console.log("err in trip database");
+      Destination.find({}, function(err, destinations){
+        if(err) console.log("err in destination database");
+        res.send(JSON.stringify({users: users,
+                                 trips: trips,
+                                 destinations: destinations}, null, 2));
+      });
+    });
+  });
+});
+
 // GET requests
 
 /* GET home page. */
