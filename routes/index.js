@@ -19,11 +19,8 @@ var User = require('../schemas/user');
 var Trip = require('../schemas/trip');
 var Destination = require('../schemas/destination');
 var helperFunction = require('../bin/fillDB.js');
-
-// including the location data
-var City = require('../schemas/locationCity');
-var StateModel = require('../schemas/locationState');
-var Country = require('../schemas/locationCountry');
+var mongoose = require('mongoose');
+var ObjectId = mongoose.Schema.Types.ObjectId;
 
 cloudinary.config({ 
   cloud_name: 'tabibuddy', 
@@ -219,14 +216,6 @@ router.get('/tabi_search', function(req, res, next) {
       res.render('tabi_search', {trips: tabiList, showSearchBar: false, loggedIn: req.isAuthenticated()});   
     })
   });
-  // fake trip data for front end testing
-  // var fakeTripData = {trips:[{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
-  // {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  // {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  // {tripID: "12348", userID: "126", tripTitle: "test4", username: "user4", description: "this is test description4", liked:true, imageURL:'http://placekitten.com/g/150/150'},
-  // {tripID: "12349", userID: "127", tripTitle: "test5", username: "user5", description: "this is test description5", liked:true, imageURL:'http://placekitten.com/g/150/150'},]};
-  
-  // res.render('tabi_search', fakeTripData);
 });
 
 /* GET tabi search result (filtered) */
@@ -408,19 +397,63 @@ router.post('/edit_profile_info/:user_id', function(req, res, next) {
 
 /* POST add_trip*/
 router.post('/add_trip', function(req, res, next) {
-
-  // var userID = req.user.userID;
-  // ... and so on 
-
-  var tripID = '1234testtest' //how do we come up with trip IDs? auto-increment?
-
+  // check authentication
+  // if(!req.isAuthenticated()){
+  //   res.redirect('/login/facebook');
+  //   return;
+  // }
+  var userID;
+  if (process.env.NODE_ENV === "production") {
+    userID = req.user.userID;
+  } else {
+    userID = "userA";
+  }
+  var tripInfo;
+  var tripID = new mongoose.Types.ObjectId;
+  // parse from the form
   var form = new formidable.IncomingForm();
+
+  form.parse(req, function(err, fields, files) {
+    tripInfo = {tripID: tripID,
+                tripName: fields.title,
+                tripCreator: userID,
+                tripDestinationID: fields.destination_id,
+                tripDestinationName: fields.destination_name,
+                tripType: ""}
+    var title = fields.title;
+    var description = fields.description;
+    var placeID = fields.destination_id;
+    var placeName = fields.destination_name;
+    console.log(JSON.stringify(fields));
+    console.log(fields.category);
+
+  });
+
+  var userID = "userA";
+  var title = req.body.title;
+  var description = req.body.description;
+  var placeID = req.body.destination_id;
+  var placeName = req.body.destination_name;
+  var trip_image = req.body.trip_image;
+  var duration = parseInt(req.body.duration);
+  var budget = parseInt(req.body.budget);
+  var tripPhotoURL = "http://placekitten.com/g/200/200"; // placeholder
+  var tripID = new mongoose.Types.ObjectId;
+  console.log("AAA " + JSON.stringify(req.isAuthenticated()));
+  var requiredFields = ["tripID", "tripName", "tripCreator", "tripDestinationID", "tripDestinationName", "tripType"];
+  // var tripInfo = {tripID: tripID,
+  //                 tripName: title,
+  //                 tripCreator: userID,
+  //                 tripDestinationID: placeID,
+  //                 tripDestinationName: placeName,
+  //                 tripType: ""}
 
   form.on('file', function(field, file) {
     cloudinary.uploader.upload(
       file.path, 
       function(result) {
         var tripPhotoURL = result.eager[0].secure_url;
+
         console.log(tripPhotoURL);
         // Save the trip to database.
       },
@@ -444,7 +477,7 @@ router.post('/add_trip', function(req, res, next) {
   });  
 
   // Show some message on top to let the user know the update was successful?
-  res.redirect('/view_user/'+userID);
+  // res.redirect('/view_user/'+userID);
 });
 
 /* POST edit_trip*/

@@ -33,32 +33,36 @@
       <input id="description-input" type="text" name="description" required>
       <br><br>
       <span>(*)Category: </span>
-        <input type="checkbox" name="category" value="adventure">Adventure
-        <input type="checkbox" name="category" value="food">Food
-        <input type="checkbox" name="category" value="art">Art
-        <input type="checkbox" name="category" value="history">History
+      <input type="checkbox" name="category" value="adventure">Adventure
+      <input type="checkbox" name="category" value="food">Food
+      <input type="checkbox" name="category" value="art">Art
+      <input type="checkbox" name="category" value="history">History]
 <!--       <select id="category-input" name="category" form="add_trip_form" required>
+      <span>(*)Category: </span>
+      <select id="category-input" name="category" form="add_trip_form" required>
         <option value="adventure">Adventure</option>
         <option value="food">Food</option>
         <option value="art">Art</option>
         <option value="history">History</option>
       </select> -->
       <br><br>
-      <span>Season: </span>
+        <span>Season: </span>
         <input type="checkbox" name="season" value="spring">Spring
         <input type="checkbox" name="season" value="summer">Summer
         <input type="checkbox" name="season" value="fall">Fall
         <input type="checkbox" name="season" value="winter">Winter
 <!--       <select id="season-input" name="season" form="add_trip_form">
+<span>(*)Season: </span>
+      <select id="season-input" name="season" form="add_trip_form" required>
         <option value="spring">Spring</option>
         <option value="summer">Summer</option>
         <option value="fall">Fall</option>
         <option value="winter">Winter</option>
       </select> -->
       <br><br>
-      <input id="duration-input" type="number" min="1" placeholder="Duration" name="duration"><span> day(s)</span>
+      <input id="duration-input" type="number" min="1" placeholder="(*)Duration" name="duration" required><span> day(s)</span>
       <br><br>
-      <span>&#36;</span><input id="budget-input" type="number" min="0" placeholder="Budget" name="budget">
+      <span>&#36;</span><input id="budget-input" type="number" min="0" placeholder="(*)Budget" name="budget" required>
       <br><br>
       <button id="save-trip" type="submit">Save</button>
     </form>

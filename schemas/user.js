@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var ObjectId = mongoose.Schema.Types.ObjectId;
 
 // TODO: Fill out the userSchema.
 // Hint: a user is an object such as
@@ -11,8 +12,8 @@ var userSchema = new mongoose.Schema({
   userDescription: String,
   userActive: {type: Boolean, default: true},
   userDestinations: {type: [String], default: []},
-  userLikedTrips: {type: [String], default: []},
-  userCreatedTrips: {type: [String], default: []},
+  userLikedTrips: {type: [ObjectId], default: []},
+  userCreatedTrips: {type: [ObjectId], default: []},
 });
 
 var User = mongoose.model('User', userSchema);

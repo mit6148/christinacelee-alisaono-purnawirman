@@ -219,10 +219,6 @@ module.exports = {
     }
 
     // if not existed, add new trip
-    var requiredFieldList = ["tripLikedUsers"];
-    for(fieldName in requiredFieldList){
-      tripInfo[fieldName] = [];
-    }
     var newTrip = new Trip(tripInfo);
     newTrip.save();
     // update user
