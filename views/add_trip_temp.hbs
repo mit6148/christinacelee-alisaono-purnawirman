@@ -36,7 +36,7 @@
       <input type="checkbox" name="category" value="adventure">Adventure
       <input type="checkbox" name="category" value="food">Food
       <input type="checkbox" name="category" value="art">Art
-      <input type="checkbox" name="category" value="history">History]
+      <input type="checkbox" name="category" value="history">History
 <!--       <select id="category-input" name="category" form="add_trip_form" required>
       <span>(*)Category: </span>
       <select id="category-input" name="category" form="add_trip_form" required>
@@ -46,11 +46,11 @@
         <option value="history">History</option>
       </select> -->
       <br><br>
-        <span>Season: </span>
-        <input type="checkbox" name="season" value="spring">Spring
-        <input type="checkbox" name="season" value="summer">Summer
-        <input type="checkbox" name="season" value="fall">Fall
-        <input type="checkbox" name="season" value="winter">Winter
+      <span>Season: </span>
+      <input type="checkbox" name="season" value="spring">Spring
+      <input type="checkbox" name="season" value="summer">Summer
+      <input type="checkbox" name="season" value="fall">Fall
+      <input type="checkbox" name="season" value="winter">Winter
 <!--       <select id="season-input" name="season" form="add_trip_form">
 <span>(*)Season: </span>
       <select id="season-input" name="season" form="add_trip_form" required>
@@ -91,6 +91,18 @@
         });
         $('#tabi-submit').on('click', function(e) {
           return $('#place-id').val().length > 0;
+        });
+        $('form input[name="category"]:not(checked)').on('click', function(){
+          if ($('form input[name="category"]:checked').length > 1) {
+            $('form input[name="category"]').prop('checked',false);
+            $(this).prop('checked',true);
+          }
+        });
+        $('form input[name="season"]:not(checked)').on('click', function(){
+          if ($('form input[name="season"]:checked').length > 1) {
+            $('form input[name="season"]').prop('checked',false);
+            $(this).prop('checked',true);
+          }
         });
       });
     </script>

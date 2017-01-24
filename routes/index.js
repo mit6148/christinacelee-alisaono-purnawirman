@@ -263,6 +263,9 @@ router.get('/view_user/:user_id', function(req, res, next) {
     userIsOwner = true;
   }
 
+  // var yourOwnName = req.user.userName;
+  
+
   // userImageURL should have been saved in the database
   // userImageURL should include version number so that pictures are concurrently updated
   var userImageURL = "https://res.cloudinary.com/tabibuddy/image/upload/c_thumb,g_face,h_200,w_200/v1485053998/125.jpg";
