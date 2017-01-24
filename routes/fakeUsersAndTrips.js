@@ -1,6 +1,13 @@
 // the fake users and trips consists of 3 users (userA, userB, userC) 
 // 3 locations (NY, cambridge, seattle) with valid location id
 // and 6 trips created (newYorkTestA, newYorkTestB, cambridgeTestA, etc.)
+var mongoose = require('mongoose');
+var newYorkTestAID = new mongoose.Types.ObjectId;
+var newYorkTestBID = new mongoose.Types.ObjectId;
+var cambridgeTestAID = new mongoose.Types.ObjectId;
+var cambridgeTestBID = new mongoose.Types.ObjectId;
+var seattleTestAID = new mongoose.Types.ObjectId;
+var seattleTestBID = new mongoose.Types.ObjectId;
 
 var users = [
 			{"userID": "userA",
@@ -10,8 +17,8 @@ var users = [
 			 "userDescription": "This is a fake user A",
 			 "userActive": true,
 			 "userDestinations": ["ChIJOwg_06VPwokRYv534QaPC8g", "ChIJX8wwy6Vw44kRh2xoiWSOOsU", "ChIJVTPokywQkFQRmtVEaUZlJRA"], 
-			 "userLikedTrips": ["newYorkTestA", "newYorkTestB", "cambridgeTestA", "cambridgeTestB", "seattleTestA", "seattleTestB"],
-			 "userCreatedTrips": ["newYorkTestA", "cambridgeTestB", "seattleTestB"]
+			 "userLikedTrips": [newYorkTestAID, newYorkTestBID, cambridgeTestAID, cambridgeTestBID, seattleTestAID, seattleTestBID],
+			 "userCreatedTrips": [newYorkTestAID, cambridgeTestBID, seattleTestBID]
 			},
 			 {"userID": "userB",
 			 "userName": "userB",
@@ -20,8 +27,8 @@ var users = [
 			 "userDescription": "This is a fake user B",
 			 "userActive": true,
 			 "userDestinations": ["ChIJOwg_06VPwokRYv534QaPC8g"], 
-			 "userLikedTrips": ["newYorkTestA", "newYorkTestB"],
-			 "userCreatedTrips": ["newYorkTestB"]
+			 "userLikedTrips": [newYorkTestAID, newYorkTestBID],
+			 "userCreatedTrips": [newYorkTestBID]
 			},
 			{"userID": "userC",
 			 "userName": "userC",
@@ -30,13 +37,14 @@ var users = [
 			 "userDescription": "This is a fake user C",
 			 "userActive": true,
 			 "userDestinations": ["ChIJOwg_06VPwokRYv534QaPC8g", "ChIJX8wwy6Vw44kRh2xoiWSOOsU", "ChIJVTPokywQkFQRmtVEaUZlJRA"], 
-			 "userLikedTrips": ["newYorkTestA", "cambridgeTestA", "cambridgeTestB", "seattleTestA", "seattleTestB"],
-			 "userCreatedTrips": ["cambridgeTestA", "seattleTestA"]
+			 "userLikedTrips": [newYorkTestAID, cambridgeTestAID, cambridgeTestBID, seattleTestAID, seattleTestBID],
+			 "userCreatedTrips": [cambridgeTestAID, seattleTestAID]
 			},]
+
 
 var trips = [
 			{
-			  "tripID": "newYorkTestA",
+			  "tripID": newYorkTestAID,
 			  "tripName": "newYorkTestA",
 			  "tripCreatorID": "userA",
 			  "tripCreatorName": "userA",
@@ -52,7 +60,7 @@ var trips = [
 			  "tripBudget": 200,
 			},
 			{
-			  "tripID": "newYorkTestB",
+			  "tripID": newYorkTestBID,
 			  "tripName": "newYorkTestB",
 			  "tripCreatorID": "userB",
 			  "tripCreatorName": "userB",
@@ -68,7 +76,7 @@ var trips = [
 			  "tripBudget": 50,
 			},
 			{
-			  "tripID": "cambridgeTestA",
+			  "tripID": cambridgeTestAID,
 			  "tripName": "cambridgeTestA",
 			  "tripCreatorID": "userC",
 			  "tripCreatorName": "userC",
@@ -84,7 +92,7 @@ var trips = [
 			  "tripBudget": 150,
 			},
 			{
-			  "tripID": "cambridgeTestB",
+			  "tripID": cambridgeTestBID,
 			  "tripName": "cambridgeTestB",
 			  "tripCreatorID": "userA",
 			  "tripCreatorName": "userA",
@@ -100,8 +108,8 @@ var trips = [
 			  "tripBudget": 10000,
 			},
 			{
-			  "tripID": "seattleTestA",
-			  "tripName": "seattleTestA",
+			  "tripID": seattleTestAID,
+			  "tripName": seattleTestAID,
 			  "tripCreatorID": "userC",
 			  "tripCreatorName": "userC",
 			  "tripDestinationID": "ChIJVTPokywQkFQRmtVEaUZlJRA",
@@ -116,8 +124,8 @@ var trips = [
 			  "tripBudget": 650,
 			},
 			{
-			  "tripID": "seattleTestB",
-			  "tripName": "seattleTestB",
+			  "tripID": seattleTestBID,
+			  "tripName": seattleTestBID,
 			  "tripCreatorID": "userA",
 			  "tripCreatorName": "userA",
 			  "tripDestinationID": "ChIJVTPokywQkFQRmtVEaUZlJRA",
@@ -136,19 +144,19 @@ var trips = [
 var destinations = [{
 					"destinationID": "ChIJOwg_06VPwokRYv534QaPC8g",
 					"destinationName": "New York, NY, USA",
-					"tabies": ["newYorkTestA", "newYorkTestB"],
+					"tabies": [newYorkTestAID, newYorkTestBID],
 					"buddies": ["userA", "userB", "userC"],
 					},
 					{
 					"destinationID": "ChIJX8wwy6Vw44kRh2xoiWSOOsU",
 					"destinationName": "Cambridge, MA, USA",
-					"tabies": ["cambridgeTestA", "cambridgeTestB"],
+					"tabies": [cambridgeTestAID, cambridgeTestBID],
 					"buddies": ["userA", "userC"],
 					},
 					{
 					"destinationID": "ChIJVTPokywQkFQRmtVEaUZlJRA",
 					"destinationName": "Seattle, WA, USA",
-					"tabies": ["seattleTestA", "seattleTestB"],
+					"tabies": [seattleTestAID, seattleTestBID],
 					"buddies": ["userA", "userC"],
 					},]
 
