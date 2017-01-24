@@ -35,8 +35,8 @@ body {
   height: 100%;
 }
 
-#background-next {
-  z-index: -3;
+#hidden-background {
+  z-index: -2;
 }
 
 .hero {

@@ -270,6 +270,8 @@ router.get('/view_user/:user_id', function(req, res, next) {
   // userImageURL should include version number so that pictures are concurrently updated
   var userImageURL = "https://res.cloudinary.com/tabibuddy/image/upload/c_thumb,g_face,h_200,w_200/v1485053998/125.jpg";
 
+  var tripImageURL = "http://res.cloudinary.com/tabibuddy/image/upload/(place_name)(number).jpg"
+
   // fake user profile data for front end testing ~~~~
   var userTripsList = [{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
   {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
