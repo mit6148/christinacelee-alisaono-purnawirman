@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+	<head>
+		<meta charset="utf-8">
+		<title>tabibuddy | home</title>
+		<link rel="stylesheet" href="/stylesheets/home.css">
+	</head>
+	<body>
+		<section class="hero">
+
+			<h2>tabibuddy</h2>
+			
+			<p>Description of tabibuddy</p>
+		</section><!--tabi function
+
+		--><section class="container">
+			<fieldset class = "fieldset-home tabi">
+				<img src="assets/images/tabi_icon.png" alt="tabi icon">
+				<h3>tabi</h3>
+				<h4>(explanation of tabi function)</h4>
+				<label>
+					Where to?
+					<input type="text" name="destination"
+					placeholder="Type in a city name!">
+				</label>
+				<button name="submit">
+					Go!
+				</button>
+			</fieldset>
+		</section><!--buddy function
+
+		--><section class="container">
+			<fieldset class="fieldset-home buddy">
+				<img src="assets/images/buddy_icon.png" alt="buddy icon">
+				<h3>buddy</h3>
+				<h4>(explanation of buddy function)</h4>
+				<label>
+					Where to?
+					<input type="text" name="destination" placeholder="Type in a city name!">
+
+					<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    				<script src="assets/js/autocomp.js"></script>
+    				<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8lG_CLlQVPpyRbKhHHUe0vZYjFnCPTNs&libraries=places&callback=initMap" async defer></script>
+				</label>
+				<button name="submit">
+					Go!
+				</button>
+			</fieldset>
+		</section>
+
+	</body>
+</html>

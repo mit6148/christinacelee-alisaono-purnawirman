@@ -1,0 +1,88 @@
+/*
+
+  ==================================================
+
+  Home
+
+  ==================================================
+*/
+
+.hero {
+  color: #00CED1;
+  line-height: 44px;
+  padding: 22px 80px 44px 80px;
+  text-align: center;
+}
+
+.hero h2 {
+  font-size: 36px;
+}
+
+.hero p {
+  font-size: 24px;
+  font-weight: 100;
+}
+
+/*
+  ==================================================
+  Container
+  ==================================================
+*/
+
+.container {
+  float: left;
+  display: inline-block;
+  margin: 0 0;
+  width: 50%;
+
+}
+
+
+/*
+  ===================================================
+  Home
+  ===================================================
+*/
+
+.fieldset-home {
+  width: 280px;
+  height: 280px;
+  display: inline-block;
+  margin: 5%;
+  border-radius: 50%;
+  text-align: center;
+  background-color: #7FFFD4;
+
+}
+
+.tabi {
+  float: right;
+  margin-right: 12.5%
+}
+
+.buddy {
+  float: left;
+  margin-left: 12.5%
+}
+
+.trip_attributes {
+  display: block;
+}
+
+/*
+  ===================================================
+  Add/edit trip forms
+  ===================================================
+*/
+
+form {
+  border: 1px solid #c6c7cc;
+  border-radius: 5px;
+  font: 14px/1.4 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  overflow: hidden;
+  width: 240px;
+}
+
+.trip-action {
+  float: right;
+}
