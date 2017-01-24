@@ -27,22 +27,6 @@ function initMap() {
     $('#buddy-place-id').val(placeID);
     $('#buddy-place-name').val(placeName);
   });
-
-  // $(function(){
-  // var backgrounds = ['/images/people.jpg','/images/city1.jpg','/images/city2.jpg','/images/forest.jpg','/images/city3.jpg'];
-  // var current = 0;
-
-  // function nextBackground(){
-  //   $('#background').fadeOut('300');
-  //   current++;
-  //   $('#background').attr('src',backgrounds[current%backgrounds.length]);
-  //   $('#background').fadeIn('600');
-  //   setTimeout(nextBackground,5000);
-  // };
-
-  // setTimeout(nextBackground,5000);
-  //   $('#background').attr('src', backgrounds[0]);
-  // });
 }
 
 $(document).ready(function(){
@@ -54,5 +38,28 @@ $(document).ready(function(){
   });
   $('#buddy-submit').on('click', function(e) {
     return $('#buddy-place-id').val().length > 0;
+  });
+  $(function(){
+  var backgrounds = ['/images/sf-background.jpg','/images/switzerland-background.jpg',
+    '/images/egypt-background.jpg'];
+  var current = 0;
+
+  function nextBackground(){
+    current++;
+    // $('#background-next').attr('src',backgrounds[current%backgrounds.length]);
+    $('#background').fadeOut(3000, function() {
+      // $('#background').attr('src',backgrounds[current%backgrounds.length]).show();
+    });
+    setTimeout(nextBackground,5000);
+  };
+
+  // $next.css('z-index',2);//move the next image up the pile
+  //     $active.fadeOut(1500,function(){//fade out the top image
+  //   $active.css('z-index',1).show().removeClass('active');//reset the z-index and unhide the image
+  //         $next.css('z-index',3).addClass('active');//make the next image the top one
+  //     });
+
+  setTimeout(nextBackground,5000);
+  $('#background').attr('src', backgrounds[0]);
   });
 });

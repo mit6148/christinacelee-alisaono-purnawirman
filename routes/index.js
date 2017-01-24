@@ -263,6 +263,9 @@ router.get('/view_user/:user_id', function(req, res, next) {
     userIsOwner = true;
   }
 
+  // var yourOwnName = req.user.userName;
+  
+
   // userImageURL should have been saved in the database
   // userImageURL should include version number so that pictures are concurrently updated
   var userImageURL = "https://res.cloudinary.com/tabibuddy/image/upload/c_thumb,g_face,h_200,w_200/v1485053998/125.jpg";
@@ -455,9 +458,14 @@ router.post('/add_trip', function(req, res, next) {
     );
   });
 
-  form.parse(req); 
-
-  // res.send(tripPhoto);
+  form.parse(req, function(err, fields, files) {
+    console.log(fields);
+    var title = fields.title;
+    var description = fields.description;
+    var placeID = fields.destination_id;
+    var placeName = fields.destination_name;
+    console.log(title);
+  });  
 
   // Show some message on top to let the user know the update was successful?
   // res.redirect('/view_user/'+userID);
