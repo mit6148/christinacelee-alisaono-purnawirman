@@ -16,7 +16,10 @@ body {
 }
 
 .hero {
-  color: #00CED1;
+/*  color: #1abc9c;*/
+  color: #2c3e50;
+  position: relative;
+  top: 50px;
   line-height: 44px;
   padding: 22px 80px 44px 80px;
   text-align: center;
@@ -59,7 +62,7 @@ body {
   margin: 5%;
   border-radius: 50%;
   text-align: center;
-  background-color: #7FFFD4;
+  background-color: #1abc9c;
 
 }
 
@@ -83,7 +86,7 @@ body {
   ===================================================
 */
 
-form {
+/*form {
   border: 1px solid #c6c7cc;
   border-radius: 5px;
   font: 14px/1.4 "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -93,4 +96,4 @@ form {
 
 .trip-action {
   float: right;
-}
+}*/
