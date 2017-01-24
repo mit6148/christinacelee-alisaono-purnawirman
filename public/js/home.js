@@ -46,9 +46,10 @@ $(document).ready(function(){
 
   function nextBackground(){
     current++;
-    $('#background-next').attr('src',backgrounds[current%backgrounds.length]);
-    $('#background').fadeOut('3000');
-    $('#background-next').fadeIn('3000');
+    // $('#background-next').attr('src',backgrounds[current%backgrounds.length]);
+    $('#background').fadeOut(3000, function() {
+      // $('#background').attr('src',backgrounds[current%backgrounds.length]).show();
+    });
     setTimeout(nextBackground,5000);
   };
 

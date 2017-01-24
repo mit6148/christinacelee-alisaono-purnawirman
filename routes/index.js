@@ -409,11 +409,7 @@ router.post('/edit_profile_info/:user_id', function(req, res, next) {
 /* POST add_trip*/
 router.post('/add_trip', function(req, res, next) {
 
-  var userID = req.user.userID;
-  var title = req.body.title;
-  var description = req.body.description;
-  var placeID = req.body.destination_id;
-  var placeName = req.body.destination_name;
+  // var userID = req.user.userID;
   // ... and so on 
 
   var tripID = '1234testtest' //how do we come up with trip IDs? auto-increment?
@@ -438,7 +434,14 @@ router.post('/add_trip', function(req, res, next) {
     );
   });
 
-  form.parse(req);  
+  form.parse(req, function(err, fields, files) {
+    console.log(fields);
+    var title = fields.title;
+    var description = fields.description;
+    var placeID = fields.destination_id;
+    var placeName = fields.destination_name;
+    console.log(title);
+  });  
 
   // Show some message on top to let the user know the update was successful?
   res.redirect('/view_user/'+userID);
