@@ -107,7 +107,7 @@ router.get('/__addFakeUsersAndTrips', function(req, res, next){
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('home_temp', {showSearchBar: false, loggedIn: req.isAuthenticated()});
+  res.render('home', {showSearchBar: false, loggedIn: req.isAuthenticated()});
 });
 
 router.get('/login/facebook', passport.authenticate('facebook'));

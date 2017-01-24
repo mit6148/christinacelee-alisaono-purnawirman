@@ -7,6 +7,14 @@
   ==================================================
 */
 
+body {
+  margin: 0;
+}
+
+.invisible {
+  display: none;
+}
+
 .hero {
   color: #00CED1;
   line-height: 44px;
