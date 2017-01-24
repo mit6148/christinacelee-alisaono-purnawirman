@@ -121,7 +121,7 @@ router.get('/__auth', function(req, res, next){
   var data = {isAuthenticated: req.isAuthenticated()};
   if(req.isAuthenticated()){
     for(var key in req.user){
-      if(p.hasOwnProperty(key)){
+      if(req.user.hasOwnProperty(key)){
         data[key] = req.user[key];
       }
     }
