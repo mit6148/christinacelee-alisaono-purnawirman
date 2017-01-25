@@ -34,7 +34,6 @@
   padding-left: 10px;
   text-align: center;
   vertical-align: center;
-/*  background-color: #95a5a6;*/
   background-color: white;
 }
 #top-user-image-container {
@@ -45,7 +44,6 @@
   right: 0;
   top: 0;
   display: inline-block;
-/*  background-color: #95a5a6;*/
   background-color: white;
 }
 #top-user-image {
