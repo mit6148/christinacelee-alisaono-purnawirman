@@ -363,7 +363,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
             userTripsList.push(tripsList);
           }
         }
-        profileData = {userIsOwner: userIsOwner,
+        profileData = {userIsOwner: true,
                        userImageURL: user.userPhoto, 
                        username: loggedInUser, 
                        userID: user.userID, 
@@ -467,9 +467,15 @@ router.post('/edit_profile_photo/:user_id', function(req, res, next) {
       file.path, 
       function(result) {
         // then update the db with new image URL ~~~
-        var newImageURL = result.eager[0].secure_url 
+        var newImageURL = result.eager[0].secure_url; 
+        var userInfo = {userID: userID, userPhoto: newImageURL};
+        if(helperFunction.editUserProfile(userInfo)){
+          res.redirect('/view_user/'+userID); 
+        } else {
+          res.send("error in updating photo");
+        }
         // then redirect to the user's own profile page
-        res.redirect('/view_user/'+userID); },
+      },
         // Show some message on top to let the user know the update was successful?
       {
         public_id: userID, 
@@ -487,14 +493,14 @@ router.post('/edit_profile_photo/:user_id', function(req, res, next) {
 /* POST edit_profile_text*/
 router.post('/edit_profile_info/:user_id', function(req, res, next) {
   var userID = req.params.user_id;
-  var newText = req.body.new_profile_text;
-  var newContact = req.body.new_profile_contact;
-  console.log("Edit");
-  // make sure userID matches req.user.userID
-  // update the db
-
-  // redirect to the user's own profile page
-  res.redirect('/view_user/'+userID);
+  var userInfo = {"userID": userID,
+                  "userDescription": req.body.new_profile_text,
+                  "userEmail": req.body.new_profile_contact}
+  if(helperFunction.editUserProfile(userInfo)){
+    res.redirect('/view_user/'+userID);
+  } else {
+    res.send("Error in updating profile")
+  }
 });
 
 /* POST add_trip*/

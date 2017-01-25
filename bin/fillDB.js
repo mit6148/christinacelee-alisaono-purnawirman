@@ -123,12 +123,12 @@ module.exports = {
       } else {
         // update each field if it exist in userInfo
         var fieldNameList = ["userName", "userPhoto", "userDescription", "userEmail"];
-        var fieldName;
-        for(fieldName in fieldNameList){
-          if(userInfo.hasOwnProperty(fieldName)){
-            user[fieldName] = userInfo[fieldName];
+        for(var i = 0; i < fieldNameList.length; i++){
+          if(userInfo.hasOwnProperty(fieldNameList[i])){
+            user[fieldNameList[i]] = userInfo[fieldNameList[i]];
           }
         }
+        console.log(chalk.yellow(user));
         user.save();
       }
     });
