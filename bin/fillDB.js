@@ -231,6 +231,7 @@ module.exports = {
         return false;
       }
       uniquePush(trip["tripLikedUsers"], userID);
+      trip.save();
       // query user
       var qUser = User.findOne({}).where("userID").eq(userID);
       qUser.exec(function(err, user){
@@ -241,7 +242,7 @@ module.exports = {
         }
         uniquePush(user["userLikedTrips"], tripID);
         uniquePush(user["userDestinations"], destinationID);
-
+        trip.save();
         // query destination
         var qDest = Destination.findOne({}).where("destinationID").eq(destinationID);
         qDest.exec(function(err, dest){
@@ -251,8 +252,8 @@ module.exports = {
             return false;
           }
           uniquePush(dest["userDestinations"], destinationID);
-          trip.save();
-          user.save();
+          // trip.save();
+          // user.save();
           dest.save();
           return true;
         });
