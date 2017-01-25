@@ -353,13 +353,17 @@ router.get('/view_user/:user_id', function(req, res, next) {
                             liked: false, // TODO
                             imageURL: trips[i].tripPhoto}
           // wishlist = likedtrips - createdtrips
-          console.log("AAA "+ i + JSON.stringify(tripsList));
           if(user.userCreatedTrips.indexOf(trips[i].tripID) < 0){
-            wishlistTripsList.push({tripsList});
+            wishlistTripsList.push(tripsList);
           } else {
-            userTripsList.push({tripsList});
+            userTripsList.push(tripsList);
           }
         }
+  //       var userTripsList = [{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},]
+
+        console.log(JSON.stringify(userTripsList));
         profileData = {userIsOwner: userIsOwner,
                        userImageURL: user.userPhoto, 
                        username: loggedInUser, 
