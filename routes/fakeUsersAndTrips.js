@@ -109,7 +109,7 @@ var trips = [
 			},
 			{
 			  "tripID": seattleTestAID,
-			  "tripName": seattleTestAID,
+			  "tripName": "seattleTestA",
 			  "tripCreatorID": "userC",
 			  "tripCreatorName": "userC",
 			  "tripDestinationID": "ChIJVTPokywQkFQRmtVEaUZlJRA",
@@ -125,7 +125,7 @@ var trips = [
 			},
 			{
 			  "tripID": seattleTestBID,
-			  "tripName": seattleTestBID,
+			  "tripName": "seattleTestB",
 			  "tripCreatorID": "userA",
 			  "tripCreatorName": "userA",
 			  "tripDestinationID": "ChIJVTPokywQkFQRmtVEaUZlJRA",

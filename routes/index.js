@@ -338,8 +338,10 @@ router.get('/view_user/:user_id', function(req, res, next) {
       return;
     } else {
       var queryTrips = Trip.find({}).
-                       where("tripID").in(user.userLikedTrips);
+                       where("tripID").in(user.userLikedTrips).
+                       select("tripID tripCreatorID tripName tripCreatorName tripDescription tripPhoto");
       queryTrips.exec(function(err, trips){
+        if(err) console.log("Error in finding the trips");
         var wishlistTripsList = [];
         var userTripsList = [];
         for(var i = 0; i < trips.length; i++){
@@ -351,6 +353,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
                             liked: false, // TODO
                             imageURL: trips[i].tripPhoto}
           // wishlist = likedtrips - createdtrips
+          console.log("AAA "+ i + JSON.stringify(tripsList));
           if(user.userCreatedTrips.indexOf(trips[i].tripID) < 0){
             wishlistTripsList.push({tripsList});
           } else {
