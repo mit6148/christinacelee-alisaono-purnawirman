@@ -40,26 +40,35 @@ $(document).ready(function(){
     return $('#buddy-place-id').val().length > 0;
   });
 
+  $('.fieldset-home').hover(
+    function() {
+      $(this).animate({height:'+=50', width:'+=50'}, 'slow');
+    },
+    function() {
+      $(this).animate({height:'-=50', width:'-=50'}, 'slow')
+
+    }
+  );
+
   $(function(){
-    var backgrounds = ['/images/sf-background.jpg','/images/switzerland-background.jpg',
-      '/images/egypt-background.jpg'];
+    var backgrounds = ['sf','switzerland','egypt','stonehenge','india','russia','tokyo'];
     var index = 0;
 
     function nextBackground(){
       index++;
-      var nextImage = backgrounds[index%backgrounds.length];
+      var nextImage = '/images/'+backgrounds[index%backgrounds.length]+'-background.jpg';
       $('#background-next').attr('src',nextImage);
-      $('#background').fadeOut('300',function(){
+      $('#background').fadeOut('500',function(){
         $('#background').attr('src',nextImage);
         $('#background').show();
       });
 
-      setTimeout(nextBackground,1000);
+      setTimeout(nextBackground,3000);
     };
 
-    $('#background').attr('src',backgrounds[0]);
-    $('#background-next').attr('src',backgrounds[1]);
-    setTimeout(nextBackground,1000);
+    $('#background').attr('src','/images/'+backgrounds[0]+'-background.jpg');
+    $('#background-next').attr('src','/images/'+backgrounds[1]+'-background.jpg');
+    setTimeout(nextBackground,3000);
   });
 
 });

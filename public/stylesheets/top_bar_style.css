@@ -13,6 +13,7 @@
   left: 0;
   top: 0;
   display: inline-block;
+  border-bottom: solid 1px #95a5a6;
 }
 #logo {
   width: 100%;
@@ -27,20 +28,26 @@
 #user-hello {
   height: 50px;
   position: absolute;
-  right: 50px;
+  right: 60px;
   top: 0;
   display: inline-block;
   padding-right: 10px;
+  padding-left: 10px;
   text-align: center;
   vertical-align: center;
+  background-color: white;
+  border-bottom: solid 1px #95a5a6;
 }
 #top-user-image-container {
   height: 50px;
   width: 50px;
+  padding-right: 10px; 
   position: absolute;
   right: 0;
   top: 0;
   display: inline-block;
+  background-color: white;
+  border-bottom: solid 1px #95a5a6;
 }
 #top-user-image {
   height: 100%;
@@ -51,12 +58,15 @@
   right: 0;
   top: 50px;
   display: none;
+  border-radius: 0 0 15px 15px;
+  border: solid 1px #95a5a6;
+  overflow: hidden;
 }
 .user-dropdown {
   height: 26px;
   width: 150px;
   padding: 10px;
-  border: solid 1px black;
+  border: solid 1px #95a5a6;
   background-color: white;
   font-size: 20px;
 }
