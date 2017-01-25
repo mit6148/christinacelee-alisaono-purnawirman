@@ -476,11 +476,6 @@ router.post('/edit_profile_info/:user_id', function(req, res, next) {
 
 /* POST add_trip*/
 router.post('/add_trip', function(req, res, next) {
-  // check authentication
-  // if(!req.isAuthenticated()){
-  //   res.redirect('/login/facebook');
-  //   return;
-  // }
   var userID;
   var userName;
   if (process.env.NODE_ENV === "production") {
@@ -513,7 +508,7 @@ router.post('/add_trip', function(req, res, next) {
                 tripDescription: fields.description,
                 tripLikedUsers: [userID],
                 tripSeason: fields.season,
-                tripDuration: fields.duration,
+                tripDuration: fields.duration, 
                 tripBudget: fields.budget,}
   });
 
@@ -525,11 +520,7 @@ router.post('/add_trip', function(req, res, next) {
         tripInfo["tripPhoto"] = result.eager[0].secure_url;
         // Save the trip to database.
         console.log(helperFunction.addTrip(User, Trip, tripInfo));
-        // if(helperFunction.addTrip(tripInfo)){
-          res.redirect('/view_user/'+ userID);
-        // } else {
-          // res.send("Error in adding trips");
-        // }
+        res.redirect('/view_user/'+ userID);
       },
       {
         public_id: tripID, 
