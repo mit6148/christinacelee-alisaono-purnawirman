@@ -13,6 +13,7 @@
   left: 0;
   top: 0;
   display: inline-block;
+  border-bottom: solid 1px #95a5a6;
 }
 #logo {
   width: 100%;
@@ -35,6 +36,7 @@
   text-align: center;
   vertical-align: center;
   background-color: white;
+  border-bottom: solid 1px #95a5a6;
 }
 #top-user-image-container {
   height: 50px;
@@ -45,6 +47,7 @@
   top: 0;
   display: inline-block;
   background-color: white;
+  border-bottom: solid 1px #95a5a6;
 }
 #top-user-image {
   height: 100%;
@@ -56,6 +59,7 @@
   top: 50px;
   display: none;
   border-radius: 0 0 15px 15px;
+  border: solid 1px #95a5a6;
   overflow: hidden;
 }
 .user-dropdown {

@@ -4,9 +4,9 @@ var main = function() {
   });
 
   $("#user-option").mouseenter(function(event){
-    $('#user-dropdown-container').slideDown();
+    $('#user-dropdown-container').slideDown('slow');
   }).mouseleave(function(event){
-    $('#user-dropdown-container').slideUp();
+    $('#user-dropdown-container').slideUp('slow');
   });
 
 
