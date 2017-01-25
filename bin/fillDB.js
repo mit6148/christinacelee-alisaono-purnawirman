@@ -109,7 +109,7 @@ module.exports = {
   editing user profile is restricted to changing information related to users only
   e.g. can only edit userName, userPhoto, userDescription
   */
-  editUserProfile: function(User, userInfo){
+  editUserProfile: function(userInfo){
     var chalk = require('chalk');
     // update user profile
     User.findOne({'userID': userInfo.userID}, function(err, user){
@@ -126,12 +126,10 @@ module.exports = {
         var fieldName;
         for(fieldName in fieldNameList){
           if(userInfo.hasOwnProperty(fieldName)){
-            if(!this._updateField(User, "userID", user.userID, fieldName, userInfo[fieldName]))
-            {
-              return false;
-            }
+            user[fieldName] = userInfo[fieldName];
           }
         }
+        user.save();
       }
     });
     return true;
@@ -223,16 +221,50 @@ module.exports = {
   User: userLikedTrips, userDestinations
   Trip: tripLikedUsers
   Destination: buddies */
-  likeTrip: function(User, Trip, Destination, userID, tripID, destinationID){
-    var chalk = require('chalk');
-    
-    if(!_findAndAddToList(Trip, "tripID", tripID, "tripLikedUsers", userID) ||
-       !_findAndAddToList(User, "userID", userID, "userLikedTrips", tripID) ||
-       !_findAndAddToList(User, "userID", userID, "userDestinations", destinationID) ||
-       !_findAndAddToList(Destination, "destinationID", destinationID, "buddies", userID)){
-      return false;
-    }
-    return true;
+  likeTrip: function(userID, tripID, destinationID){
+    // query trip
+    var qTrip = Trip.findOne({}).where("tripID").eq(tripID);
+    qTrip.exec(function(err, trip){
+      if(err) console.log("like trip error in trip query");
+      if(trip === null){
+        console.log("trip does not exist");
+        return false;
+      }
+      uniquePush(trip["tripLikedUsers"], userID);
+      // query user
+      var qUser = User.findOne({}).where("userID").eq(userID);
+      qUser.exec(function(err, user){
+        if(err) console.log("like trip error in user query");
+        if(user === null){
+          console.log("user does not exist");
+          return false;
+        }
+        uniquePush(user["userLikedTrips"], tripID);
+        uniquePush(user["userDestinations"], destinationID);
+
+        // query destination
+        var qDest = Destination.findOne({}).where("destinationID").eq(destinationID);
+        qDest.exec(function(err, dest){
+          if(err) console.log("like trip error in destination query");
+          if(dest === null){
+            console.log("dest does not exist");
+            return false;
+          }
+          uniquePush(dest["userDestinations"], destinationID);
+          trip.save();
+          user.save();
+          dest.save();
+          return true;
+        });
+      });
+    });
+    // if(!_findAndAddToList(Trip, "tripID", tripID, "tripLikedUsers", userID) ||
+    //    !_findAndAddToList(User, "userID", userID, "userLikedTrips", tripID) ||
+    //    !_findAndAddToList(User, "userID", userID, "userDestinations", destinationID) ||
+    //    !_findAndAddToList(Destination, "destinationID", destinationID, "buddies", userID)){
+    //   return false;
+    // }
+    // return true;
   }
   ,
 
@@ -337,15 +369,6 @@ module.exports = {
   /* Deleting trips to the database */
   deleteTrip: function(tripID, tripName, tripCreator, tripDestination, tripType, tripInfo){
 
-  },
-  listMinus: function(list1, list2){
-    var result = [];
-    for(var i = 0; i < list1.length; i++){
-      if(list2.indexOf(list1[i]) < 0){
-        result.push(list1[i]);
-      }
-    }
-    return result;
   }
 }
 
