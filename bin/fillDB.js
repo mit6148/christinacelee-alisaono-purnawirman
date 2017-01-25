@@ -337,6 +337,15 @@ module.exports = {
   /* Deleting trips to the database */
   deleteTrip: function(tripID, tripName, tripCreator, tripDestination, tripType, tripInfo){
 
+  },
+  listMinus: function(list1, list2){
+    var result = [];
+    for(var i = 0; i < list1.length; i++){
+      if(list2.indexOf(list1[i]) < 0){
+        result.push(list1[i]);
+      }
+    }
+    return result;
   }
 }
 

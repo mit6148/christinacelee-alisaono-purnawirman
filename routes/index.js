@@ -329,46 +329,93 @@ router.get('/view_user/:user_id', function(req, res, next) {
     loggedInUser = 'guest';
   }
 
+  var query = User.findOne({"userID": userID});
+  var profileData;
+  query.exec(function(err, user){
+    if(err) console.log("error in finding user");
+    if(user === null){
+      res.send("There is no such users");
+      return;
+    } else {
+      var queryTrips = Trip.find({}).
+                       where("tripID").in(user.userLikedTrips);
+      queryTrips.exec(function(err, trips){
+        var wishlistTripsList = [];
+        var userTripsList = [];
+        for(var i = 0; i < trips.length; i++){
+          var tripsList = {tripID: trips[i].tripID,
+                            userID: trips[i].tripCreatorID,
+                            tripTitle: trips[i].tripName,
+                            userName: trips[i].tripCreatorName,
+                            description: trips[i].tripDescription,
+                            liked: false, // TODO
+                            imageURL: trips[i].tripPhoto}
+          // wishlist = likedtrips - createdtrips
+          if(user.userCreatedTrips.indexOf(trips[i].tripID) < 0){
+            wishlistTripsList.push({tripsList});
+          } else {
+            userTripsList.push({tripsList});
+          }
+        }
+        profileData = {userIsOwner: userIsOwner,
+                       userImageURL: user.userPhoto, 
+                       username: loggedInUser, 
+                       userID: user.userID, 
+                       userDescription: user.userDescription, 
+                       userContact: 'test@gmail.com', 
+                       wishlistTrips: wishlistTripsList, 
+                       userTrips: userTripsList,
+                       showSearchBar: false, 
+                       loggedIn: loggedIn, 
+                       loggedInUser: loggedInUser};
+        res.render('user_profile', profileData);
+      });
+    }
+  });
+
   // var yourOwnName = req.user.userName;
-  
+  // // userImageURL should have been saved in the database
+  // // userImageURL should include version number so that pictures are concurrently updated
+  // var userImageURL = "https://res.cloudinary.com/tabibuddy/image/upload/c_thumb,g_face,h_200,w_200/v1485053998/125.jpg";
+  // var tripImageURL = "http://res.cloudinary.com/tabibuddy/image/upload/(place_name)(number).jpg"
+  // // fake user profile data for front end testing ~~~~
+  // var userTripsList = [{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12348", userID: "126", tripTitle: "test4", username: "user4", description: "this is test description4", liked:true, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12349", userID: "127", tripTitle: "test5", username: "user5", description: "this is test description5", liked:true, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12350", userID: "128", tripTitle: "test6", username: "user6", description: "this is test description6", liked: true, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12351", userID: "129", tripTitle: "test7", username: "user7", description: "this is test description7", liked:false, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12352", userID: "130", tripTitle: "test8", username: "user8", description: "this is test description8", liked:false, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12353", userID: "131", tripTitle: "test9", username: "user9", description: "this is test description9", liked:true, imageURL:'http://placekitten.com/g/150/150'},];
 
-  // userImageURL should have been saved in the database
-  // userImageURL should include version number so that pictures are concurrently updated
-  var userImageURL = "https://res.cloudinary.com/tabibuddy/image/upload/c_thumb,g_face,h_200,w_200/v1485053998/125.jpg";
-
-  var tripImageURL = "http://res.cloudinary.com/tabibuddy/image/upload/(place_name)(number).jpg"
-
-  // fake user profile data for front end testing ~~~~
-  var userTripsList = [{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12348", userID: "126", tripTitle: "test4", username: "user4", description: "this is test description4", liked:true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12349", userID: "127", tripTitle: "test5", username: "user5", description: "this is test description5", liked:true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12350", userID: "128", tripTitle: "test6", username: "user6", description: "this is test description6", liked: true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12351", userID: "129", tripTitle: "test7", username: "user7", description: "this is test description7", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12352", userID: "130", tripTitle: "test8", username: "user8", description: "this is test description8", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12353", userID: "131", tripTitle: "test9", username: "user9", description: "this is test description9", liked:true, imageURL:'http://placekitten.com/g/150/150'},];
-
-  var wishlistTripsList = [{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12348", userID: "126", tripTitle: "test4", username: "user4", description: "this is test description4", liked:true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12349", userID: "127", tripTitle: "test5", username: "user5", description: "this is test description5", liked:true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12350", userID: "128", tripTitle: "test6", username: "user6", description: "this is test description6", liked: true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12351", userID: "129", tripTitle: "test7", username: "user7", description: "this is test description7", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12352", userID: "130", tripTitle: "test8", username: "user8", description: "this is test description8", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12353", userID: "131", tripTitle: "test9", username: "user9", description: "this is test description9", liked:true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12354", userID: "132", tripTitle: "test10", username: "user10", description: "this is test description10", liked:true, imageURL:'http://placekitten.com/g/150/150'},];
+  // var wishlistTripsList = [{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12348", userID: "126", tripTitle: "test4", username: "user4", description: "this is test description4", liked:true, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12349", userID: "127", tripTitle: "test5", username: "user5", description: "this is test description5", liked:true, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12350", userID: "128", tripTitle: "test6", username: "user6", description: "this is test description6", liked: true, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12351", userID: "129", tripTitle: "test7", username: "user7", description: "this is test description7", liked:false, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12352", userID: "130", tripTitle: "test8", username: "user8", description: "this is test description8", liked:false, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12353", userID: "131", tripTitle: "test9", username: "user9", description: "this is test description9", liked:true, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12354", userID: "132", tripTitle: "test10", username: "user10", description: "this is test description10", liked:true, imageURL:'http://placekitten.com/g/150/150'},];
 
   // userIsOwner = true -> edit/delete options should appear, false -> only like option
-  var fakeProfileData = {userIsOwner: userIsOwner,
-  userImageURL: userImageURL, username: "Cat Meow", userID: userID, userDescription: "this user's ID is "+userID, 
-  userContact: 'test@gmail.com', wishlistTrips: wishlistTripsList, userTrips: userTripsList,
-  showSearchBar: false, loggedIn: loggedIn, loggedInUser: loggedInUser};
+  // var fakeProfileData = {userIsOwner: userIsOwner,
+  //                        userImageURL: userImageURL, 
+  //                        username: loggedInUser, 
+  //                        userID: userID, 
+  //                        userDescription: "this user's ID is "+ userID, 
+  //                        userContact: 'test@gmail.com', 
+  //                        wishlistTrips: wishlistTripsList, 
+  //                        userTrips: userTripsList,
+  //                        showSearchBar: false, 
+  //                        loggedIn: loggedIn, 
+  //                        loggedInUser: loggedInUser};
 
-  // ~~~~ fake data ends
+  // // ~~~~ fake data ends
 
-  res.render('user_profile', fakeProfileData);
+  // res.render('user_profile', fakeProfileData);
 });
 
 /* GET add trip page */;
