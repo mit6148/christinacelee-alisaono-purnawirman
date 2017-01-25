@@ -86,7 +86,7 @@ module.exports = {
         var fieldName;
         for(fieldName in fieldNameList){
           if(userInfo.hasOwnProperty(fieldName)){
-            if(!_updateField(User, "userID", user.userID, fieldName, userInfo[fieldName])){
+            if(!this._updateField(User, "userID", user.userID, fieldName, userInfo[fieldName])){
               return false;
             }
           }
@@ -113,7 +113,7 @@ module.exports = {
         if(newFieldValue.indexOf(newElement) > 0){
           newFieldValue.push(newElement);
         }
-        if(!_updateField(Model, IDName, IDValue, fieldName, newFieldValue)){
+        if(!this._updateField(Model, IDName, IDValue, fieldName, newFieldValue)){
           return false;
         }
       }
@@ -144,7 +144,7 @@ module.exports = {
       } else {
         var newFieldValue = record[fieldName];
         removeAllOccurenceFromList(newFieldValue, elementToRemove);
-        if(!_updateField(Model, IDName, IDValue, fieldName, newFieldValue)){
+        if(!this._updateField(Model, IDName, IDValue, fieldName, newFieldValue)){
           return false;
         }
       }
