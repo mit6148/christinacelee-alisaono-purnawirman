@@ -4,8 +4,42 @@
 var User = require('../schemas/user');
 var Trip = require('../schemas/trip');
 var Destination = require('../schemas/destination');
-// var chalk = require('chalk')
+var chalk = require('chalk')
+var isIDExist = function(Model, IDName, IDValue){
+    Model.findOne({IDName: IDValue}, function(err, record){
+      if(err){
+        console.log(chalk.red("error in finding " + IDName));
+      }
+      if(record != null){
+        return true;
+      }
+    });
+    return false;
+  }
 
+var _findAndAddToList = function(Model, IDName, IDValue, fieldName, newElement){
+    // TODOL: for some reason _updateField function is not recognized, so brute force here
+    Model.findOne({IDName: IDValue}, function(err, record){
+      if(err){
+        console.log(chalk.red("Error in update for " + IDName));
+        return false;
+      }
+      if(record == null){
+        console.log(chalk.red(IDName + " record does not exist"));
+        return false;
+      } else {
+        var newFieldValue = record[fieldName];
+        // if element does not exist in the list, then add it
+        if(newFieldValue.indexOf(newElement) < 0){
+          newFieldValue.push(newElement);
+        }
+        if(!this._updateField(Model, IDName, IDValue, fieldName, newFieldValue)){
+          return false;
+        }
+      }
+    });
+    return true;
+  }
 // /* Adding new destination to database */
 // var _addNewDestination = function(destinationInfo){
 //   Destination.findOne()
@@ -86,7 +120,8 @@ module.exports = {
         var fieldName;
         for(fieldName in fieldNameList){
           if(userInfo.hasOwnProperty(fieldName)){
-            if(!this._updateField(User, "userID", user.userID, fieldName, userInfo[fieldName])){
+            if(!this._updateField(User, "userID", user.userID, fieldName, userInfo[fieldName]))
+            {
               return false;
             }
           }
@@ -99,21 +134,46 @@ module.exports = {
 
   /* helper function find and add element list */
   _findAndAddToList: function(Model, IDName, IDValue, fieldName, newElement){
+    // TODOL: for some reason _updateField function is not recognized, so brute force here
     Model.findOne({IDName: IDValue}, function(err, record){
       if(err){
         console.log(chalk.red("Error in update for " + IDName));
         return false;
       }
       if(record == null){
-        console.log(chalk.red(IDNAME + " record does not exist"));
+        console.log(chalk.red(IDName + " record does not exist"));
         return false;
       } else {
         var newFieldValue = record[fieldName];
         // if element does not exist in the list, then add it
-        if(newFieldValue.indexOf(newElement) > 0){
+        if(newFieldValue.indexOf(newElement) < 0){
           newFieldValue.push(newElement);
         }
         if(!this._updateField(Model, IDName, IDValue, fieldName, newFieldValue)){
+          return false;
+        }
+      }
+    });
+    return true;
+  },
+  /* helper function find and add element list */
+  _findAndAddToUserList: function(IDValue, fieldName, newElement){
+    // TODOL: for some reason _updateField function is not recognized, so brute force here
+    User.findOne({"userID": IDValue}, function(err, record){
+      if(err){
+        console.log(chalk.red("Error in update for users"));
+        return false;
+      }
+      if(record == null){
+        console.log(chalk.red("user record does not exist"));
+        return false;
+      } else {
+        var newFieldValue = record[fieldName];
+        // if element does not exist in the list, then add it
+        if(newFieldValue.indexOf(newElement) < 0){
+          newFieldValue.push(newElement);
+        }
+        if(!this._updateField(User, "userID", IDValue, fieldName, newFieldValue)){
           return false;
         }
       }
@@ -201,7 +261,7 @@ module.exports = {
   Trip
   User: userCreatedTrips, userDestinations
   Destination: new or just tabies, buddies */
-  addTrip: function(tripInfo){
+  addTrip: function(User, Trip, tripInfo){
     var chalk = require('chalk');
     var requiredFields = ["tripID", "tripName", "tripCreatorID", "tripCreatorName", "tripDestinationID", "tripDestinationName", "tripType"];
     var fieldName;
@@ -212,7 +272,7 @@ module.exports = {
         return "incomplete input fields for add trip";
       }
     }
-    if(this.isIDExist(Trip, "tripID", tripInfo.tripID)){
+    if(isIDExist(Trip, "tripID", tripInfo.tripID)){
       console.log(chalk.red("trip already exist, can not add new trips"));
       return "trip already exist, can not add new trips";
     }
@@ -221,24 +281,44 @@ module.exports = {
     var newTrip = new Trip(tripInfo);
     newTrip.save();
     // update user
-    if(!this._findAndAddToList(User, "userID", tripInfo.tripCreator, "userCreatedTrips", tripInfo.tripID) ||
-       !this._findAndAddToList(User, "userID", tripInfo.tripCreator, "userDestinations", tripInfo.tripDestinationID)){
-      return "update user failed";
-    }
-    // update destination
-    if(!this.isIDExist(Destination, "destinationID", tripInfo.tripDestinationID)){
-      var destinationInfo = {"destinationID": tripInfo.tripDestinationID,
-                             "destinationName": tripInfo.tripDestinationName,
-                             "tabies": tripInfo.tripID,
-                             "buddies": tripInfo.tripCreator};
-      var newDestination = new Destination(destinationInfo);
-      newDestination.save();
-    } else if (!this._findAndAddToList(Destination, "destinationID", tripInfo.tripDestinationID, "buddies", trip.tripCreator) ||
-               !this._findAndAddToList(Destination, "destinationID", tripInfo.tripDestinationID, "tabies", trip.tripID)){
-      return "update destination failed";
-    }
+    // if(!this._findAndAddToUserList(User, tripInfo.tripCreatorID, "userCreatedTrips", tripInfo.tripID) ||
+    //     !this._findAndAddToUserList(User, tripInfo.tripCreatorID, "userLikedTrips", tripInfo.tripID) ||
+    //    !this._findAndAddToUserList(User, tripInfo.tripCreatorID, "userDestinations", tripInfo.tripDestinationID)){
+    //   return "update user failed";
+    // }
+    var query = User.
+                findOne({}).
+                where("userID").eq(tripInfo.tripCreatorID)
+    query.exec(function(err, user){
+      if(err) console.log("Error in updating users for add trip");
+      if(user != null){
+        user['userCreatedTrips'].push(tripInfo.tripID);
+        user['userLikedTrips'].push(tripInfo.tripID);
+        if(user['userDestinations'].indexOf(tripInfo.tripDestinationID)){
+          user['userDestinations'].push(tripInfo.tripDestinationID);
+        }
+        user.save();
+        console.log(chalk.red(JSON.stringify(user)));
+      } else {
+        console.log(chalk.red(tripInfo.tripCreatorID + " user not found!"));
+      }
+      // update destination
+      if(!isIDExist(Destination, "destinationID", tripInfo.tripDestinationID)){
+        var destinationInfo = {"destinationID": tripInfo.tripDestinationID,
+                               "destinationName": tripInfo.tripDestinationName,
+                               "tabies": tripInfo.tripID,
+                               "buddies": tripInfo.tripCreatorID};
+        var newDestination = new Destination(destinationInfo);
+        newDestination.save();
+      } else if (!_findAndAddToList(Destination, "destinationID", tripInfo.tripDestinationID, "buddies", trip.tripCreatorID) ||
+                 !_findAndAddToList(Destination, "destinationID", tripInfo.tripDestinationID, "tabies", trip.tripID)){
+        return "update destination failed";
+      }
 
-    return "update success";
+      return "update success";
+    });
+
+
   }
   ,
   /* Editing trips to the database 

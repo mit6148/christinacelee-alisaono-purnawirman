@@ -116,6 +116,14 @@ router.get('/__database', function(req, res, next){
   });
 });
 
+/* view all users status now */
+router.get('/__users', function(req, res, next){
+  User.find({}, function(err, users){
+    if(err) console.log("err in user database");
+    res.send(JSON.stringify(users, null, 2));
+  });
+});
+
 /* view all database status now */
 router.get('/__auth', function(req, res, next){
   var data = {isAuthenticated: req.isAuthenticated()};
@@ -516,11 +524,12 @@ router.post('/add_trip', function(req, res, next) {
       function(result) {
         tripInfo["tripPhoto"] = result.eager[0].secure_url;
         // Save the trip to database.
-        if(helperFunction.addTrip(tripInfo)){
+        console.log(helperFunction.addTrip(User, Trip, tripInfo));
+        // if(helperFunction.addTrip(tripInfo)){
           res.redirect('/view_user/'+ userID);
-        } else {
-          res.send("Error in adding trips");
-        }
+        // } else {
+          // res.send("Error in adding trips");
+        // }
       },
       {
         public_id: tripID, 
