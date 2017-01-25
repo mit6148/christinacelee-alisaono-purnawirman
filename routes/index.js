@@ -363,7 +363,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
             userTripsList.push(tripsList);
           }
         }
-        profileData = {userIsOwner: true,
+        profileData = {userIsOwner: userIsOwner,
                        userImageURL: user.userPhoto, 
                        username: loggedInUser, 
                        userID: user.userID, 
