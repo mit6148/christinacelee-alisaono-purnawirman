@@ -368,7 +368,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
                        username: loggedInUser, 
                        userID: user.userID, 
                        userDescription: user.userDescription, 
-                       userContact: 'test@gmail.com', 
+                       userContact: user.userEmail, 
                        wishlistTrips: wishlistTripsList, 
                        userTrips: userTripsList,
                        showSearchBar: false, 
