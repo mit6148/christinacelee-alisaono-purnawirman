@@ -24,6 +24,16 @@
   background-color: yellow;
   display: inline-block;
 }
+#user-hello {
+  height: 50px;
+  position: absolute;
+  right: 50px;
+  top: 0;
+  display: inline-block;
+  padding-right: 10px;
+  text-align: center;
+  vertical-align: center;
+}
 #top-user-image-container {
   height: 50px;
   width: 50px;
