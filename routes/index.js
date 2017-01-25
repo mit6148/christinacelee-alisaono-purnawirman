@@ -142,14 +142,14 @@ router.get('/__auth', function(req, res, next){
 /* GET home page. */
 router.get('/', function(req, res, next) {
   var loggedIn = req.isAuthenticated();
-  var username;
+  var loggedInUser;
   if (loggedIn) {
-    username = req.user.userName;
+    loggedInUser = req.user.userName;
   } else {
-    username = 'guest';
+    loggedInUser = 'guest';
   }
 
-  res.render('home', {showSearchBar: false, loggedIn: loggedIn, username: username});
+  res.render('home', {showSearchBar: false, loggedIn: loggedIn, loggedInUser: loggedInUser});
 });
 
 router.get('/login/facebook', passport.authenticate('facebook'));
@@ -171,11 +171,11 @@ router.get('/logout', function(req, res, next) {
 router.get('/buddy_search', function(req, res, next) {
 
   var loggedIn = req.isAuthenticated();
-  var username;
+  var loggedInUser;
   if (loggedIn) {
-    username = req.user.userName;
+    loggedInUser = req.user.userName;
   } else {
-    username = 'guest';
+    loggedInUser = 'guest';
   }
 
   var placeID = req.query.buddy_destination_id;
@@ -205,7 +205,7 @@ router.get('/buddy_search', function(req, res, next) {
           });
         }
       }
-      res.render('buddy_search', {users: buddyList, showSearchBar: false, loggedIn: loggedIn, username: username});   
+      res.render('buddy_search', {users: buddyList, showSearchBar: false, loggedIn: loggedIn, loggedInUser: loggedInUser});   
     })
   });
 });
@@ -235,11 +235,11 @@ router.get('/buddy_search_filter', function(req, res, next) {
 router.get('/tabi_search', function(req, res, next) {
 
   var loggedIn = req.isAuthenticated();
-  var username;
+  var loggedInUser;
   if (loggedIn) {
-    username = req.user.userName;
+    loggedInUser = req.user.userName;
   } else {
-    username = 'guest';
+    loggedInUser = 'guest';
   }
 
   var placeID = req.query.tabi_destination_id;
@@ -273,7 +273,7 @@ router.get('/tabi_search', function(req, res, next) {
         }
       }
       console.log(tabies);
-      res.render('tabi_search', {trips: tabiList, showSearchBar: false, loggedIn: req.isAuthenticated()});   
+      res.render('tabi_search', {trips: tabiList, showSearchBar: false, loggedIn: loggedIn, loggedInUser: loggedInUser});   
     })
   });
 });
@@ -319,14 +319,14 @@ router.get('/view_user/:user_id', function(req, res, next) {
   var userIsOwner = false;
   
   var loggedIn = req.isAuthenticated();
-  var username;
+  var loggedInUser;
   if (loggedIn) {
-    username = req.user.userName;
+    loggedInUser = req.user.userName;
     if (userID === req.user.userID) {
       userIsOwner = true;
     }
   } else {
-    username = 'guest';
+    loggedInUser = 'guest';
   }
 
   // var yourOwnName = req.user.userName;
@@ -364,7 +364,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
   var fakeProfileData = {userIsOwner: userIsOwner,
   userImageURL: userImageURL, username: "Cat Meow", userID: userID, userDescription: "this user's ID is "+userID, 
   userContact: 'test@gmail.com', wishlistTrips: wishlistTripsList, userTrips: userTripsList,
-  showSearchBar: false, loggedIn: req.isAuthenticated()};
+  showSearchBar: false, loggedIn: loggedIn, loggedInUser: loggedInUser};
 
   // ~~~~ fake data ends
 
@@ -375,14 +375,14 @@ router.get('/view_user/:user_id', function(req, res, next) {
 router.get('/add_trip_page', function(req, res, next) {
 
   var loggedIn = req.isAuthenticated();
-  var username;
+  var loggedInUser;
   if (loggedIn) {
-    username = req.user.userName;
+    loggedInUser = req.user.userName;
   } else {
-    username = 'guest';
+    loggedInUser = 'guest';
   }
 
-  res.render('add_trip_temp', {loggedIn: loggedIn, username: username});
+  res.render('add_trip_temp', {loggedIn: loggedIn, loggedInUser: loggedInUser});
 });
 
 /* GET edit trip page by trip ID */
