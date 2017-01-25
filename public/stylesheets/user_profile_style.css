@@ -2,16 +2,6 @@ body {
   margin: 0;
 }
 
-/* top bar placeholder */
-/*#top-bar {
-  width: 100%;
-  height: 50px;
-  background-color: pink;
-  text-align: center;
-  position: fixed;
-  z-index: 1;
-}*/
-
 /* user info */
 #user-info-container {
   width: 100%;
@@ -59,7 +49,7 @@ body {
 .trip, .new-trip {
   margin: 10px;
   padding: 10px;
-  border: 2px solid black;
+  border: 1px solid #2c3e50;
   border-radius: 10px;
   background-color: white;
 }
@@ -111,9 +101,9 @@ body {
 .tab-index {
   width: 49%;
   height: 45px;
-  border-right: 1px solid black;
-  border-left: 1px solid black;
-  border-top: 1px solid black;
+  border-right: 1px solid #7f8c8d;
+  border-left: 1px solid #7f8c8d;
+  border-top: 1px solid #7f8c8d;
   border-radius: 10px 10px 0 0;
   display: inline-block;
   text-align: center;
@@ -122,17 +112,16 @@ body {
   margin: 0;
 }
 .tab-index.active {
-  background-color: darkgrey;
-}
-.tab-index.inactive {
-  /*something to change inactive tab index*/
+  border-color: #2c3e50;
+  border-width: 2px;
+  background-color: #1abc9c;
 }
 .tab-content.active {
   padding-top: 10px;
   padding-bottom: 10px;
   width: 100%;
-  border: 1px solid black;
-  background-color: darkgrey;
+  border: 2px solid #2c3e50;
+  background-color: #1abc9c;
 }
 .tab-content.inactive {
   display: none;
