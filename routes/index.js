@@ -236,8 +236,10 @@ router.get('/tabi_search', function(req, res, next) {
 
   var loggedIn = req.isAuthenticated();
   var loggedInUser;
+  var loggedUserLikeList = [];
   if (loggedIn) {
     loggedInUser = req.user.userName;
+    loggedUserLikeList = req.user.userLikedTrips;
   } else {
     loggedInUser = 'guest';
   }
@@ -261,13 +263,14 @@ router.get('/tabi_search', function(req, res, next) {
       if(err) console.log("Error");
       if(trips != null){
         for(var k = 0; k < trips.length; k++){
-          // console.log("ID: " + trips[k].userID + " userName: " + trips[k].userName);
+          // if its in logged user liked list, then liked is true
+          var liked = (loggedUserLikeList.indexOf(trips[k].tripID) >= 0); 
           tabiList.push({tripID: trips[k].tripID,
                           userID: trips[k].tripCreatorID,
                           tripTitle: trips[k].tripName,
                           username: trips[k].tripCreatorName,
                           description: trips[k].tripDescription,
-                          liked: false,
+                          liked: liked,
                           imageURL: trips[k].tripPhoto
           });
         }
@@ -329,46 +332,52 @@ router.get('/view_user/:user_id', function(req, res, next) {
     loggedInUser = 'guest';
   }
 
-  // var yourOwnName = req.user.userName;
-  
-
-  // userImageURL should have been saved in the database
-  // userImageURL should include version number so that pictures are concurrently updated
-  var userImageURL = "https://res.cloudinary.com/tabibuddy/image/upload/c_thumb,g_face,h_200,w_200/v1485053998/125.jpg";
-
-  var tripImageURL = "http://res.cloudinary.com/tabibuddy/image/upload/(place_name)(number).jpg"
-
-  // fake user profile data for front end testing ~~~~
-  var userTripsList = [{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12348", userID: "126", tripTitle: "test4", username: "user4", description: "this is test description4", liked:true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12349", userID: "127", tripTitle: "test5", username: "user5", description: "this is test description5", liked:true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12350", userID: "128", tripTitle: "test6", username: "user6", description: "this is test description6", liked: true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12351", userID: "129", tripTitle: "test7", username: "user7", description: "this is test description7", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12352", userID: "130", tripTitle: "test8", username: "user8", description: "this is test description8", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12353", userID: "131", tripTitle: "test9", username: "user9", description: "this is test description9", liked:true, imageURL:'http://placekitten.com/g/150/150'},];
-
-  var wishlistTripsList = [{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12348", userID: "126", tripTitle: "test4", username: "user4", description: "this is test description4", liked:true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12349", userID: "127", tripTitle: "test5", username: "user5", description: "this is test description5", liked:true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12350", userID: "128", tripTitle: "test6", username: "user6", description: "this is test description6", liked: true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12351", userID: "129", tripTitle: "test7", username: "user7", description: "this is test description7", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12352", userID: "130", tripTitle: "test8", username: "user8", description: "this is test description8", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12353", userID: "131", tripTitle: "test9", username: "user9", description: "this is test description9", liked:true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12354", userID: "132", tripTitle: "test10", username: "user10", description: "this is test description10", liked:true, imageURL:'http://placekitten.com/g/150/150'},];
-
-  // userIsOwner = true -> edit/delete options should appear, false -> only like option
-  var fakeProfileData = {userIsOwner: userIsOwner,
-  userImageURL: userImageURL, username: "Cat Meow", userID: userID, userDescription: "this user's ID is "+userID, 
-  userContact: 'test@gmail.com', wishlistTrips: wishlistTripsList, userTrips: userTripsList,
-  showSearchBar: false, loggedIn: loggedIn, loggedInUser: loggedInUser};
-
-  // ~~~~ fake data ends
-
-  res.render('user_profile', fakeProfileData);
+  // perform query to users then query each trips he liked
+  var query = User.findOne({"userID": userID});
+  var profileData;
+  query.exec(function(err, user){
+    if(err) console.log("error in finding user");
+    if(user === null){
+      res.send("There is no such users");
+      return;
+    } else {
+      var queryTrips = Trip.find({}).
+                       where("tripID").in(user.userLikedTrips).
+                       select("tripID tripCreatorID tripName tripCreatorName tripDescription tripPhoto");
+      queryTrips.exec(function(err, trips){
+        if(err) console.log("Error in finding the trips");
+        var wishlistTripsList = [];
+        var userTripsList = [];
+        for(var i = 0; i < trips.length; i++){
+          var tripsList = {tripID: trips[i].tripID,
+                            userID: trips[i].tripCreatorID,
+                            tripTitle: trips[i].tripName,
+                            userName: trips[i].tripCreatorName,
+                            description: trips[i].tripDescription,
+                            liked: false, // TODO
+                            imageURL: trips[i].tripPhoto}
+          // wishlist = likedtrips - createdtrips
+          if(user.userCreatedTrips.indexOf(trips[i].tripID) < 0){
+            wishlistTripsList.push(tripsList);
+          } else {
+            userTripsList.push(tripsList);
+          }
+        }
+        profileData = {userIsOwner: userIsOwner,
+                       userImageURL: user.userPhoto, 
+                       username: loggedInUser, 
+                       userID: user.userID, 
+                       userDescription: user.userDescription, 
+                       userContact: user.userEmail, 
+                       wishlistTrips: wishlistTripsList, 
+                       userTrips: userTripsList,
+                       showSearchBar: false, 
+                       loggedIn: loggedIn, 
+                       loggedInUser: loggedInUser};
+        res.render('user_profile', profileData);
+      });
+    }
+  });
 });
 
 /* GET add trip page */;
@@ -406,14 +415,28 @@ router.get('/edit_trip_page/:trip_id', function(req, res, next) {
 
 /* POST like_trip*/
 router.post('/like_trip', function(req, res, next) {
-  var likedUser = req.user.userID;
-  var likedTrip = req.body.trip_id;
-  console.log(chalk.red("Hit on like trip!"));
-
+  // var likedUser = req.user.userID;
+  // var likedTrip = req.body.trip_id;
+  console.log(chalk.red("AAA" + req.body));
+  console.log(chalk.red("like trip!"));
+  var userID;
+  var userName;
+  if (process.env.NODE_ENV === "production") {
+    userID = req.user.userID;
+    userName = req.user.userName;
+    if(!req.isAuthenticated()){
+      res.redirect('/login/facebook');
+      return;
+    }
+  } else {
+    userID = "userA";
+    userName = "userA";
+  }
+  console.log("ADAFDFADFAD");
   // update the database 
-
+  // helperFunction.like
   // if no error, send empty string message
-  res.send('');
+  res.send({liked: true});
   // else redirect to error screen
 });
 
@@ -444,9 +467,15 @@ router.post('/edit_profile_photo/:user_id', function(req, res, next) {
       file.path, 
       function(result) {
         // then update the db with new image URL ~~~
-        var newImageURL = result.eager[0].secure_url 
+        var newImageURL = result.eager[0].secure_url; 
+        var userInfo = {userID: userID, userPhoto: newImageURL};
+        if(helperFunction.editUserProfile(userInfo)){
+          res.redirect('/view_user/'+userID); 
+        } else {
+          res.send("error in updating photo");
+        }
         // then redirect to the user's own profile page
-        res.redirect('/view_user/'+userID); },
+      },
         // Show some message on top to let the user know the update was successful?
       {
         public_id: userID, 
@@ -464,23 +493,18 @@ router.post('/edit_profile_photo/:user_id', function(req, res, next) {
 /* POST edit_profile_text*/
 router.post('/edit_profile_info/:user_id', function(req, res, next) {
   var userID = req.params.user_id;
-  var newText = req.body.new_profile_text;
-  var newContact = req.body.new_profile_contact;
-
-  // make sure userID matches req.user.userID
-  // update the db
-
-  // redirect to the user's own profile page
-  res.redirect('/view_user/'+userID);
+  var userInfo = {"userID": userID,
+                  "userDescription": req.body.new_profile_text,
+                  "userEmail": req.body.new_profile_contact}
+  if(helperFunction.editUserProfile(userInfo)){
+    res.redirect('/view_user/'+userID);
+  } else {
+    res.send("Error in updating profile")
+  }
 });
 
 /* POST add_trip*/
 router.post('/add_trip', function(req, res, next) {
-  // check authentication
-  // if(!req.isAuthenticated()){
-  //   res.redirect('/login/facebook');
-  //   return;
-  // }
   var userID;
   var userName;
   if (process.env.NODE_ENV === "production") {
@@ -513,7 +537,7 @@ router.post('/add_trip', function(req, res, next) {
                 tripDescription: fields.description,
                 tripLikedUsers: [userID],
                 tripSeason: fields.season,
-                tripDuration: fields.duration,
+                tripDuration: fields.duration, 
                 tripBudget: fields.budget,}
   });
 
@@ -525,11 +549,7 @@ router.post('/add_trip', function(req, res, next) {
         tripInfo["tripPhoto"] = result.eager[0].secure_url;
         // Save the trip to database.
         console.log(helperFunction.addTrip(User, Trip, tripInfo));
-        // if(helperFunction.addTrip(tripInfo)){
-          res.redirect('/view_user/'+ userID);
-        // } else {
-          // res.send("Error in adding trips");
-        // }
+        res.redirect('/view_user/'+ userID);
       },
       {
         public_id: tripID, 
