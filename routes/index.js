@@ -365,7 +365,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
         }
         profileData = {userIsOwner: userIsOwner,
                        userImageURL: user.userPhoto, 
-                       username: loggedInUser, 
+                       username: user.userName, 
                        userID: user.userID, 
                        userDescription: user.userDescription, 
                        userContact: user.userEmail, 

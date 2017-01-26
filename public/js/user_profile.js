@@ -61,6 +61,8 @@ var main = function() {
 
   $('#trip-popup-close-icon').on('click',closePopupTrip);
 
+  $('#background-blur').on('click',closePopupTrip);
+
   $('#trip-popup').on('click',function(event){
     event.preventDefault();
 
