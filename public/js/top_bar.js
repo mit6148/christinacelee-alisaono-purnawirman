@@ -9,10 +9,6 @@ var main = function() {
     $('#user-dropdown-container').slideUp('fast');
   });
 
-  // $("#user-option").on('click',function(event){
-  //   $('#user-dropdown-container').slideDown('slow');
-  // });
-
   $('.user-dropdown').mouseover(function(event){
     $(this).css('background-color', '#95a5a6');
   }).mouseout(function(event){

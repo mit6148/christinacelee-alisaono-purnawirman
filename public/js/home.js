@@ -42,11 +42,12 @@ $(document).ready(function(){
 
   $('.fieldset-home').hover(
     function() {
-      $(this).animate({height:'+=50', width:'+=50'}, 'slow');
+      $(this).find('.expand-show').show();
+      $(this).animate({height:'+=80', width:'+=80'}, 'slow');
     },
     function() {
-      $(this).animate({height:'-=50', width:'-=50'}, 'slow')
-
+      $(this).animate({height:'-=80', width:'-=80'}, 'slow');
+      $(this).find('.expand-show').hide();
     }
   );
 

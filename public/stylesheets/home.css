@@ -1,6 +1,7 @@
 
 body {
   margin: 0;
+  font-family: 'Raleway', sans-serif;
 }
 .invisible {
   display: none;
@@ -51,8 +52,8 @@ body {
 
 }
 .fieldset-home {
-  width: 180px;
-  height: 180px;
+  width: 200px;
+  height: 200px;
   padding-top: 10px;
   display: inline-block;
   margin: 5%;
@@ -72,5 +73,8 @@ body {
 }
 .trip_attributes {
   display: block;
+}
+.expand-show {
+  display: none;
 }
 
