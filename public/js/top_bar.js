@@ -3,12 +3,15 @@ var main = function() {
     window.location = '/';
   });
 
-  $("#user-option").mouseenter(function(event){
-    $('#user-dropdown-container').slideDown('slow');
-  }).mouseleave(function(event){
-    $('#user-dropdown-container').slideUp('slow');
-  });
+  // $("#user-option").mouseenter(function(event){
+  //   $('#user-dropdown-container').slideDown('slow');
+  // }).mouseleave(function(event){
+  //   $('#user-dropdown-container').slideUp('slow');
+  // });
 
+  $("#user-option").on('click',function(event){
+    $('#user-dropdown-container').slideDown('slow');
+  });
 
   $('.user-dropdown').mouseover(function(event){
     $(this).css('background-color', '#95a5a6');
