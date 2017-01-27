@@ -34,9 +34,10 @@
   padding-right: 10px;
   padding-left: 10px;
   text-align: center;
-  vertical-align: center;
+  vertical-align: middle;
   background-color: white;
   border-bottom: solid 1px #95a5a6;
+  cursor: default;
 }
 #top-user-image-container {
   height: 50px;
@@ -69,6 +70,7 @@
   border: solid 1px #95a5a6;
   background-color: white;
   font-size: 20px;
+  cursor: default;
 }
 #user-dropdown-login {
   width: 200px;

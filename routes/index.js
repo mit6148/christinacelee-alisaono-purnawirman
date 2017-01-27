@@ -170,7 +170,8 @@ router.get('/logout', function(req, res, next) {
 // This GET req should return ALL buddies of the same location 
 router.get('/buddy_search', function(req, res, next) {
 
-  var loggedIn = req.isAuthenticated();
+  var loggedIn = false;
+  // var loggedIn = req.isAuthenticated();
   var loggedInUser;
   if (loggedIn) {
     loggedInUser = req.user.userName;
@@ -178,36 +179,50 @@ router.get('/buddy_search', function(req, res, next) {
     loggedInUser = 'guest';
   }
 
-  var placeID = req.query.buddy_destination_id;
-  var placeName = req.query.buddy_destination_name;
-  var buddies = [];
-  Destination.findOne({"destinationID": placeID}, function(err, foundDestination){
-    if(err){
-      console.log("Errof in finding destination");
-    }
-    if(foundDestination != null){
-      buddies = foundDestination["buddies"];
-    }
-    var buddyList = [];
-    var query = User.
-                find({}).
-                where("userID").in(buddies).
-                select("userID userName userPhoto")
-    query.exec(function(err, users){
-      if(err) console.log("Error");
-      if(users != null){
-        for(var k = 0; k < users.length; k++){
-          // console.log("ID: " + users[k].userID + " userName: " + users[k].userName);
-          buddyList.push({userID: users[k].userID,
-                          username: users[k].userName,
-                          userImageURL: users[k].userPhoto,
-                          tripImages: []
-          });
-        }
-      }
-      res.render('buddy_search', {users: buddyList, showSearchBar: false, loggedIn: loggedIn, loggedInUser: loggedInUser});   
-    })
-  });
+//   var placeID = req.query.buddy_destination_id;
+//   var placeName = req.query.buddy_destination_name;
+//   var buddies = [];
+//   Destination.findOne({"destinationID": placeID}, function(err, foundDestination){
+//     if(err){
+//       console.log("Errof in finding destination");
+//     }
+//     if(foundDestination != null){
+//       buddies = foundDestination["buddies"];
+//     }
+//     var buddyList = [];
+//     var query = User.
+//                 find({}).
+//                 where("userID").in(buddies).
+//                 select("userID userName userPhoto")
+//     query.exec(function(err, users){
+//       if(err) console.log("Error");
+//       if(users != null){
+//         for(var k = 0; k < users.length; k++){
+//           // console.log("ID: " + users[k].userID + " userName: " + users[k].userName);
+//           buddyList.push({userID: users[k].userID,
+//                           username: users[k].userName,
+//                           userImageURL: users[k].userPhoto,
+//                           tripImages: []
+//           });
+//         }
+//       }
+//       res.render('buddy_search', {users: buddyList, showSearchBar: false, loggedIn: loggedIn, loggedInUser: loggedInUser});   
+//     })
+//   });
+// });
+
+var fakeBuddyData = {users:[{userID: "123", username: "filter success!", userImageURL: 'http://placekitten.com/g/150/150',
+tripImages: []},
+{userID: "124", username: "user2withalong name", userImageURL: 'http://placekitten.com/g/150/150', 
+tripImages: []},
+{userID: "125", username: "user3", userImageURL: 'http://placekitten.com/g/150/150',
+tripImages: []},
+{userID: "126", username: "user4", userImageURL: 'http://placekitten.com/g/150/150',
+tripImages: []},
+{userID: "127", username: "user5", userImageURL: 'http://placekitten.com/g/150/150',
+tripImages: []},
+], showSearchBar: false, loggedIn: loggedIn, loggedInUser: loggedInUser};
+res.render('buddy_search', fakeBuddyData);
 });
 
 /* GET buddy search result (filtered) */

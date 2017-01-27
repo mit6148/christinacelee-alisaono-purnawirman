@@ -30,11 +30,10 @@ body {
 }
 
 .hero {
-/*  color: #1abc9c;*/
-  color: #2c3e50;
   line-height: 44px;
   padding: 22px 80px 44px 80px;
   text-align: center;
+  cursor: default;
 }
 .hero h2 {
   font-size: 36px;
@@ -62,6 +61,9 @@ body {
   text-align: center;
   background-color: #1abc9c;
   overflow: hidden;
+}
+.fieldset-home h3, h4{
+  cursor: default;
 }
 .tabi {
   float: right;

@@ -61,6 +61,8 @@ function populateSearchBar(filter){
 
 function expandFilterCriteria(event){
   event.preventDefault();
+  $('.filter-title-container').css('background-color','#95a5a6');
+  $(this).css('background-color','white');
   var groupName = $(this).attr('rel');
   $('.filter-criteria-container').hide();
   $('#'+groupName+'-criteria-container').show();
