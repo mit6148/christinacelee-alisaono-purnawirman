@@ -12,24 +12,34 @@ body {
   margin-left: 1%;
 }
 #filter-by-container form {
-  border: 2px solid black;
+  border: 3px solid #ecf0f1;
+  background-color: #1abc9c;
   margin: 10px;
+  font-size: 1.5vw;
+  overflow: hidden;
+  cursor: default;
+}
+#filter-by-container h2 {
+  font-size: 2vw;
 }
 #filter-by-container h1 {
   margin-left: 10px;
+  font-size: 2.5vw;
 }
 #filter-by-container button {
   margin: 10px;
   display: none;
 }
 #filter-by-container ul {
-  margin: 10px;
+  margin-top: 10px;
+  padding-left: 35px;
   display: none;
 }
 .filter-title-container {
   width: 100%;
   height: 40px;
-  border: solid 1px black;
+  border: solid 1px #ecf0f1;
+  background-color: #95a5a6;
 }
 .filter-title-container h2 {
   margin: 0;
@@ -39,7 +49,8 @@ body {
 .filter-criteria-container {
   padding: 10px;
   display: none;
-  border: solid 1px black;
+  border: solid 2px #ecf0f1;
+  background-color: white;
 }
 
 /* search result trips */
@@ -53,34 +64,47 @@ body {
   width: 24%;
   display: inline-block;
   text-align: center;
+  vertical-align: top;
 }
 .trip {
   margin: 10px;
   padding: 10px;
-  border: 2px solid black;
+  border: 3px solid #95a5a6;
   border-radius: 10px;
   background-color: white;
+  cursor: zoom-in;
+  font-size: 1.5vw;
 }
 .trip-title-container {
   width: 85%;
   display: inline-block;
 }
 .trip-title {
+  width: 100%;
   margin: 0;
   text-align: left;
+  font-size: 2.5vw;
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
 }
 .trip-like-container {
   width: 15%;
   display: inline-block;
   vertical-align: top;
+  text-align: right;
 }
 .trip-like, .trip-unlike {
   width: 100%;
   vertical-align: top;
+  cursor: pointer;
 }
 .trip-author, .trip-description {
   margin: 0;
   margin-top: 10px;
+}
+.trip-author {
+  cursor: pointer;
 }
 .trip-image {
   width: 100%;
@@ -114,12 +138,13 @@ body {
 #trip-popup-close-icon {
   width: 100%;
   height: 100%;
+  cursor: pointer;
 }
 #trip-popup {
   position: absolute;
   top: 100px;
-  left: 35%;
-  width: 30%;
+  left: 25%;
+  width: 50%;
   margin-bottom: 25px;
   text-align: center;
 }

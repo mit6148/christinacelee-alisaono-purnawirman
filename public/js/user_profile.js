@@ -154,8 +154,13 @@ function showPopupTrip(tripElement){
   $('#trip-popup-close').css('top',popupCloseTop+'px');
   $('#trip-popup-container').removeClass('popup-inactive');
 	$('#trip-popup').append(tripElement.clone());
-	$('#trip-popup .trip-description').removeClass('text-hidden');
-	$('#trip-popup').attr('rel',tripID);
+  $('#trip-popup img').css('width','50%');
+  $('#trip-popup .trip-description').removeClass('text-hidden');
+  $('#trip-popup').attr('rel',tripID);
+  $('#trip-popup .trip-title').css('overflow-wrap','break-word');
+  $('#trip-popup .trip-title').css('over-wrap','break-word');
+  $('#trip-popup .trip-title').css('hyphens','auto');
+  $('#trip-popup .trip').css('cursor','default');
 }
 
 function closePopupTrip(event){

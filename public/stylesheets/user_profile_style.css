@@ -53,34 +53,47 @@ body {
   border: 1px solid #2c3e50;
   border-radius: 10px;
   background-color: white;
+  cursor: zoom-in;
+  font-size: 1.5vw;
 }
 .trip-title-container {
   width: 85%;
   display: inline-block;
 }
 .trip-title {
+  width: 100%;
   margin: 0;
   text-align: left;
+  font-size: 2.5vw;
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
 }
 .trip-like-container, .trip-edit-container {
   width: 15%;
   display: inline-block;
   vertical-align: top;
+  text-align: right;
 }
 .trip-delete-container {
   width: 15%;
   vertical-align: top;
   margin-top: 5px;
   float: right;
+  text-align: right;
 }
 .trip-like, .trip-unlike, .trip-edit, .trip-delete {
   width: 100%;
   height: 100%;
   vertical-align: top;
+  cursor: pointer;
 }
 .trip-author, .trip-description {
   margin: 0;
   margin-top: 10px;
+}
+.trip-author {
+  cursor: pointer;
 }
 .trip-image {
   width: 100%;
@@ -108,6 +121,7 @@ body {
   border-radius: 10px 10px 0 0;
   display: inline-block;
   text-align: center;
+  cursor: pointer;
 }
 .tab-index h1 {
   margin: 0;
@@ -168,10 +182,12 @@ body {
   right: 25px;
   width: 25px;
   height: 25px;
+  cursor: pointer;
 }
 #trip-popup-close-icon {
   width: 100%;
   height: 100%;
+  cursor: pointer;
 }
 #trip-popup {
   position: absolute;
