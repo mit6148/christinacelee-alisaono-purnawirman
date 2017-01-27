@@ -60,8 +60,11 @@ var main = function() {
 	});
 
   $('#trip-popup-close-icon').on('click',closePopupTrip);
-
+  
   $('#background-blur').on('click',closePopupTrip);
+  // $('#background-blur').on('click',function(event){
+  //   console.log('closing');
+  // });
 
   $('#trip-popup').on('click',function(event){
     event.preventDefault();
@@ -160,7 +163,8 @@ function showPopupTrip(tripElement){
   $('#trip-popup .trip-title').css('overflow-wrap','break-word');
   $('#trip-popup .trip-title').css('over-wrap','break-word');
   $('#trip-popup .trip-title').css('hyphens','auto');
-  $('#trip-popup .trip').css('cursor','default');
+  $('#trip-popup').children().css('cursor','default');
+  $('#trip-popup .trip-author').css('cursor','pointer')
 }
 
 function closePopupTrip(event){

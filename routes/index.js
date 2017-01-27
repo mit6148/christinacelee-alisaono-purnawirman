@@ -354,7 +354,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
           var tripsList = {tripID: trips[i].tripID,
                             userID: trips[i].tripCreatorID,
                             tripTitle: trips[i].tripName,
-                            userName: trips[i].tripCreatorName,
+                            username: trips[i].tripCreatorName,
                             description: trips[i].tripDescription,
                             liked: false, // TODO
                             imageURL: trips[i].tripPhoto}
