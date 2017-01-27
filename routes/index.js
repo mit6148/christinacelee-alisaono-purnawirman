@@ -170,8 +170,7 @@ router.get('/logout', function(req, res, next) {
 // This GET req should return ALL buddies of the same location 
 router.get('/buddy_search', function(req, res, next) {
 
-  var loggedIn = false;
-  // var loggedIn = req.isAuthenticated();
+  var loggedIn = req.isAuthenticated();
   var loggedInUser;
   if (loggedIn) {
     loggedInUser = req.user.userName;
