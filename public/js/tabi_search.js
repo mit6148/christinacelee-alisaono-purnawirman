@@ -219,12 +219,6 @@ function likeTrip (eventTarget, tripID) {
       trip_id: tripID,
     }
   }).done(function(response){
-    //db updates trip with like
-    
-    // eventTarget.attr('class','trip-unlike');
-    // eventTarget.attr('src',unlikeIconURL);
-
-    alert(response);
 
     $('img[rel="'+tripID+'"]').attr('class','trip-unlike');
     $('img[rel="'+tripID+'"]').attr('src',unlikeIconURL);
@@ -242,12 +236,6 @@ function unlikeTrip (eventTarget,tripID) {
       trip_id: tripID,
     }
   }).done(function(response){
-    //db updates trip with unlike
-
-    // eventTarget.attr('class','trip-like');
-    // eventTarget.attr('src',likeIconURL);
-
-    alert(response);
 
     $('img[rel="'+tripID+'"]').attr('class','trip-like');
     $('img[rel="'+tripID+'"]').attr('src',likeIconURL);

@@ -267,13 +267,13 @@ router.get('/tabi_search', function(req, res, next) {
       if(trips != null){
         for(var k = 0; k < trips.length; k++){
           // if its in logged user liked list, then liked is true
-          var liked = (loggedUserLikeList.indexOf(trips[k].tripID) >= 0);
+          var tripLiked = (loggedUserLikeList.indexOf(trips[k].tripID.toString()) >= 0);
           tabiList.push({tripID: trips[k].tripID,
                           userID: trips[k].tripCreatorID,
                           tripTitle: trips[k].tripName,
                           username: trips[k].tripCreatorName,
                           description: trips[k].tripDescription,
-                          liked: liked,
+                          liked: tripLiked,
                           imageURL: trips[k].tripPhoto
           });
         }
@@ -324,7 +324,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
   // set userIsOwner to true, if the person is viewing his/her own profile
   var userIsOwner = false;
   var loggedIn = req.isAuthenticated();
-  var loggedInUser;
+  var loggedInUser = 'guest';
   var loggedUserLikeList = [];
   if (loggedIn) {
     loggedInUser = req.user.userName;
@@ -332,9 +332,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
     if (userID === req.user.userID) {
       userIsOwner = true;
     }
-  } else {
-    loggedInUser = 'guest';
-  }
+  } 
 
   // perform query to users then query each trips he liked
   var query = User.findOne({"userID": userID});
