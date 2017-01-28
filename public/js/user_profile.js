@@ -175,7 +175,7 @@ function closePopupTrip(event){
 }
 
 function likeTrip(eventTarget, tripID) {
-  console.log(tripID+' liked post req');
+  // console.log(tripID+' liked post req');
 
   $.ajax({
     url: '/like_trip',
@@ -185,13 +185,13 @@ function likeTrip(eventTarget, tripID) {
     }
   }).done(function(response){
     //db updated trip with like
-    eventTarget.attr('class','trip-unlike');
-  	eventTarget.attr('src',unlikeIconURL);
+    $('.trip-like[rel="'+tripID+'"]').attr('class','trip-unlike');
+    $('.trip-like[rel="'+tripID+'"]').attr('src',unlikeIconURL);
   });
 }
 
 function unlikeTrip(eventTarget,tripID) {
-	console.log(tripID+' unliked post req');
+	// console.log(tripID+' unliked post req');
 	
 	$.ajax({
     url: '/unlike_trip',
@@ -201,8 +201,9 @@ function unlikeTrip(eventTarget,tripID) {
     }
   }).done(function(response){
     //db updated trip with unlike
-    eventTarget.attr('class','trip-like');
-  	eventTarget.attr('src',likeIconURL);
+
+    $('.trip-unlike[rel="'+tripID+'"]').attr('class','trip-like');
+    $('.trip-unlike[rel="'+tripID+'"]').attr('src',likeIconURL);
   });
 }
 

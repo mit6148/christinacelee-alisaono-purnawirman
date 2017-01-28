@@ -167,7 +167,7 @@ function applyFilter(event){
     }
   });
 
-  console.log(filterData);
+  // console.log(filterData);
 
   $.ajax({
     url: '/tabi_search_filter',
@@ -210,7 +210,7 @@ function closePopupTrip(event){
 }
 
 function likeTrip (eventTarget, tripID) {
-  console.log(tripID+' liked post req');
+  // console.log(tripID+' liked post req');
 
   $.ajax({
     url: '/like_trip',
@@ -231,7 +231,7 @@ function likeTrip (eventTarget, tripID) {
 }
 
 function unlikeTrip (eventTarget,tripID) {
-  console.log(tripID+' unliked post req');
+  // console.log(tripID+' unliked post req');
   
   $.ajax({
     url: '/unlike_trip',
