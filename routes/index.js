@@ -243,7 +243,6 @@ router.get('/tabi_search', function(req, res, next) {
   if (loggedIn) {
     loggedInUser = req.user.userName;
     loggedUserLikeList = req.user.userLikedTrips;
-    loggedInUserID = req.user.userID;
   } else {
     loggedInUser = 'guest';
   }
@@ -268,17 +267,7 @@ router.get('/tabi_search', function(req, res, next) {
       if(trips != null){
         for(var k = 0; k < trips.length; k++){
           // if its in logged user liked list, then liked is true
-          // var liked = loggedUserLikeList.some(function(tabi){
-          //   return tabi.equals(trips[k].tripID);
-          // });
-          var likedUsers = trips[k].tripLikedUsers;
-          var liked = false;
-          if (loggedIn) {
-            // liked = likedUsers.some(function(likedUser){
-            //   return likedUser.equals(loggedUserID);
-            // });
-            liked = true;
-          } 
+          var liked = (loggedUserLikeList.indexOf(trips[k].tripID.toString()) >= 0);
           tabiList.push({tripID: trips[k].tripID,
                           userID: trips[k].tripCreatorID,
                           tripTitle: trips[k].tripName,
@@ -364,7 +353,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
         var wishlistTripsList = [];
         var userTripsList = [];
         for(var i = 0; i < trips.length; i++){
-          var liked = (loggedUserLikeList.indexOf(trips[i].tripID) >= 0);
+          var liked = (loggedUserLikeList.indexOf(trips[i].tripID.toString()) >= 0);
           var tripsList = {tripID: trips[i].tripID,
                             userID: trips[i].tripCreatorID,
                             tripTitle: trips[i].tripName,
