@@ -350,7 +350,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
     } else {
       var queryTrips = Trip.find({}).
                        where("tripID").in(user.userLikedTrips).
-                       select("tripID tripCreatorID tripName tripCreatorName tripDescription tripPhoto tripLikedUser");
+                       select("tripID tripCreatorID tripName tripCreatorName tripDescription tripPhoto tripLikedUsers");
       queryTrips.exec(function(err, trips){
         if(err) console.log("Error in finding the trips");
         var wishlistTripsList = [];
