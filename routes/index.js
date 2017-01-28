@@ -321,7 +321,6 @@ router.get('/view_user/:user_id', function(req, res, next) {
   // req.user.userID is user ID of the person who is viewing the profile
   // set userIsOwner to true, if the person is viewing his/her own profile
   var userIsOwner = false;
-  
   var loggedIn = req.isAuthenticated();
   var loggedInUser;
   var loggedUserLikeList = [];
@@ -352,7 +351,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
         var wishlistTripsList = [];
         var userTripsList = [];
         for(var i = 0; i < trips.length; i++){
-          var liked = (loggedUserLikeList.indexOf(trips[k].tripID) >= 0)
+          var liked = (loggedUserLikeList.indexOf(trips[k].tripID) >= 0);
           var tripsList = {tripID: trips[i].tripID,
                             userID: trips[i].tripCreatorID,
                             tripTitle: trips[i].tripName,
