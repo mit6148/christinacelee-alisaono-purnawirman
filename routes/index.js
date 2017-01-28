@@ -192,7 +192,7 @@ router.get('/buddy_search', function(req, res, next) {
     var query = User.
                 find({}).
                 where("userID").in(buddies).
-                select("userID userName userPhoto")
+                select("userID userName userPhoto");
     query.exec(function(err, users){
       if(err) console.log("Error");
       if(users != null){
@@ -261,15 +261,15 @@ router.get('/tabi_search', function(req, res, next) {
     var query = Trip.
                 find({}).
                 where("tripID").in(tabies).
-                select("tripID tripCreatorID tripName tripCreatorName tripDescription tripPhoto")
+                select("tripID tripCreatorID tripName tripCreatorName tripDescription tripPhoto");
     query.exec(function(err, trips){
       if(err) console.log("Error");
       if(trips != null){
         for(var k = 0; k < trips.length; k++){
           // if its in logged user liked list, then liked is true
-          var liked = loggedUserLikeList.some(function(tabi){
-            return tabi.equals(trips[k].tripID);
-          });
+          // var liked = loggedUserLikeList.some(function(tabi){
+          //   return tabi.equals(trips[k].tripID);
+          // });
           // var liked = (loggedUserLikeList.indexOf(trips[k].tripID) >= 0);
           console.log(liked); 
           tabiList.push({tripID: trips[k].tripID,
