@@ -277,7 +277,7 @@ router.get('/tabi_search', function(req, res, next) {
             // liked = likedUsers.some(function(likedUser){
             //   return likedUser.equals(loggedUserID);
             // });
-            liked = likedUsers.includes(loggedInUserID);
+            liked = true;
           } 
           tabiList.push({tripID: trips[k].tripID,
                           userID: trips[k].tripCreatorID,
