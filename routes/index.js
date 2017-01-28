@@ -586,20 +586,17 @@ router.post('/add_trip', function(req, res, next) {
         tripInfo["tripPhoto"] = result.eager[0].secure_url;
         // Save the trip to database.
         console.log(helperFunction.addTrip(User, Trip, tripInfo));
+        // Show some message on top to let the user know the update was successful?
         res.redirect('/view_user/'+ userID);
       },
       {
         public_id: tripID, 
         quality: "auto:good",
         width: 600, height: 600, crop: "limit",
-        eager: [{ width: 500, height: 500, crop: 'thumb', gravity: 'face', format: 'jpg'}],                                   
-      // tags: [] 
+        eager: [{ width: 500, height: 500, crop: 'thumb', gravity: 'auto', format: 'jpg'}],
       }
     );
   });
-
-  // Show some message on top to let the user know the update was successful?
-  // res.redirect('/view_user/'+userID);
 });
 
 /* POST edit_trip*/
