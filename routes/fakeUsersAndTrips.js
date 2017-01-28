@@ -197,7 +197,7 @@ var trips = [
 			  "tripDestinationID": "ChIJOSmpLuR5j4AR0u9gOcikHdo", 
 			  "tripDestinationName": "San Bruno, CA, USA", 
 			  "tripType": "Adventure",
-			  "tripActive": true  
+			  "tripActive": true, 
 			  "tripPhoto": "https://res.cloudinary.com/tabibuddy/image/upload/c_thumb,g_auto,h_500,w_500/v1485327112/58884b0824be4c2bb0ff700f.jpg", 
 			  "tripDescription": "On a long trip on pacific highway, we discovered the forbidden forest.", 
 			  "tripLikedUsers": [ "10158044489410487" ], 
@@ -213,7 +213,7 @@ var trips = [
 			  "tripDestinationID": "ChIJNc0j6G3raDURpwhxJHTL2DU", 
 			  "tripDestinationName": "Busan, South Korea", 
 			  "tripType": "Food", 
-			  "tripActive": true 
+			  "tripActive": true, 
 			  "tripPhoto": "https://res.cloudinary.com/tabibuddy/image/upload/c_thumb,g_auto,h_500,w_500/v1485307986/58880052bfda072fb896bfb7.jpg", 
 			  "tripDescription": "Great pie store in Busan! Name is 'Pie-o-lin', as in it rhymes with 'violin' haha XD Their pecan pies and espresso are amazingggg <3", 
 			  "tripLikedUsers": [ "10155769496177729" ], 
