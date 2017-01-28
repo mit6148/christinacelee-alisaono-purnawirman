@@ -249,7 +249,7 @@ var destinations = [{
 					"buddies": ["664614793719454"],
 					},
 					{
-					"destinationID": "ChIJVTPokywQkFQRmtVEaUZlJRA",
+					"destinationID": "ChIJOSmpLuR5j4AR0u9gOcikHdo",
 					"destinationName": "San Bruno, CA, USA",
 					"tabies": [purnaTripAID],
 					"buddies": ["10158044489410487"],
