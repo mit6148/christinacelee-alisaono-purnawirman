@@ -351,13 +351,13 @@ router.get('/view_user/:user_id', function(req, res, next) {
         var wishlistTripsList = [];
         var userTripsList = [];
         for(var i = 0; i < trips.length; i++){
-          var liked = (loggedUserLikeList.indexOf(trips[i].tripID.toString()) >= 0);
+          var tripLiked = (loggedUserLikeList.indexOf(trips[i].tripID.toString()) >= 0);
           var tripsList = {tripID: trips[i].tripID,
                             userID: trips[i].tripCreatorID,
                             tripTitle: trips[i].tripName,
                             username: trips[i].tripCreatorName,
                             description: trips[i].tripDescription,
-                            liked: true, 
+                            liked: tripLiked, 
                             imageURL: trips[i].tripPhoto}
           // wishlist = likedtrips - createdtrips
           if(user.userCreatedTrips.indexOf(trips[i].tripID) < 0){
