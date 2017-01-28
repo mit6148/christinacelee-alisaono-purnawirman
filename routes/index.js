@@ -10,7 +10,7 @@ var session = require('express-session');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 
-router.use(session({ secret: 'my super secret secret', resave: 'false', saveUninitialized: 'true' }));
+router.use(session({ secret: 'abhdf2134jkbdu4083n7k4bskk0as8j4nf63kng', resave: 'false', saveUninitialized: 'true' }));
 router.use(passport.initialize());
 router.use(passport.session());
 
@@ -213,6 +213,8 @@ router.get('/buddy_search', function(req, res, next) {
 });
 
 
+
+//////TODO
 /* GET buddy search result (filtered) */
 // This GET req should return FILTERED buddies of the same location 
 router.get('/buddy_search_filter', function(req, res, next) {
@@ -239,11 +241,9 @@ router.get('/tabi_search', function(req, res, next) {
 
   var loggedIn = req.isAuthenticated();
   var loggedInUser = 'guest';
-  // var loggedUserLikeList = [];
   var loggedUserID = null;
   if (loggedIn) {
     loggedInUser = req.user.userName;
-    // loggedUserLikeList = req.user.userLikedTrips;
     loggedUserID = req.user.userID;
   } 
 
@@ -282,15 +282,26 @@ router.get('/tabi_search', function(req, res, next) {
         }
       }
 
-      res.render('tabi_search', {trips: tabiList, showSearchBar: false, loggedIn: loggedIn, loggedInUser: loggedInUser});   
+      res.render('tabi_search', {placeID: placeID, placeName: placeName, 
+        trips: tabiList, showSearchBar: false, loggedIn: loggedIn, loggedInUser: loggedInUser});   
     })
   });
 });
 
+
+//////TODO
 /* GET tabi search result (filtered) */
 // This GET req should return FILTERED trips of the same location
 router.get('/tabi_search_filter', function(req, res, next) {
-  console.log(req.query.Budget);
+  console.log(req.query);
+
+  var loggedUserID = null;
+  if (req.isAuthenticated()) {
+    loggedUserID = req.user.userID;
+  } 
+
+  var placeID = req.query.placeID;
+
   // front end will send req.body should include location, filter object
   // {
   //   placeID: '12345',
@@ -298,15 +309,57 @@ router.get('/tabi_search_filter', function(req, res, next) {
   //   duration: ['short'],
   // }
 
+  Destination.findOne({"destinationID": placeID}, function(err, foundDestination){
+    if(err){
+      console.log("Error in finding destination");
+    }
+    if(foundDestination != null){
+      tabies = foundDestination["tabies"];
+    }
+    var tabiList = [];
+    var query = Trip.
+                find({}).
+                where("tripID").in(tabies);
+
+    for (var g = 1; g < req.query.length; g++) {
+      var groupName = req.query[g];
+      query.where(groupName).in(req.query[groupName]);
+    }
+
+    query.select("tripID tripCreatorID tripName tripCreatorName tripDescription tripPhoto tripLikedUsers");
+    query.exec(function(err, trips){
+      if(err) console.log("Error");
+      if(trips != null){
+        for(var k = 0; k < trips.length; k++){
+          // if its in logged user liked list, then liked is true
+          var tripLikedUsers = trips[k].tripLikedUsers;
+          var tripLiked = tripLikedUsers.some(function(tripUser){
+            return tripUser === loggedUserID;
+          });
+          tabiList.push({tripID: trips[k].tripID,
+                          userID: trips[k].tripCreatorID,
+                          tripTitle: trips[k].tripName,
+                          username: trips[k].tripCreatorName,
+                          description: trips[k].tripDescription,
+                          liked: tripLiked,
+                          imageURL: trips[k].tripPhoto
+          });
+        }
+      }
+
+      res.render('tabi_search_result', {trips: tabiList});   
+    })
+  });
+
   // fake trip data for front end testing
   // you return something like below to the front end 
-  var fakeTripData = {trips:[{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "Filter success!", liked: true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12348", userID: "126", tripTitle: "test4", username: "user4", description: "this is test description4", liked:true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12349", userID: "127", tripTitle: "test5", username: "user5", description: "this is test description5", liked:true, imageURL:'http://placekitten.com/g/150/150'},],};
+  // var fakeTripData = {trips:[{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "Filter success!", liked: true, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12348", userID: "126", tripTitle: "test4", username: "user4", description: "this is test description4", liked:true, imageURL:'http://placekitten.com/g/150/150'},
+  // {tripID: "12349", userID: "127", tripTitle: "test5", username: "user5", description: "this is test description5", liked:true, imageURL:'http://placekitten.com/g/150/150'},],};
 
-  res.render('tabi_search_result', fakeTripData);
+  // res.render('tabi_search_result', fakeTripData);
 });
 
 
@@ -405,6 +458,7 @@ router.get('/add_trip_page', function(req, res, next) {
   res.render('add_trip_temp', {loggedIn: loggedIn, loggedInUser: loggedInUser});
 });
 
+///////TODO
 /* GET edit trip page by trip ID */
 router.get('/edit_trip_page/:trip_id', function(req, res, next) {
   
@@ -427,7 +481,6 @@ router.get('/edit_trip_page/:trip_id', function(req, res, next) {
 /* POST like_trip*/
 router.post('/like_trip', function(req, res, next) {
 
-  // console.log(chalk.red("AAA" + req.body.trip_id));
   // console.log(chalk.red("like trip!"));
 
   var tripID = req.body.trip_id;
@@ -501,48 +554,57 @@ router.post('/edit_profile_photo/:user_id', function(req, res, next) {
 
   var userID = req.params.user_id;
 
-  // check userID matches req.user.userID
+  if (!req.isAuthenticated()) {
+    res.redirect('/login/facebook');
+  } else if (req.user.userID !== userID) {
+    res.send("unauthorized access");
+  } else {
+    var form = new formidable.IncomingForm();
 
-  var form = new formidable.IncomingForm();
-
-  form.on('file', function(field, file) {
-    cloudinary.uploader.upload(
-      file.path, 
-      function(result) {
-        // then update the db with new image URL ~~~
-        var newImageURL = result.eager[0].secure_url; 
-        var userInfo = {userID: userID, userPhoto: newImageURL};
-        if(helperFunction.editUserProfile(userInfo)){
-          res.redirect('/view_user/'+userID); 
-        } else {
-          res.send("error in updating photo");
+    form.on('file', function(field, file) {
+      cloudinary.uploader.upload(
+        file.path, 
+        function(result) {
+          // then update the db with new image URL ~~~
+          var newImageURL = result.eager[0].secure_url; 
+          var userInfo = {userID: userID, userPhoto: newImageURL};
+          if(helperFunction.editUserProfile(userInfo)){
+            res.redirect('/view_user/'+userID); 
+          } else {
+            res.send("error in updating photo");
+          }
+        },
+          // Show some message on top to let the user know the update was successful?
+        {
+          public_id: userID, 
+          quality: "auto:good",
+          width: 400, height: 400, crop: "limit",
+          eager: [{ width: 300, height: 300, crop: 'thumb', gravity: 'face', format: 'jpg'}],                                   
         }
-        // then redirect to the user's own profile page
-      },
-        // Show some message on top to let the user know the update was successful?
-      {
-        public_id: userID, 
-        quality: "auto:good",
-        width: 400, height: 400, crop: "limit",
-        eager: [{ width: 300, height: 300, crop: 'thumb', gravity: 'face', format: 'jpg'}],                                   
-      // tags: [] 
-      }
-    );
-  });
+      );
+    });
 
-  form.parse(req);
+    form.parse(req);
+  }
 });
 
 /* POST edit_profile_text*/
 router.post('/edit_profile_info/:user_id', function(req, res, next) {
   var userID = req.params.user_id;
-  var userInfo = {"userID": userID,
-                  "userDescription": req.body.new_profile_text,
-                  "userEmail": req.body.new_profile_contact}
-  if(helperFunction.editUserProfile(userInfo)){
-    res.redirect('/view_user/'+userID);
+
+  if (!req.isAuthenticated()) {
+    res.redirect('/login/facebook');
+  } else if (req.user.userID !== userID) {
+    res.send("unauthorized access");
   } else {
-    res.send("Error in updating profile")
+    var userInfo = {"userID": userID,
+                    "userDescription": req.body.new_profile_text,
+                    "userEmail": req.body.new_profile_contact}
+    if(helperFunction.editUserProfile(userInfo)){
+      res.redirect('/view_user/'+userID);
+    } else {
+      res.send("Error in updating profile")
+    }
   }
 });
 
@@ -605,6 +667,7 @@ router.post('/add_trip', function(req, res, next) {
   });
 });
 
+/////TODO
 /* POST edit_trip*/
 router.post('/edit_trip', function(req, res, next) {
 
@@ -622,11 +685,15 @@ router.post('/edit_trip', function(req, res, next) {
   // else redirect them to error page
 });
 
+
+//////TODO
 /* POST delete_trip*/
 router.post('/delete_trip', function(req, res, next) {
 
   var userID = req.user.userID;
   var tripID = req.body.tripID;
+
+
 
   // If userID matches creatorID of the trip, update database
   // then redirect them to their own profile.

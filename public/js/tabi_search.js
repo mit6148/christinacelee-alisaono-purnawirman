@@ -154,10 +154,11 @@ function applyFilter(event){
   event.preventDefault();
 
   var filterData = {};
+  filterData['placeID'] = $('body').attr('rel');
 
   $('#filter-by-container input[type=checkbox]:checked').each(function(){
 
-    var groupName = $(this).attr('name');
+    var groupName = 'trip'+$(this).attr('name');
     var value = $(this).attr('value');
 
     if (groupName in filterData) {
