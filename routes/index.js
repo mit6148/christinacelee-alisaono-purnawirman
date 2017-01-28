@@ -239,11 +239,11 @@ router.get('/tabi_search', function(req, res, next) {
 
   var loggedIn = req.isAuthenticated();
   var loggedInUser = 'guest';
-  var loggedUserLikeList = [];
+  // var loggedUserLikeList = [];
   var loggedUserID = null;
   if (loggedIn) {
     loggedInUser = req.user.userName;
-    loggedUserLikeList = req.user.userLikedTrips;
+    // loggedUserLikeList = req.user.userLikedTrips;
     loggedUserID = req.user.userID;
   } 
 
@@ -267,7 +267,6 @@ router.get('/tabi_search', function(req, res, next) {
       if(trips != null){
         for(var k = 0; k < trips.length; k++){
           // if its in logged user liked list, then liked is true
-          // var tripLiked = (loggedUserLikeList.indexOf(trips[k].tripID.toString()) !== -1);
           var tripLikedUsers = trips[k].tripLikedUsers;
           var tripLiked = tripLikedUsers.some(function(tripUser){
             return tripUser === loggedUserID;
@@ -329,11 +328,13 @@ router.get('/view_user/:user_id', function(req, res, next) {
   var userIsOwner = false;
   var loggedIn = req.isAuthenticated();
   var loggedInUser = 'guest';
-  var loggedUserLikeList = [];
+  // var loggedUserLikeList = [];
+  var loggedUserID = null;
   if (loggedIn) {
     loggedInUser = req.user.userName;
-    loggedUserLikeList = req.user.userLikedTrips;
-    if (userID === req.user.userID) {
+    // loggedUserLikeList = req.user.userLikedTrips;
+    loggedUserID = req.user.userID;
+    if (userID === loggedUserID) {
       userIsOwner = true;
     }
   } 
@@ -349,13 +350,16 @@ router.get('/view_user/:user_id', function(req, res, next) {
     } else {
       var queryTrips = Trip.find({}).
                        where("tripID").in(user.userLikedTrips).
-                       select("tripID tripCreatorID tripName tripCreatorName tripDescription tripPhoto");
+                       select("tripID tripCreatorID tripName tripCreatorName tripDescription tripPhoto tripLikedUser");
       queryTrips.exec(function(err, trips){
         if(err) console.log("Error in finding the trips");
         var wishlistTripsList = [];
         var userTripsList = [];
         for(var i = 0; i < trips.length; i++){
-          var tripLiked = (loggedUserLikeList.indexOf(trips[i].tripID.toString()) >= 0);
+          var tripLikedUsers = trips[i].tripLikedUsers;
+          var tripLiked = tripLikedUsers.some(function(tripUser){
+            return tripUser === loggedUserID;
+          });
           var tripsList = {tripID: trips[i].tripID,
                             userID: trips[i].tripCreatorID,
                             tripTitle: trips[i].tripName,
