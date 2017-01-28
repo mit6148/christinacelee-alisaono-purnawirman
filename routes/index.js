@@ -243,6 +243,7 @@ router.get('/tabi_search', function(req, res, next) {
   if (loggedIn) {
     loggedInUser = req.user.userName;
     loggedUserLikeList = req.user.userLikedTrips;
+    loggedInUserID = req.user.userID;
   } else {
     loggedInUser = 'guest';
   }
@@ -270,7 +271,15 @@ router.get('/tabi_search', function(req, res, next) {
           // var liked = loggedUserLikeList.some(function(tabi){
           //   return tabi.equals(trips[k].tripID);
           // });
-          var liked = loggedUserLikeList.includes(trips[k].tripID);
+          var liked;
+          if (loggedIn) {
+            var likedUsers = trips[k].tripLikedUsers;
+            liked = likedUsers.some(function(user){
+              return user.equals(loggedUserID);
+            });
+          } else {
+            liked = false;
+          }
           tabiList.push({tripID: trips[k].tripID,
                           userID: trips[k].tripCreatorID,
                           tripTitle: trips[k].tripName,
