@@ -238,14 +238,14 @@ router.get('/buddy_search_filter', function(req, res, next) {
 router.get('/tabi_search', function(req, res, next) {
 
   var loggedIn = req.isAuthenticated();
-  var loggedInUser;
+  var loggedInUser = 'guest';
   var loggedUserLikeList = [];
+  var loggedUserID = null;
   if (loggedIn) {
     loggedInUser = req.user.userName;
     loggedUserLikeList = req.user.userLikedTrips;
-  } else {
-    loggedInUser = 'guest';
-  }
+    loggedUserID = req.user.userID;
+  } 
 
   var placeID = req.query.tabi_destination_id;
   var placeName = req.query.tabi_destination_name;
@@ -261,13 +261,17 @@ router.get('/tabi_search', function(req, res, next) {
     var query = Trip.
                 find({}).
                 where("tripID").in(tabies).
-                select("tripID tripCreatorID tripName tripCreatorName tripDescription tripPhoto");
+                select("tripID tripCreatorID tripName tripCreatorName tripDescription tripPhoto tripLikedUsers");
     query.exec(function(err, trips){
       if(err) console.log("Error");
       if(trips != null){
         for(var k = 0; k < trips.length; k++){
           // if its in logged user liked list, then liked is true
-          var tripLiked = (loggedUserLikeList.indexOf(trips[k].tripID.toString()) !== -1);
+          // var tripLiked = (loggedUserLikeList.indexOf(trips[k].tripID.toString()) !== -1);
+          var tripLikedUsers = trips[k].tripLikedUsers;
+          var tripLiked = tripLikedUsers.some(function(tripUser){
+            return tripUser === loggedUserID;
+          });
           tabiList.push({tripID: trips[k].tripID,
                           userID: trips[k].tripCreatorID,
                           tripTitle: trips[k].tripName,
