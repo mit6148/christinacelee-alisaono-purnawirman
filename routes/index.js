@@ -171,12 +171,12 @@ router.get('/logout', function(req, res, next) {
 router.get('/buddy_search', function(req, res, next) {
 
   var loggedIn = req.isAuthenticated();
-  var loggedInUser;
+  var loggedInUser = "guest";
+  var loggedUserID = null;
   if (loggedIn) {
     loggedInUser = req.user.userName;
-  } else {
-    loggedInUser = 'guest';
-  }
+    loggedUserID = req.user.userID;
+  } 
 
   var placeID = req.query.buddy_destination_id;
   var placeName = req.query.buddy_destination_name;
@@ -198,11 +198,13 @@ router.get('/buddy_search', function(req, res, next) {
       if(users != null){
         for(var k = 0; k < users.length; k++){
           // console.log("ID: " + users[k].userID + " userName: " + users[k].userName);
-          buddyList.push({userID: users[k].userID,
-                          username: users[k].userName,
-                          userImageURL: users[k].userPhoto,
-                          tripImages: []
-          });
+          if (users[k].userID !== loggedUserID) {
+            buddyList.push({userID: users[k].userID,
+                            username: users[k].userName,
+                            userImageURL: users[k].userPhoto,
+                            tripImages: []
+            }); 
+          }
         }
       }
       res.render('buddy_search', {users: buddyList, showSearchBar: false, loggedIn: loggedIn, loggedInUser: loggedInUser});   
@@ -357,7 +359,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
                             tripTitle: trips[i].tripName,
                             username: trips[i].tripCreatorName,
                             description: trips[i].tripDescription,
-                            liked: liked, // TODO
+                            liked: liked, 
                             imageURL: trips[i].tripPhoto}
           // wishlist = likedtrips - createdtrips
           if(user.userCreatedTrips.indexOf(trips[i].tripID) < 0){
