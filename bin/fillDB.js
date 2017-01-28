@@ -197,22 +197,23 @@ module.exports = {
 
   /* helper function find and remove element from list */
   _findAndRemoveFromList: function(Model, IDName, IDValue, fieldName, elementToRemove){
-    Model.findOne({IDName: IDValue}, function(err, record){
-      if(err){
-        console.log(chalk.red("Error in update for " + IDName));
-        return false;
-      }
-      if(record == null){
-        console.log(chalk.red(IDNAME + " record does not exist"));
-        return false;
-      } else {
-        var newFieldValue = record[fieldName];
-        removeAllOccurenceFromList(newFieldValue, elementToRemove);
-        if(!this._updateField(Model, IDName, IDValue, fieldName, newFieldValue)){
-          return false;
-        }
-      }
-    });
+    console.log('called');
+    // Model.findOne({IDName: IDValue}, function(err, record){
+    //   if(err){
+    //     console.log(chalk.red("Error in update for " + IDName));
+    //     return false;
+    //   }
+    //   if(record == null){
+    //     console.log(chalk.red(IDNAME + " record does not exist"));
+    //     return false;
+    //   } else {
+    //     var newFieldValue = record[fieldName];
+    //     removeAllOccurenceFromList(newFieldValue, elementToRemove);
+    //     if(!this._updateField(Model, IDName, IDValue, fieldName, newFieldValue)){
+    //       return false;
+    //     }
+    //   }
+    // });
     return true;
   }
   ,
@@ -221,41 +222,47 @@ module.exports = {
   User: userLikedTrips, userDestinations
   Trip: tripLikedUsers
   Destination: buddies */
-  likeTrip: function(userID, tripID, destinationID){
+  likeTrip: function(userID, tripID, callback){
     // query trip
+    console.log('function was called');
     var qTrip = Trip.findOne({}).where("tripID").eq(tripID);
     qTrip.exec(function(err, trip){
+      console.log(trip);
       if(err) console.log("like trip error in trip query");
       if(trip === null){
         console.log("trip does not exist");
-        return false;
+        callback(false);
       }
+      var destinationID = trip["tripDestinationID"];
       uniquePush(trip["tripLikedUsers"], userID);
       trip.save();
       // query user
       var qUser = User.findOne({}).where("userID").eq(userID);
       qUser.exec(function(err, user){
+        console.log(user);
         if(err) console.log("like trip error in user query");
         if(user === null){
           console.log("user does not exist");
-          return false;
+          callback(false);
         }
         uniquePush(user["userLikedTrips"], tripID);
         uniquePush(user["userDestinations"], destinationID);
-        trip.save();
+        user.save();
         // query destination
         var qDest = Destination.findOne({}).where("destinationID").eq(destinationID);
         qDest.exec(function(err, dest){
+          console.log(dest);
           if(err) console.log("like trip error in destination query");
           if(dest === null){
             console.log("dest does not exist");
-            return false;
+            callback(false);
           }
-          uniquePush(dest["userDestinations"], destinationID);
+          uniquePush(dest["buddies"], userID);
           // trip.save();
           // user.save();
           dest.save();
-          return true;
+          console.log('success');
+          callback(true);
         });
       });
     });
@@ -273,17 +280,94 @@ module.exports = {
   User: userLikedTrips, userDestinations
   Trip: tripLikedUsers
   Destination: buddies */
-  dislikeTrip: function(User, Trip, Destination, userID, tripID, destinationID){
+  dislikeTrip: function(userID, tripID, callback){
     var chalk = require('chalk');
-    
-    // update Trip
-    if(!_findAndRemoveFromList(Trip, "tripID", tripID, "tripLikedUsers", userID) ||
-       !_findAndRemoveFromList(User, "userID", userID, "userLikedTrips", tripID) ||
-       !_findAndRemoveFromList(User, "userID", userID, "userDestinations", destinationID) ||
-       !_findAndRemoveFromList(Destination, "destinationID", destinationID, "buddies", userID)){
-      return false;
-    }
-    return true;
+
+    var qTrip = Trip.findOne({}).where("tripID").eq(tripID);
+    qTrip.exec(function(err, trip){
+      if(err){
+        console.log(chalk.red("Error in update for " + tripID));
+        callback(false);
+
+      } else if(trip == null){
+        console.log(chalk.red(tripID + " record does not exist"));
+        callback(false);
+
+      } else {
+        var destinationID = trip["tripDestinationID"];
+        var tripLikedUsers = trip["tripLikedUsers"];
+        for(var k = tripLikedUsers.length - 1; k >= 0; k--){
+          if(tripLikedUsers[k] === userID){
+            tripLikedUsers.splice(k, 1);
+          }
+        }
+        trip.save();
+
+        var qDest = Destination.findOne({}).where("destinationID").eq(destinationID);
+        qDest.exec(function(err,dest){
+          if (err) {
+            console.log(chalk.red("Error in update for " + destinationID));
+            callback(false);
+
+          } else if (dest == null) {
+            console.log(chalk.red(destinationID + " record does not exist"));
+            callback(false);
+
+          } else {
+
+            var buddies = dest["buddies"];
+            var tabies = dest["tabies"];
+
+            var qUser = User.findOne({}).where("userID").eq(userID);
+            qUser.exec(function(err, user){
+              if (err) {
+                console.log(chalk.red("Error in update for " + userID));
+                callback(false);
+
+              } else if (user == null) {
+                console.log(chalk.red(userID + " record does not exist"));
+                callback(false);
+
+              } else {
+                var userLikedTrips = user["userLikedTrips"];
+                var userDestinations = user["userDestinations"];
+                var removeDestination = true;
+                for (var h = userLikedTrips.length - 1; h >= 0; h--) {
+                  if (userLikedTrips[h].equals(tripID)) {
+                    userLikedTrips.splice(h, 1);
+                  } else { 
+                    var isInArray = tabies.some(function(tabi){
+                      return tabi.equals(userLikedTrips[h]);
+                    });
+                    if (isInArray) {
+                      removeDestination = false;
+                    }
+                  }
+                }
+                if (removeDestination) {
+                  for(var i = buddies.length - 1; i >= 0; i--){
+                    if(buddies[i] === userID){
+                      buddies.splice(i, 1);
+                    }
+                  }
+                  for(var j = userDestinations.length - 1; j >= 0; j--){
+                    if(userDestinations[j] === destinationID){
+                    userDestinations.splice(j, 1);
+                    }
+                  }
+                }
+                
+                dest.save();
+                user.save();
+
+                console.log('success');
+                callback(true);
+              }
+            });
+          }
+        });
+      }
+    });
   }
   ,
 

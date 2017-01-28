@@ -1,5 +1,3 @@
-var myUserID = 'tempUserID';
-
 var likeIconURL = "/images/like.png";
 var unlikeIconURL = "/images/unlike.png";
 
@@ -219,13 +217,16 @@ function likeTrip (eventTarget, tripID) {
     method: 'POST', 
     data: {
       trip_id: tripID,
-      user_id: myUserID,
     }
   }).done(function(response){
     //db updates trip with like
     
-    eventTarget.attr('class','trip-unlike');
-    eventTarget.attr('src',unlikeIconURL);
+    // eventTarget.attr('class','trip-unlike');
+    // eventTarget.attr('src',unlikeIconURL);
+
+    $('.trip-like[rel='+tripID+']').attr('class','trip-unlike');
+    $('.trip-like[rel='+tripID+']').attr('src',unlikeIconURL);
+
   });
 }
 
@@ -237,15 +238,16 @@ function unlikeTrip (eventTarget,tripID) {
     method: 'POST', 
     data: {
       trip_id: tripID,
-      user_id: myUserID,
-
-      // how to get my own user ID?
     }
   }).done(function(response){
     //db updates trip with unlike
 
-    eventTarget.attr('class','trip-like');
-    eventTarget.attr('src',likeIconURL);
+    // eventTarget.attr('class','trip-like');
+    // eventTarget.attr('src',likeIconURL);
+
+    $('.trip-unlike[rel='+tripID+']').attr('class','trip-like');
+    $('.trip-unlike[rel='+tripID+']').attr('src',likeIconURL);
+
   });
 }
 

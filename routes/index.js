@@ -416,10 +416,47 @@ router.get('/edit_trip_page/:trip_id', function(req, res, next) {
 
 /* POST like_trip*/
 router.post('/like_trip', function(req, res, next) {
-  // var likedUser = req.user.userID;
-  // var likedTrip = req.body.trip_id;
-  console.log(chalk.red("AAA" + req.body));
-  console.log(chalk.red("like trip!"));
+
+  // console.log(chalk.red("AAA" + req.body.trip_id));
+  // console.log(chalk.red("like trip!"));
+
+  var tripID = req.body.trip_id;
+  var userID;
+  var userName;
+  if (process.env.NODE_ENV === "production") {
+    userID = req.user.userID;
+    userName = req.user.userName;
+    if(!req.isAuthenticated()){
+      res.redirect('/login/facebook');
+      return;
+    }
+  } else {
+    userID = "userB";
+    userName = "userB";
+  }
+
+  // update the database 
+
+  var callback = function(success) {
+    if (success) {
+      // if no error, send empty string message
+      res.send('');
+    } else {
+      // else redirect to error screen
+      console.log('error');
+    }
+  }
+
+  helperFunction.likeTrip(userID,tripID,callback);
+
+});
+
+/* POST like_trip*/
+router.post('/unlike_trip', function(req, res, next) {
+
+  console.log(chalk.red("Hit on unlike trip!"));
+
+  var tripID = req.body.trip_id;
   var userID;
   var userName;
   if (process.env.NODE_ENV === "production") {
@@ -433,25 +470,20 @@ router.post('/like_trip', function(req, res, next) {
     userID = "userA";
     userName = "userA";
   }
-  console.log("ADAFDFADFAD");
-  // update the database 
-  // helperFunction.like
-  // if no error, send empty string message
-  res.send({liked: true});
-  // else redirect to error screen
-});
-
-/* POST like_trip*/
-router.post('/unlike_trip', function(req, res, next) {
-  var unlikedUser = req.user.userID;
-  var unlikedTrip = req.body.trip_id;
-  console.log(chalk.red("Hit on unlike trip!"));
 
   // update the database 
 
-  // if no error, send empty string message
-  res.send('');
-  // else redirect to error screen
+  var callback = function(success) {
+    if (success) {
+      // if no error, send empty string message
+      res.send('');
+    } else {
+      // else redirect to error screen
+      console.log('error');
+    }
+  }
+
+  helperFunction.dislikeTrip(userID,tripID,callback);
 });
 
 /* POST edit_profile_photo*/
