@@ -267,7 +267,11 @@ router.get('/tabi_search', function(req, res, next) {
       if(trips != null){
         for(var k = 0; k < trips.length; k++){
           // if its in logged user liked list, then liked is true
-          var liked = (loggedUserLikeList.indexOf(trips[k].tripID) >= 0); 
+          var liked = loggedUserLikeList.some(function(tabi){
+            return tabi.equals(trips[k].tripID);
+          });
+          // var liked = (loggedUserLikeList.indexOf(trips[k].tripID) >= 0);
+          console.log(liked); 
           tabiList.push({tripID: trips[k].tripID,
                           userID: trips[k].tripCreatorID,
                           tripTitle: trips[k].tripName,
@@ -278,7 +282,7 @@ router.get('/tabi_search', function(req, res, next) {
           });
         }
       }
-      console.log(tabies);
+
       res.render('tabi_search', {trips: tabiList, showSearchBar: false, loggedIn: loggedIn, loggedInUser: loggedInUser});   
     })
   });
