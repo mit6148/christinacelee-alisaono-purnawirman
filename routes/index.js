@@ -270,8 +270,8 @@ router.get('/tabi_search', function(req, res, next) {
           // var liked = loggedUserLikeList.some(function(tabi){
           //   return tabi.equals(trips[k].tripID);
           // });
-          // var liked = (loggedUserLikeList.indexOf(trips[k].tripID) >= 0);
-          console.log(liked); 
+          var liked = (loggedUserLikeList.indexOf(trips[k].tripID) >= 0);
+
           tabiList.push({tripID: trips[k].tripID,
                           userID: trips[k].tripCreatorID,
                           tripTitle: trips[k].tripName,
