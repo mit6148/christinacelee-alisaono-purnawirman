@@ -353,7 +353,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
         var wishlistTripsList = [];
         var userTripsList = [];
         for(var i = 0; i < trips.length; i++){
-          var liked = (loggedUserLikeList.indexOf(trips[k].tripID) >= 0);
+          var liked = (loggedUserLikeList.indexOf(trips[i].tripID) >= 0);
           var tripsList = {tripID: trips[i].tripID,
                             userID: trips[i].tripCreatorID,
                             tripTitle: trips[i].tripName,
