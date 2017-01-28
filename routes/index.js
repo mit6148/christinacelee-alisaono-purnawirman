@@ -267,7 +267,7 @@ router.get('/tabi_search', function(req, res, next) {
       if(trips != null){
         for(var k = 0; k < trips.length; k++){
           // if its in logged user liked list, then liked is true
-          var liked = (loggedUserLikeList.indexOf(trips[k].tripID.toString()) >= 0);
+          var liked = (loggedUserLikeList.indexOf(trips[k].tripID) >= 0);
           tabiList.push({tripID: trips[k].tripID,
                           userID: trips[k].tripCreatorID,
                           tripTitle: trips[k].tripName,
@@ -359,7 +359,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
                             tripTitle: trips[i].tripName,
                             username: trips[i].tripCreatorName,
                             description: trips[i].tripDescription,
-                            liked: liked, 
+                            liked: true, 
                             imageURL: trips[i].tripPhoto}
           // wishlist = likedtrips - createdtrips
           if(user.userCreatedTrips.indexOf(trips[i].tripID) < 0){

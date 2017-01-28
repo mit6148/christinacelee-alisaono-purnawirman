@@ -185,8 +185,8 @@ function likeTrip(eventTarget, tripID) {
     }
   }).done(function(response){
     //db updated trip with like
-    $('.trip-like[rel="'+tripID+'"]').attr('class','trip-unlike');
-    $('.trip-like[rel="'+tripID+'"]').attr('src',unlikeIconURL);
+    $('img[rel="'+tripID+'"]').attr('class','trip-unlike');
+    $('img[rel="'+tripID+'"]').attr('src',unlikeIconURL);
   });
 }
 
@@ -202,8 +202,8 @@ function unlikeTrip(eventTarget,tripID) {
   }).done(function(response){
     //db updated trip with unlike
 
-    $('.trip-unlike[rel="'+tripID+'"]').attr('class','trip-like');
-    $('.trip-unlike[rel="'+tripID+'"]').attr('src',likeIconURL);
+    $('img[rel="'+tripID+'"]').attr('class','trip-like');
+    $('img[rel="'+tripID+'"]').attr('src',likeIconURL);
   });
 }
 
