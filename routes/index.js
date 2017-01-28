@@ -271,15 +271,14 @@ router.get('/tabi_search', function(req, res, next) {
           // var liked = loggedUserLikeList.some(function(tabi){
           //   return tabi.equals(trips[k].tripID);
           // });
-          var liked;
+          var likedUsers = trips[k].tripLikedUsers;
+          var liked = false;
           if (loggedIn) {
-            var likedUsers = trips[k].tripLikedUsers;
-            liked = likedUsers.some(function(user){
-              return user.equals(loggedUserID);
-            });
-          } else {
-            liked = false;
-          }
+            // liked = likedUsers.some(function(likedUser){
+            //   return likedUser.equals(loggedUserID);
+            // });
+            liked = likedUsers.includes(loggedInUserID);
+          } 
           tabiList.push({tripID: trips[k].tripID,
                           userID: trips[k].tripCreatorID,
                           tripTitle: trips[k].tripName,
