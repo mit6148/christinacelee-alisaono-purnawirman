@@ -224,8 +224,8 @@ function likeTrip (eventTarget, tripID) {
     // eventTarget.attr('class','trip-unlike');
     // eventTarget.attr('src',unlikeIconURL);
 
-    $('.trip-like[rel='+tripID+']').attr('class','trip-unlike');
-    $('.trip-like[rel='+tripID+']').attr('src',unlikeIconURL);
+    $('.trip-like[rel="'+tripID+'"]').attr('class','trip-unlike');
+    $('.trip-like[rel="'+tripID+'"]').attr('src',unlikeIconURL);
 
   });
 }
@@ -245,8 +245,8 @@ function unlikeTrip (eventTarget,tripID) {
     // eventTarget.attr('class','trip-like');
     // eventTarget.attr('src',likeIconURL);
 
-    $('.trip-unlike[rel='+tripID+']').attr('class','trip-like');
-    $('.trip-unlike[rel='+tripID+']').attr('src',likeIconURL);
+    $('.trip-unlike[rel="'+tripID+'"]').attr('class','trip-like');
+    $('.trip-unlike[rel="'+tripID+'"]').attr('src',likeIconURL);
 
   });
 }
