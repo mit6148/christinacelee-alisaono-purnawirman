@@ -324,8 +324,10 @@ router.get('/view_user/:user_id', function(req, res, next) {
   
   var loggedIn = req.isAuthenticated();
   var loggedInUser;
+  var loggedUserLikeList = [];
   if (loggedIn) {
     loggedInUser = req.user.userName;
+    loggedUserLikeList = req.user.userLikedTrips;
     if (userID === req.user.userID) {
       userIsOwner = true;
     }
@@ -350,12 +352,13 @@ router.get('/view_user/:user_id', function(req, res, next) {
         var wishlistTripsList = [];
         var userTripsList = [];
         for(var i = 0; i < trips.length; i++){
+          var liked = (loggedUserLikeList.indexOf(trips[k].tripID) >= 0)
           var tripsList = {tripID: trips[i].tripID,
                             userID: trips[i].tripCreatorID,
                             tripTitle: trips[i].tripName,
                             username: trips[i].tripCreatorName,
                             description: trips[i].tripDescription,
-                            liked: false, // TODO
+                            liked: liked, // TODO
                             imageURL: trips[i].tripPhoto}
           // wishlist = likedtrips - createdtrips
           if(user.userCreatedTrips.indexOf(trips[i].tripID) < 0){
@@ -629,96 +632,4 @@ router.post('/delete_trip', function(req, res, next) {
   // else redirect them to error page
 });
 
-
 module.exports = router;
-
-// var passport = require("passport");
-// // var 
-// /* Auth part */
-// router.get('/login', function(req, res, next){
-//   // res.send("<form method='post' action='/login'> <div> Username: <input type="text" placeholder="Enter Username" name="uname" required> </div>")
-//   res.send("<form method='post' action='/login'> \
-//           <div> Username: <input type='text' placeholder='Enter Username' name='uname' required> </div>\
-//           <div> Password: <input type='text' placeholder='Enter Password' name='password' required> </div>");
-// });
-
-// router.post('/login', function(req, res, next){
-//   // passport.authenticate('local', { successRedirect: '/',
-//   //                                  failureRedirect: '/login',
-//   //                                  failureFlash: true })
-//   res.end();
-// });
-
-// router.get('/signup', function(req, res, next){
-//   // res.send("<form method='post' action='/login'> <div> Username: <input type="text" placeholder="Enter Username" name="uname" required> </div>")
-//   res.send("<form method='post' action='/signup'> \
-//           <div> Username: <input type='text' placeholder='Enter Username' name='uname' required> </div>\
-//           <div> Password: <input type='text' placeholder='Enter Password' name='password' required> </div>");
-// });
-
-// router.post('/signup',function(req, res, next){
-//   // User.register(...);
-//   res.end();
-// });
-
-// Example to add, edit and delete in mongoose
-// /* POST to adduser */
-// router.post('/adduser', function(req, res, next) {
-//   var username = req.body.username;
-//   var userFruit = req.body.userfruit;
-
-//   // TODO: Create a new document with the given username and favorite fruit.
-//   // If the username already exists, then do nothing.
-//   var newUser = new User({
-//     'username': username,
-//     'favoriteFruit': userFruit
-//   });
-//   newUser.save();
-
-//   // Redirecting back to the root
-//   res.redirect('/');
-// });
-
-// /* POST to deleteuser */
-// router.post('/deleteuser', function(req, res, next) {
-//   var username = req.body.username;
-
-//   // TODO: Remove the document from the collection, if it exists.
-//   // Otherwise, let the client know that the user does not exist.
-//   //
-//   // Hint: How can you tell whether User.remove() was successful?
-//   // Look at the second parameter of the callback function passed
-//   // User.remove(). You can get the number of documents deleted
-//   // by the operation.
-//   User.remove({'username': username}, function(err, result) {
-//     if (err) {
-//       res.send('An error occurred!');
-//     } else {
-//       if (result.result.n === 0) {
-//         res.send(username + ' is not in the database!');
-//       } else {
-//         res.send(username + ' was successfully removed!');
-//       }
-//     }
-//   });
-// });
-
-// router.get('/findfruit', function(req, res, next) {
-//   var username = req.query.username;
-
-//   // TODO: Check if the user exists. If the user exists, send back
-//   // their favorite fruit. Otherwise, let the client know that the
-//   // username is not in the database.
-//   User.findOne({'username': username}, function(err, user) {
-//     if (err) {
-//       res.send('An error occurred!');
-//     } else {
-//       if (user) {
-//         res.send(username + '\'s favorite fruit is ' + user.favoriteFruit);
-//       } else {
-//         // If the user does not exist, use this line of code below.
-//         res.send(username + ' is not in the database!');
-//       }
-//     }
-//   });
-// });
