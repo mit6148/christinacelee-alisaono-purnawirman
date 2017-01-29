@@ -207,7 +207,8 @@ router.get('/buddy_search', function(req, res, next) {
           }
         }
       }
-      res.render('buddy_search', {users: buddyList, showSearchBar: false, loggedIn: loggedIn, loggedInUser: loggedInUser});   
+      res.render('buddy_search', {placeID: placeID, placeName: placeName, 
+        users: buddyList, showSearchBar: false, loggedIn: loggedIn, loggedInUser: loggedInUser});   
     })
   });
 });
@@ -219,20 +220,96 @@ router.get('/buddy_search', function(req, res, next) {
 // This GET req should return FILTERED buddies of the same location 
 router.get('/buddy_search_filter', function(req, res, next) {
 
+  console.log(req.query);
 
-  // fake buddy data for front end testing
-  var fakeBuddyData = {users:[{userID: "123", username: "filter success!", userImageURL: 'http://placekitten.com/g/150/150',
-  tripImages: [{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'}]},
-  {userID: "124", username: "user2", userImageURL: 'http://placekitten.com/g/150/150', 
-  tripImages: [{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'}]},
-  {userID: "125", username: "user3", userImageURL: 'http://placekitten.com/g/150/150',
-  tripImages: [{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'}]},
-  {userID: "126", username: "user4", userImageURL: 'http://placekitten.com/g/150/150',
-  tripImages: [{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'}]},
-  {userID: "127", username: "user5", userImageURL: 'http://placekitten.com/g/150/150',
-  tripImages: [{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'}]},
-  ]};
-  res.render('buddy_search_result', fakeBuddyData);
+  var loggedUserID = null;
+  if (req.isAuthenticated()) {
+    loggedUserID = req.user.userID;
+  } 
+
+  var placeID = req.query.placeID;
+
+  var buddyList = [];
+
+  var tripFilter = Trip.
+                   find({});
+
+  if ('Category' in req.query) {
+      tripFilter.where("tripType").in(req.query['Category']);
+  } 
+  if ('Season' in req.query) {
+      tripFilter.where("tripSeason").in(req.query['Season']);
+  } 
+  if ('Duration' in req.query) {
+    tripDuration = req.query['Duration'][0];
+    if (tripDuration === 'dayTrip') {
+      tripFilter.where("tripDuration").equals(1);
+    } else if (tripDuration === 'shortTrip') {
+      tripFilter.where("tripDuration").gt(1).lte(3);
+    } else if (tripDuration === 'mediumTrip') {
+      tripFilter.where("tripDuration").gt(3).lte(7);
+    } else if (tripDuration === 'longTrip') {
+      tripFilter.where("tripDuration").gt(7);
+    }
+  } 
+  if ('Budget' in req.query) {
+    tripBudget = req.query['Budget'][0];
+    if (tripBudget === 'lowBudget') {
+      tripFilter.where("tripBudget").lte(300);
+    } else if (tripBudget === 'mediumBudget') {
+      tripFilter.where("tripBudget").gt(300).lte(800);
+    } else if (tripBudget === 'highBudget') {
+      tripFilter.where("tripBudget").gt(800);
+    }
+  }
+
+  var addBuddies = function(users,currentUser,totalUsers) {
+    var userLikedTrips = users[currentUser].userLikedTrips;
+    var buddyUserID = users[currentUser].userID;
+    console.log("looking "+buddyUserID);
+    var buddyUsername = users[currentUser].userName;
+    var buddyUserImage = users[currentUser].userPhoto;
+    var qTrip = tripFilter.where("tripID").in(userLikedTrips).count();
+    qTrip.exec(function(err, tripCount){
+      if (buddyUserID !== loggedUserID && tripCount > 0) {
+        console.log("added "+buddyUserID);
+        buddyList.push({userID: buddyUserID,
+                        username: buddyUsername,
+                        userImageURL: buddyUserImage,
+                        tripImages: []
+                      }); 
+      }
+      currentUser += 1;
+      if (currentUser < totalUsers) {
+        addBuddies(users,currentUser,totalUsers);
+      } else {
+        res.render('buddy_search_result', {users: buddyList});   
+      }
+    });
+  }
+
+  var buddies = [];
+  Destination.findOne({"destinationID": placeID}, function(err, foundDestination){
+    if(err){
+      console.log("Errof in finding destination");
+    }
+    if(foundDestination != null){
+      buddies = foundDestination["buddies"];
+    }
+    var buddyList = [];
+    var query = User.
+                find({}).
+                where("userID").in(buddies).
+                select("userID userName userPhoto userLikedTrips");
+    query.exec(function(err, users){
+      if(err) console.log("Error");
+      if(users != null){
+        var currentUser = 0;
+        var totalUsers = users.length;
+        addBuddies(users,currentUser,totalUsers);
+      }
+    });
+  });
 });
 
 /* GET tabi search result */
@@ -299,6 +376,7 @@ router.get('/tabi_search_filter', function(req, res, next) {
 
   var placeID = req.query.placeID;
 
+  var tabies = [];
   Destination.findOne({"destinationID": placeID}, function(err, foundDestination){
     if(err){
       console.log("Error in finding destination");
