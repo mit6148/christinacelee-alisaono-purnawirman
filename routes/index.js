@@ -336,7 +336,7 @@ router.get('/tabi_search', function(req, res, next) {
     var query = Trip.
                 find({}).
                 where("tripID").in(tabies).
-                select("tripID tripCreatorID tripName tripCreatorName tripDescription tripPhoto tripLikedUsers");
+                select("tripID tripActive tripCreatorID tripName tripCreatorName tripDescription tripPhoto tripLikedUsers");
     query.exec(function(err, trips){
       if(err) console.log("Error");
       if(trips != null){
@@ -346,14 +346,16 @@ router.get('/tabi_search', function(req, res, next) {
           var tripLiked = tripLikedUsers.some(function(tripUser){
             return tripUser === loggedUserID;
           });
-          tabiList.push({tripID: trips[k].tripID,
-                          userID: trips[k].tripCreatorID,
-                          tripTitle: trips[k].tripName,
-                          username: trips[k].tripCreatorName,
-                          description: trips[k].tripDescription,
-                          liked: tripLiked,
-                          imageURL: trips[k].tripPhoto
-          });
+          if (trips[k].tripActive) {
+            tabiList.push({tripID: trips[k].tripID,
+                            userID: trips[k].tripCreatorID,
+                            tripTitle: trips[k].tripName,
+                            username: trips[k].tripCreatorName,
+                            description: trips[k].tripDescription,
+                            liked: tripLiked,
+                            imageURL: trips[k].tripPhoto
+            });
+          }
         }
       }
 
@@ -424,14 +426,16 @@ router.get('/tabi_search_filter', function(req, res, next) {
           var tripLiked = tripLikedUsers.some(function(tripUser){
             return tripUser === loggedUserID;
           });
-          tabiList.push({tripID: trips[k].tripID,
-                          userID: trips[k].tripCreatorID,
-                          tripTitle: trips[k].tripName,
-                          username: trips[k].tripCreatorName,
-                          description: trips[k].tripDescription,
-                          liked: tripLiked,
-                          imageURL: trips[k].tripPhoto
-          });
+          if (trips[k].tripActive) {
+            tabiList.push({tripID: trips[k].tripID,
+                            userID: trips[k].tripCreatorID,
+                            tripTitle: trips[k].tripName,
+                            username: trips[k].tripCreatorName,
+                            description: trips[k].tripDescription,
+                            liked: tripLiked,
+                            imageURL: trips[k].tripPhoto
+            });
+          }
         }
       }
 
@@ -454,21 +458,24 @@ router.get('/view_user/:user_id', function(req, res, next) {
   // userID is user ID of the profile we are accessing
   var userID = req.params.user_id;
 
-  // req.user.userID is user ID of the person who is viewing the profile
-  // set userIsOwner to true, if the person is viewing his/her own profile
-  var userIsOwner = false;
   var loggedIn = req.isAuthenticated();
   var loggedInUser = 'guest';
-  // var loggedUserLikeList = [];
   var loggedUserID = null;
-  if (loggedIn) {
-    loggedInUser = req.user.userName;
-    // loggedUserLikeList = req.user.userLikedTrips;
-    loggedUserID = req.user.userID;
-    if (userID === loggedUserID) {
-      userIsOwner = true;
-    }
-  } 
+  var userIsOwner = false;
+
+  if (process.env.NODE_ENV === "production") {
+    if (loggedIn) {
+      loggedInUser = req.user.userName;
+      loggedUserID = req.user.userID;
+      if (userID === loggedUserID) {
+        userIsOwner = true;
+      }
+    } 
+  } else {
+    loggedUserID = "userA";
+    loggedInUser = "userA";
+    userIsOwner = true;
+  }
 
   // perform query to users then query each trips he liked
   var query = User.findOne({"userID": userID});
@@ -842,21 +849,60 @@ router.post('/edit_trip/:tripID', function(req, res, next) {
 });
 
 
-//////TODO
 /* POST delete_trip*/
 router.post('/delete_trip', function(req, res, next) {
 
-  var userID = req.user.userID;
-  var tripID = req.body.tripID;
+  var userID;
+  if (process.env.NODE_ENV === "production") {
+    if(!req.isAuthenticated()){
+      res.redirect('/login/facebook');
+      return;
+    } else {
+      userID = req.user.userID;
+    }
+  } else {
+    userID = "userA";
+  }
 
+  var tripID = req.body.trip_id;
 
+  Trip.findOne({"tripID": tripID}, function(err, foundTrip) {
 
-  // If userID matches creatorID of the trip, update database
-  // then redirect them to their own profile.
-  // (Show some message on top to let the user know the update was successful?)
-  res.redirect('/view_user/'+userID);
+    if (err) {
+      console.log("Error looking up trip of this trip ID");
+      res.send(err)
+    }
 
-  // else redirect them to error page
+    if (foundTrip === null) {
+      console.log("No such trip exists for this trip ID");
+      res.send('error');
+    }
+
+    var tripCreatorID = foundTrip.tripCreatorID;
+
+    if (userID !== tripCreatorID) {
+      console.log("User is not the creator of this trip");
+      res.send("unauthorized access");
+    }
+
+    foundTrip.tripActive = false;
+
+    foundTrip.save();
+
+    var callback = function(success) {
+      if (success) {
+        // if no error, send empty string message
+        // (Show some message on top to let the user know the update was successful?)
+        res.send('');
+      } else {
+        // else redirect to error screen
+        console.log('error');
+      }
+    }
+
+    helperFunction.dislikeTrip(userID,tripID,callback);
+
+  });  
 });
 
 module.exports = router;

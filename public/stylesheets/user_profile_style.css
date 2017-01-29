@@ -20,6 +20,9 @@ body {
 #user-image {
   width: 100%;
 }
+.edit-user-image {
+  cursor: pointer;
+}
 #user-description-container {
   display: inline-block;
   vertical-align: top;
@@ -33,6 +36,7 @@ body {
 #user-info-edit {
   width: 100%;
   vertical-align: top;
+  cursor: pointer;
 }
 
 /* trips */

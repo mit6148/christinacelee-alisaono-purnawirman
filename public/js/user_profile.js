@@ -164,7 +164,7 @@ function showPopupTrip(tripElement){
   $('#trip-popup .trip-title').css('over-wrap','break-word');
   $('#trip-popup .trip-title').css('hyphens','auto');
   $('#trip-popup').children().css('cursor','default');
-  $('#trip-popup .trip-author').css('cursor','pointer')
+  $('#trip-popup .trip-author').css('cursor','pointer');
 }
 
 function closePopupTrip(event){
@@ -213,13 +213,18 @@ function editTrip(tripID){
 function deleteTrip(event){
   var tripID = $("#delete-confirm").attr('rel');
 
-  $('<form>', {
-    method: 'post',
-    action: '/delete_trip',
+  $.ajax({
+    url: '/delete_trip',
+    method: 'POST', 
     data: {
       trip_id: tripID,
     }
-  }).submit();
+  }).done(function(response){
+    if (response === '') {
+      location.reload();
+    } 
+    // error?
+  });
 }
 
 function addTrip(){
