@@ -213,9 +213,6 @@ router.get('/buddy_search', function(req, res, next) {
   });
 });
 
-
-
-//////TODO
 /* GET buddy search result (filtered) */
 // This GET req should return FILTERED buddies of the same location 
 router.get('/buddy_search_filter', function(req, res, next) {
@@ -539,24 +536,54 @@ router.get('/add_trip_page', function(req, res, next) {
   res.render('add_trip_temp', {loggedIn: loggedIn, loggedInUser: loggedInUser});
 });
 
-///////TODO
 /* GET edit trip page by trip ID */
 router.get('/edit_trip_page/:trip_id', function(req, res, next) {
-  
-  var userID = req.user.userID;
+
+  var loggedInUser;
+  var loggedUserID;
+  if (process.env.NODE_ENV === "production") {
+    if(!req.isAuthenticated()){
+      res.redirect('/login/facebook');
+      return;
+    } else {
+      loggedInUser = req.user.userName;
+      loggedUserID = req.user.userID;
+    }
+  } else {
+    loggedUserID = "userA";
+    loggedInUser = "userA";
+  }
+
   var tripID = req.params.trip_id;  
 
-  // check userID matches the creator ID of the trip
+  Trip.findOne({"tripID": tripID}, function(err, foundTrip) {
+    if(err){
+      console.log("Error in finding destination");
+    } else if (foundTrip === null) {
+      console.log("No such trip with this trip ID");
+    } else {
+      var tripCreatorID = foundTrip['tripCreatorID'];
 
-  // get the current data about the trip 
+      if (tripCreatorID !== loggedUserID) {
+        res.send("unauthorized access");
 
-  var fakeTripData = {
-    tripID: tripID, title: 'test title', description: 'test description', category: 'food', season: 'summer',
-    duration: 3, budget: 200
-  }
-  // send empty string if season has no input, 
+      } else {
+        var tripData = {tripID: tripID,
+                        title: foundTrip.tripName,
+                        description: foundTrip.tripDescription,
+                        category: foundTrip.tripType,
+                        season: foundTrip.tripSeason,
+                        duration: foundTrip.tripDuration,
+                        budget: foundTrip.tripBudget,
+                        showSearchBar: false, 
+                        loggedIn: true, 
+                        loggedInUser: loggedInUser}
 
-  res.render('edit_trip_temp',fakeTripData);
+        res.render('edit_trip_temp',tripData);
+      }
+
+    }
+  });
 });
 
 /* POST like_trip*/
@@ -568,12 +595,12 @@ router.post('/like_trip', function(req, res, next) {
   var userID;
   var userName;
   if (process.env.NODE_ENV === "production") {
-    userID = req.user.userID;
-    userName = req.user.userName;
     if(!req.isAuthenticated()){
       res.redirect('/login/facebook');
       return;
     }
+    userID = req.user.userID;
+    userName = req.user.userName;
   } else {
     userID = "userB";
     userName = "userB";
@@ -604,12 +631,12 @@ router.post('/unlike_trip', function(req, res, next) {
   var userID;
   var userName;
   if (process.env.NODE_ENV === "production") {
-    userID = req.user.userID;
-    userName = req.user.userName;
     if(!req.isAuthenticated()){
       res.redirect('/login/facebook');
       return;
     }
+    userID = req.user.userID;
+    userName = req.user.userName;
   } else {
     userID = "userA";
     userName = "userA";
@@ -694,12 +721,12 @@ router.post('/add_trip', function(req, res, next) {
   var userID;
   var userName;
   if (process.env.NODE_ENV === "production") {
-    userID = req.user.userID;
-    userName = req.user.userName;
     if(!req.isAuthenticated()){
       res.redirect('/login/facebook');
       return;
     }
+    userID = req.user.userID;
+    userName = req.user.userName;
   } else {
     userID = "userA";
     userName = "userA";
@@ -748,22 +775,70 @@ router.post('/add_trip', function(req, res, next) {
   });
 });
 
-/////TODO
 /* POST edit_trip*/
-router.post('/edit_trip', function(req, res, next) {
+router.post('/edit_trip/:tripID', function(req, res, next) {
 
-  var userID = req.user.userID;
-  var tripID = req.body.tripID; 
-  var title = req.body.title;
+  console.log(req.body);
+
+  var userID;
+  if (process.env.NODE_ENV === "production") {
+    if(!req.isAuthenticated()){
+      res.redirect('/login/facebook');
+      return;
+    } else {
+      userID = req.user.userID;
+    }
+  } else {
+    userID = "userA";
+  }
+
+  var tripID = req.params.tripID; 
+  var title = req.body.title; 
   var description = req.body.description;
-  // ... and so on. Photo & location shouldn't be changed
+  var category = req.body.category;
+  var season = req.body.season;
+  var duration = req.body.duration;
+  var budget = req.body.budget;
 
-  // If userID matches creatorID of the trip, update database
-  // then redirect them to their own profile.
-  // (Show some message on top to let the user know the update was successful?)
-  res.redirect('/view_user/'+userID);
+  Trip.findOne({"tripID": tripID}, function(err, foundTrip) {
 
-  // else redirect them to error page
+    if (err) {
+      console.log("Error looking up trip of this trip ID");
+      res.send(err)
+    }
+
+    if (foundTrip === null) {
+      console.log("No such trip exists for this trip ID");
+      res.send('error');
+    }
+
+    var tripCreatorID = foundTrip.tripCreatorID;
+
+    if (userID !== tripCreatorID) {
+      console.log("User is not the creator of this trip");
+      res.send("unauthorized access");
+    }
+
+    if (title.length > 0) {
+      foundTrip.tripName = title;
+    }
+    if (description.length > 0) {
+      foundTrip.tripDescription = description;
+    }
+    foundTrip.tripType = category;
+    foundTrip.tripSeason = season;
+    if (duration.length > 0) {
+      foundTrip.tripDuration = duration;
+    }
+    if (budget.length > 0) {
+      foundTrip.tripBudget = budget;
+    }
+    foundTrip.save();
+
+    // then redirect them to their own profile.
+    // (Show some message on top to let the user know the update was successful?)
+    res.redirect('/view_user/'+userID);
+  });
 });
 
 

@@ -102,8 +102,16 @@
         $('form input').on('keypress', function(e) {
           return e.which !== 13;
         });
-        $('#tabi-submit').on('click', function(e) {
-          return $('#place-id').val().length > 0;
+        $('#save-trip').on('click', function(e) {
+          if ($('#duration-input').val() < 1) {
+            alert("Trip must be 1 day or longer");
+            return false;
+          } else if ($('#budget-input').val() < 0) {
+            alert("Budget must be $0 or higher");
+            return false;
+          } else {
+            return $('#place-id').val().length > 0;
+          }
         });
         $('form input[name="category"]:not(checked)').on('click', function(){
           if ($('form input[name="category"]:checked').length > 1) {
