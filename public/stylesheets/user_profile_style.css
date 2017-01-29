@@ -51,6 +51,9 @@ body {
   text-align: center;
   vertical-align: top;
 }
+.new-trip {
+  cursor: pointer;
+}
 .trip, .new-trip {
   margin: 10px;
   padding: 10px;

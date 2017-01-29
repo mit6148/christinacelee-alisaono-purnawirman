@@ -29,8 +29,6 @@ var tripFilterGroups = {
 
 var main = function() {
 
-  //loadFakeTestingData();
-
   populateSearchBar(tripFilterGroups);
 
   addListenerToTrips();
@@ -191,8 +189,6 @@ function applyFilter(event){
     }
   });
 
-  // console.log(filterData);
-
   $.ajax({
     url: '/tabi_search_filter',
     method: 'GET', 
@@ -234,8 +230,6 @@ function closePopupTrip(event){
 }
 
 function likeTrip (eventTarget, tripID) {
-  // console.log(tripID+' liked post req');
-
   $.ajax({
     url: '/like_trip',
     method: 'POST', 
@@ -251,8 +245,6 @@ function likeTrip (eventTarget, tripID) {
 }
 
 function unlikeTrip (eventTarget,tripID) {
-  // console.log(tripID+' unliked post req');
-  
   $.ajax({
     url: '/unlike_trip',
     method: 'POST', 
@@ -265,19 +257,6 @@ function unlikeTrip (eventTarget,tripID) {
     $('img[rel="'+tripID+'"]').attr('src',likeIconURL);
 
   });
-}
-
-function loadFakeTestingData() {
-  var fakeData = {trips:[{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12348", userID: "126", tripTitle: "test4", username: "user4", description: "this is test description4", liked:true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12349", userID: "127", tripTitle: "test5", username: "user5", description: "this is test description5", liked:true, imageURL:'http://placekitten.com/g/150/150'},]};
-
-  var source = $("#hbtemplate").html();
-  var template = Handlebars.compile(source);
-
-  $('#search-results-container').append(template(fakeData));
 }
 
 $(document).ready(main);
