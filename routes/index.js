@@ -416,7 +416,7 @@ router.get('/tabi_search_filter', function(req, res, next) {
         query.where("tripBudget").gt(800);
       }
     }
-    query.select("tripID tripCreatorID tripName tripCreatorName tripDescription tripPhoto tripLikedUsers");
+    query.select("tripID tripActive tripCreatorID tripName tripCreatorName tripDescription tripPhoto tripLikedUsers");
     query.exec(function(err, trips){
       if(err) console.log("Error");
       if(trips != null){
