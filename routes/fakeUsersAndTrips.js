@@ -10,6 +10,8 @@ var seattleTestAID = new mongoose.Types.ObjectId;
 var seattleTestBID = new mongoose.Types.ObjectId;
 var alisaTripAID = new mongoose.Types.ObjectId;
 var purnaTripAID = new mongoose.Types.ObjectId;
+var purnaTripBID = new mongoose.Types.ObjectId;
+var purnaTripCID = new mongoose.Types.ObjectId;
 var christinaTripAID = new mongoose.Types.ObjectId;
 
 var users = [
