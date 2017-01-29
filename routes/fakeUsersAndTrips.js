@@ -59,9 +59,9 @@ var users = [
 			 "userPhoto": "http://res.cloudinary.com/tabibuddy/image/upload/c_thumb,g_face,h_300,w_300/v1485326790/10158044489410487.jpg",
 			 "userDescription": "I'm the first user of tabibuddy, yay!",
 			 "userActive": true,
-			 "userDestinations": ["ChIJOSmpLuR5j4AR0u9gOcikHdo"], 
-			 "userLikedTrips": [purnaTripAID],
-			 "userCreatedTrips": [purnaTripAID]
+			 "userDestinations": ["ChIJOSmpLuR5j4AR0u9gOcikHdo","ChIJE9on3F3HwoAR9AhGJW_fL-I","ChIJ0X31pIK3voARo3mz1ebVzDo"], 
+			 "userLikedTrips": [purnaTripAID, purnaTripBID, purnaTripCID],
+			 "userCreatedTrips": [purnaTripAID, purnaTripBID, purnaTripCID]
 			},
 			{"userID": "10155769496177729",
 			 "userName": "Christina Lee",
@@ -289,7 +289,19 @@ var destinations = [{
 					"destinationName": "Busan, South Korea",
 					"tabies": [christinaTripAID],
 					"buddies": ["10155769496177729"],
+					},
+					{
+					"destinationID": "ChIJE9on3F3HwoAR9AhGJW_fL-I", 
+					"destinationName": "Los Angeles, CA, USA", 
+					"buddies": [ "10158044489410487" ], 
+					"tabies": [ purnaTripBID ] }, 
+					{  
+				    "destinationID": "ChIJ0X31pIK3voARo3mz1ebVzDo", 
+				    "destinationName": "Las Vegas, NV, USA", 
+				    "buddies": [ "10158044489410487" ], 
+				    "tabies": [ purnaTripCID ] 
 					},]
+
 
 
 module.exports = {
