@@ -232,7 +232,8 @@ router.get('/buddy_search_filter', function(req, res, next) {
   var buddyList = [];
 
   var tripFilter = Trip.
-                   find({});
+                   find({}).
+                   where("tripDestinationID").equals(placeID);
 
   if ('Category' in req.query) {
       tripFilter.where("tripType").in(req.query['Category']);
