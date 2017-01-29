@@ -288,12 +288,9 @@ router.get('/tabi_search', function(req, res, next) {
   });
 });
 
-
-//////TODO
 /* GET tabi search result (filtered) */
 // This GET req should return FILTERED trips of the same location
 router.get('/tabi_search_filter', function(req, res, next) {
-  console.log(req.query);
 
   var loggedUserID = null;
   if (req.isAuthenticated()) {
@@ -301,13 +298,6 @@ router.get('/tabi_search_filter', function(req, res, next) {
   } 
 
   var placeID = req.query.placeID;
-
-  // front end will send req.body should include location, filter object
-  // {
-  //   placeID: '12345',
-  //   category: ['food', 'art'],
-  //   duration: ['short'],
-  // }
 
   Destination.findOne({"destinationID": placeID}, function(err, foundDestination){
     if(err){
@@ -320,12 +310,34 @@ router.get('/tabi_search_filter', function(req, res, next) {
     var query = Trip.
                 find({}).
                 where("tripID").in(tabies);
-
-    for (var g = 1; g < req.query.length; g++) {
-      var groupName = req.query[g];
-      query.where(groupName).in(req.query[groupName]);
+    if ('Category' in req.query) {
+        query.where("tripType").in(req.query['Category']);
+    } 
+    if ('Season' in req.query) {
+        query.where("tripSeason").in(req.query['Season']);
+    } 
+    if ('Duration' in req.query) {
+      tripDuration = req.query['Duration'][0];
+      if (tripDuration === 'dayTrip') {
+        query.where("tripDuration").equals(1);
+      } else if (tripDuration === 'shortTrip') {
+        query.where("tripDuration").gt(1).lte(3);
+      } else if (tripDuration === 'mediumTrip') {
+        query.where("tripDuration").gt(3).lte(7);
+      } else if (tripDuration === 'longTrip') {
+        query.where("tripDuration").gt(7);
+      }
+    } 
+    if ('Budget' in req.query) {
+      tripBudget = req.query['Budget'][0];
+      if (tripBudget === 'lowBudget') {
+        query.where("tripBudget").lte(300);
+      } else if (tripBudget === 'mediumBudget') {
+        query.where("tripBudget").gt(300).lte(800);
+      } else if (tripBudget === 'highBudget') {
+        query.where("tripBudget").gt(800);
+      }
     }
-
     query.select("tripID tripCreatorID tripName tripCreatorName tripDescription tripPhoto tripLikedUsers");
     query.exec(function(err, trips){
       if(err) console.log("Error");
@@ -350,16 +362,6 @@ router.get('/tabi_search_filter', function(req, res, next) {
       res.render('tabi_search_result', {trips: tabiList});   
     })
   });
-
-  // fake trip data for front end testing
-  // you return something like below to the front end 
-  // var fakeTripData = {trips:[{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "Filter success!", liked: true, imageURL:'http://placekitten.com/g/150/150'},
-  // {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  // {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  // {tripID: "12348", userID: "126", tripTitle: "test4", username: "user4", description: "this is test description4", liked:true, imageURL:'http://placekitten.com/g/150/150'},
-  // {tripID: "12349", userID: "127", tripTitle: "test5", username: "user5", description: "this is test description5", liked:true, imageURL:'http://placekitten.com/g/150/150'},],};
-
-  // res.render('tabi_search_result', fakeTripData);
 });
 
 

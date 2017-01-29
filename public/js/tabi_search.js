@@ -3,20 +3,20 @@ var unlikeIconURL = "/images/unlike.png";
 
 var tripFilterGroups = {
   'Category': [
-    {title: 'Adventure', value: 'adventure'}, 
-    {title: 'Food', value: 'food'}, 
-    {title: 'Art', value: 'art'}, 
-    {title: 'History', value: 'history'}, 
+    {title: 'Adventure', value: 'Adventure'}, 
+    {title: 'Food', value: 'Food'}, 
+    {title: 'Art', value: 'Art'}, 
+    {title: 'History', value: 'History'}, 
   ],
   'Season': [
-  {title: 'Winter', value: 'winter'}, 
-  {title: 'Fall', value: 'fall'}, 
-  {title: 'Summer', value: 'summer'}, 
-  {title: 'Spring', value: 'spring'},
+  {title: 'Winter', value: 'Winter'}, 
+  {title: 'Fall', value: 'Fall'}, 
+  {title: 'Summer', value: 'Summer'}, 
+  {title: 'Spring', value: 'Spring'},
   ],
   'Duration': [
   {title: 'Day Trip', value: 'dayTrip'}, 
-  {title: 'Short(1~3 days)', value: 'shortTrip'}, 
+  {title: 'Short(2~3 days)', value: 'shortTrip'}, 
   {title: 'Medium(4~7 days)', value: 'mediumTrip'}, 
   {title: 'Long(8+ days)', value: 'longTrip'},
   ],
@@ -79,6 +79,20 @@ function populateSearchBar(filter){
     }
   }
 
+  $('form input[name="Duration"]:not(checked)').on('click', function(){
+    if ($('form input[name="Duration"]:checked').length > 1) {
+      $('form input[name="Duration"]').prop('checked',false);
+      $(this).prop('checked',true);
+    }
+  });
+
+  $('form input[name="Budget"]:not(checked)').on('click', function(){
+    if ($('form input[name="Budget"]:checked').length > 1) {
+      $('form input[name="Budget"]').prop('checked',false);
+      $(this).prop('checked',true);
+    }
+  });
+
   $('<ul>').attr('id','filter-tags').appendTo(filterForm);
   $('<button>').attr('id','apply-filter').text('Apply Filter').appendTo(filterForm);
   $('<button>').attr('id','clear-filter').text('Clear Filter').appendTo(filterForm);
@@ -87,6 +101,7 @@ function populateSearchBar(filter){
 
   $('#clear-filter').on('click',clearFilter);
   $('#apply-filter').on('click',applyFilter);
+
 }
 
 function addListenerToTrips(){
@@ -138,8 +153,16 @@ function clearFilter(event){
   $('#filter-by-container input[type=checkbox]').prop('checked',false);
   $('#filter-by-container button').hide();
   $('#filter-tags').hide();
-
   updateFilterTags();
+
+  $.ajax({
+    url: '/tabi_search_filter',
+    method: 'GET', 
+    data: {placeID: $('body').attr('rel')},
+  }).done(function(response){
+    $('#search-results-container').html(response);
+    addListenerToTrips();
+  });
 
 }
 
@@ -158,7 +181,7 @@ function applyFilter(event){
 
   $('#filter-by-container input[type=checkbox]:checked').each(function(){
 
-    var groupName = 'trip'+$(this).attr('name');
+    var groupName = $(this).attr('name');
     var value = $(this).attr('value');
 
     if (groupName in filterData) {
