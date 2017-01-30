@@ -109,17 +109,17 @@ module.exports = {
   editing user profile is restricted to changing information related to users only
   e.g. can only edit userName, userPhoto, userDescription
   */
-  editUserProfile: function(userInfo){
+  editUserProfile: function(userInfo, callback){
     var chalk = require('chalk');
     // update user profile
     User.findOne({'userID': userInfo.userID}, function(err, user){
       if(err){
         console.log(chalk.red("Error in editUserProfile"));
-        return false;
+        callback(false);
       }
       if(user === null){
         console.log(chalk.red("user does not exist"));
-        return false;
+        callback(false);
       } else {
         // update each field if it exist in userInfo
         var fieldNameList = ["userName", "userPhoto", "userDescription", "userEmail"];
@@ -132,7 +132,7 @@ module.exports = {
         user.save();
       }
     });
-    return true;
+    callback(true);
   }
   ,
 

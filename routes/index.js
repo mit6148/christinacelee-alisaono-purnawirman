@@ -787,14 +787,17 @@ router.post('/edit_profile_photo/:user_id', function(req, res, next) {
           var newImageURL = result.eager[0].secure_url; 
           var userInfo = {userID: userID, userPhoto: newImageURL};
 
-          if (helperFunction.editUserProfile(userInfo)) {
-            res.redirect('/view_user/'+userID); 
-
-          } else {
-            res.send("Error in updating photo");
-            res.render('error',{message: "Error 500 - Internal Server Error"});
-            return;
+          var redirectUser = function(success) {
+            if (success) {
+              res.redirect('/view_user/'+ userID);
+              return;
+            } else {
+              res.render('error',{message: "Error 500 - Internal Server Error"});
+              return;
+            }
           }
+
+          helperFunction.editUserProfile(userInfo, redirectUser);
         },
         {
           public_id: userID, 
