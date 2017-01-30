@@ -578,7 +578,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
   } else {
     loggedUserID = "userA";
     loggedInUser = "userA";
-    userIsOwner = true;
+    userIsOwner = (userID === loggedUserID);
   }
 
   var query = User.findOne({"userID": userID});

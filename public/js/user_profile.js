@@ -177,6 +177,7 @@ function likeTrip(eventTarget, tripID) {
 }
 
 function unlikeTrip(eventTarget,tripID) {
+
 	$.ajax({
     url: '/unlike_trip',
     method: 'POST', 
