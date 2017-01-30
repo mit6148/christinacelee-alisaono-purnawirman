@@ -600,8 +600,10 @@ router.get('/view_user/:user_id', function(req, res, next) {
       }
     } 
   } else {
-    loggedUserID = "userA";
-    loggedInUser = "userA";
+    // loggedUserID = "userA";
+    // loggedInUser = "userA";
+    loggedUserID = "664614793719454";
+    loggedInUser = "Alisa Ono";
     userIsOwner = (userID === loggedUserID);
   }
 
@@ -768,48 +770,56 @@ router.post('/edit_profile_photo/:user_id', function(req, res, next) {
 
   var userID = req.params.user_id;
 
-  if (!req.isAuthenticated()) {
-    res.redirect('/login/facebook');
-    return;
+  if (process.env.NODE_ENV === "production") {
 
-  } else if (req.user.userID !== userID) {
-    res.render('error',{message: "Error 401 - Unauthorized"});
-    return;
+    if (!req.isAuthenticated()) {
+      res.redirect('/login/facebook');
+      return;
 
-  } else {
-    var form = new formidable.IncomingForm();
+    } else if (req.user.userID !== userID) {
+      res.render('error',{message: "Error 401 - Unauthorized"});
+      return;
+    }
 
-    form.on('file', function(field, file) {
-      cloudinary.uploader.upload(
-        file.path, 
-        function(result) {
+  } 
 
-          var newImageURL = result.eager[0].secure_url; 
-          var userInfo = {userID: userID, userPhoto: newImageURL};
+  console.log(userID);
 
-          var redirectUser = function(success) {
-            if (success) {
-              res.redirect('/view_user/'+ userID);
-              return;
-            } else {
-              res.render('error',{message: "Error 500 - Internal Server Error"});
-              return;
-            }
+  var form = new formidable.IncomingForm();
+
+  form.on('file', function(field, file) {
+    console.log(field);
+    console.log(file);
+    cloudinary.uploader.upload(
+      file.path, 
+      function(result) {
+
+        var newImageURL = result.eager[0].secure_url; 
+        var userInfo = {userID: userID, userPhoto: newImageURL};
+
+        var redirectUser = function(success) {
+          if (success) {
+            res.redirect('/view_user/'+ userID);
+            return;
+          } else {
+            res.render('error',{message: "Error 500 - Internal Server Error"});
+            return;
           }
-
-          helperFunction.editUserProfile(userInfo, redirectUser);
-        },
-        {
-          public_id: userID, 
-          quality: "auto:good",
-          width: 400, height: 400, crop: "limit",
-          eager: [{ width: 300, height: 300, crop: 'thumb', gravity: 'face', format: 'jpg'}],                                   
         }
-      );
-    });
 
-    // form.parse(req);
-  }
+        helperFunction.editUserProfile(userInfo, redirectUser);
+      },
+      {
+        public_id: userID, 
+        invalidate: true,
+        quality: "auto:good",
+        width: 400, height: 400, crop: "limit",
+        eager: [{ width: 300, height: 300, crop: 'thumb', gravity: 'face', format: 'jpg'}],                                   
+      }
+    );
+  });
+
+  form.parse(req);
 });
 
 
