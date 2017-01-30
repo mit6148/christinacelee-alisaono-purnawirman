@@ -114,7 +114,7 @@
           } else if ($('#budget-input').val().length > 0 && $('#budget-input').val() < 0) {
             alert("Budget must be $0 or higher");
             return false;
-          } else if ($('#place-id').val().length > 0) {
+          } else if ($('#place-id').val().length === 0) {
             alert("Please input a valid city name");
             return false;
           } else {

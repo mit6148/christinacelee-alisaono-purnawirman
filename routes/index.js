@@ -347,7 +347,7 @@ router.get('/tabi_search_filter', function(req, res, next) {
     if ('Duration' in req.query) {
       tripDuration = req.query['Duration'][0];
       if (tripDuration === 'dayTrip') {
-        query.where("tripDuration").equals(1);
+        query.where("tripDuration").lte(1);
       } else if (tripDuration === 'shortTrip') {
         query.where("tripDuration").gt(1).lte(3);
       } else if (tripDuration === 'mediumTrip') {
@@ -490,7 +490,7 @@ router.get('/buddy_search_filter', function(req, res, next) {
   if ('Duration' in req.query) {
     tripDuration = req.query['Duration'][0];
     if (tripDuration === 'dayTrip') {
-      tripFilter.where("tripDuration").equals(1);
+      tripFilter.where("tripDuration").lte(1);
     } else if (tripDuration === 'shortTrip') {
       tripFilter.where("tripDuration").gt(1).lte(3);
     } else if (tripDuration === 'mediumTrip') {
