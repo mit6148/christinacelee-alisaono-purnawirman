@@ -892,12 +892,23 @@ router.post('/add_trip', function(req, res, next) {
         // Edit the photo URL after the photo upload
         tripInfo["tripPhoto"] = result.eager[0].secure_url;
 
-        if (helperFunction.addTrip(User, Trip, tripInfo) === "update success") {
-          res.redirect('/view_user/'+ userID);
-        } else {
-          res.render('error',{message: "Error 500 - Internal Server Error"});
-          return;
+        var redirectUser = function(success) {
+          if (success) {
+            res.redirect('/view_user/'+ userID);
+            return;
+          } else {
+            res.render('error',{message: "Error 500 - Internal Server Error"});
+            return;
+          }
         }
+
+        helperFunction.addTrip(User, Trip, tripInfo, callback);
+        // if (helperFunction.addTrip(User, Trip, tripInfo)) {
+        //   res.redirect('/view_user/'+ userID);
+        // } else {
+        //   res.render('error',{message: "Error 500 - Internal Server Error"});
+        //   return;
+        // }
       },
       {
         public_id: tripID, 
