@@ -86,16 +86,19 @@ router.get('/__addFakeUsersAndTrips', function(req, res, next){
   User.collection.insertMany(fake.users, function(err, docs){
     if(err){
       res.send("Error in inserting user for fake data");
+      return;
     }
   });
   Trip.collection.insertMany(fake.trips, function(err, docs){
     if(err){
       res.send("Error in inserting trip for fake data");
+      return;
     }
   });
   Destination.collection.insertMany(fake.destinations, function(err, docs){
     if(err){
       res.send("Error in inserting destination for fake data");
+      return;
     }
   });
   res.send('Success');
@@ -106,16 +109,19 @@ router.get('/__removeAll', function(req, res, next){
   User.remove({}, function(err, docs){
     if(err){
       res.send("Error in deleting user for fake data");
+      return;
     }
   });
   Trip.remove({}, function(err, docs){
     if(err){
       res.send("Error in deleting trip for fake data");
+      return;
     }
   });
   Destination.remove({}, function(err, docs){
     if(err){
       res.send("Error in deleting destination for fake data");
+      return;
     }
   });
   res.send('Success');
@@ -124,11 +130,20 @@ router.get('/__removeAll', function(req, res, next){
 /* view all database status now */
 router.get('/__database', function(req, res, next){
   User.find({}, function(err, users){
-    if(err) res.send("Error in user database");
+    if(err) {
+      res.send("Error in user database");
+      return;
+    }
     Trip.find({}, function(err, trips){
-      if(err) res.send("Error in trip database");
+      if(err) {
+        res.send("Error in trip database");
+        return;
+      }
       Destination.find({}, function(err, destinations){
-        if(err) res.send("Error in destination database");
+        if(err) {
+          res.send("Error in destination database");
+          return;
+        }
         res.send(JSON.stringify({users: users,
                                  trips: trips,
                                  destinations: destinations}, null, 2));
@@ -140,7 +155,10 @@ router.get('/__database', function(req, res, next){
 /* view all users status now */
 router.get('/__users', function(req, res, next){
   User.find({}, function(err, users){
-    if(err) res.send("Error in user database");
+    if(err) {
+      res.send("Error in user database");
+      return;
+    }
     res.send(JSON.stringify(users, null, 2));
   });
 });
@@ -243,6 +261,7 @@ router.get('/tabi_search', function(req, res, next) {
     if(err){
       console.log("Error in finding destination");
       res.render('error',{message: "Error 500 - Internal Server Error"});
+      return;
     }
 
     if(foundDestination !== null){
@@ -306,6 +325,7 @@ router.get('/tabi_search_filter', function(req, res, next) {
     if (err) {
       console.log("Error in finding destination");
       res.render('error',{message: "Error 500 - Internal Server Error"});
+      return;
     }
 
     if(foundDestination !== null){
@@ -353,6 +373,7 @@ router.get('/tabi_search_filter', function(req, res, next) {
       if (err) {
         console.log("Error in finding trips");
         res.render('error',{message: "Error 500 - Internal Server Error"});
+        return;
       }
 
       if (trips !== null) {
@@ -403,6 +424,7 @@ router.get('/buddy_search', function(req, res, next) {
     if(err){
       console.log("Error in finding destination");
       res.render('error',{message: "Error 500 - Internal Server Error"});
+      return;
     }
 
     if(foundDestination !== null){
@@ -503,6 +525,7 @@ router.get('/buddy_search_filter', function(req, res, next) {
       if (err) {
         console.log("Error finding trip count");
         res.render('error',{message: "Error 500 - Internal Server Error"});
+        return;
       }
 
       if (buddyUserID !== loggedUserID && tripCount > 0) {
@@ -526,6 +549,7 @@ router.get('/buddy_search_filter', function(req, res, next) {
     if (err) {
       console.log("Errof in finding destination");
       res.render('error',{message: "Error 500 - Internal Server Error"});
+      return;
     }
 
     if(foundDestination !== null){
@@ -588,6 +612,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
     if (err) {
       console.log("error in finding user");
       res.render('error',{message: "Error 500 - Internal Server Error"});
+      return;
     }
 
     if(user === null){
@@ -603,6 +628,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
         if(err) { 
           console.log("Error in finding trips");
           res.render('error',{message: "Error 500 - Internal Server Error"});
+          return;
         }
 
         var wishlistTripsList = [];
@@ -655,11 +681,20 @@ router.get('/view_user/:user_id', function(req, res, next) {
 /* GET add trip page */;
 router.get('/add_trip_page', function(req, res, next) {
 
-  if (!req.isAuthenticated()) {
-    res.redirect('/login/facebook');
-  } 
+  if (process.env.NODE_ENV === "production") {
 
-  res.render('add_trip', {loggedIn: true, loggedInUser: req.user.userName});
+    if(!req.isAuthenticated()){
+      res.redirect('/login/facebook');
+      return;
+    }
+
+    var loggedInUser = req.user.userName;
+
+  } else {
+    loggedInUser = "userA";
+  }
+
+  res.render('add_trip', {loggedIn: true, loggedInUser: loggedInUser});
 });
 
 /* GET edit trip page by trip ID */
@@ -672,6 +707,7 @@ router.get('/edit_trip_page/:trip_id', function(req, res, next) {
 
     if(!req.isAuthenticated()){
       res.redirect('/login/facebook');
+      return;
 
     } else {
       loggedInUser = req.user.userName;
@@ -689,16 +725,19 @@ router.get('/edit_trip_page/:trip_id', function(req, res, next) {
     if (err) {
       console.log("Error in finding this trip");
       res.render('error',{message: "Error 500 - Internal Server Error"});
+      return;
 
     } else if (foundTrip === null) {
       console.log("No such trip with this trip ID");
       res.render('error',{message: "Error 404 - Trip Does Not Exist"});
+      return;
 
     } else {
       var tripCreatorID = foundTrip['tripCreatorID'];
 
       if (tripCreatorID !== loggedUserID) {
         res.render('error',{message: "Error 401 - Unauthorized"});
+        return;
 
       } else {
         var tripData = {tripID: tripID,
@@ -731,9 +770,11 @@ router.post('/edit_profile_photo/:user_id', function(req, res, next) {
 
   if (!req.isAuthenticated()) {
     res.redirect('/login/facebook');
+    return;
 
   } else if (req.user.userID !== userID) {
     res.render('error',{message: "Error 401 - Unauthorized"});
+    return;
 
   } else {
     var form = new formidable.IncomingForm();
@@ -742,12 +783,6 @@ router.post('/edit_profile_photo/:user_id', function(req, res, next) {
       cloudinary.uploader.upload(
         file.path, 
         function(result) {
-
-          // TODO: Not 100% sure about this part
-          if (result.error) {
-            res.send("Error in updating photo");
-            res.render('error',{message: "Error 500 - Internal Server Error"});
-          }
 
           var newImageURL = result.eager[0].secure_url; 
           var userInfo = {userID: userID, userPhoto: newImageURL};
@@ -758,6 +793,7 @@ router.post('/edit_profile_photo/:user_id', function(req, res, next) {
           } else {
             res.send("Error in updating photo");
             res.render('error',{message: "Error 500 - Internal Server Error"});
+            return;
           }
         },
         {
@@ -781,9 +817,11 @@ router.post('/edit_profile_info/:user_id', function(req, res, next) {
 
   if (!req.isAuthenticated()) {
     res.redirect('/login/facebook');
+    return;
 
   } else if (req.user.userID !== userID) {
     res.render('error',{message: "Error 401 - Unauthorized"});
+    return;
 
   } else {
     var userInfo = {"userID": userID,
@@ -792,10 +830,12 @@ router.post('/edit_profile_info/:user_id', function(req, res, next) {
 
     if (helperFunction.editUserProfile(userInfo)) {
       res.redirect('/view_user/'+userID);
+      return;
 
     } else {
       res.send("Error in updating profile")
       res.render('error',{message: "Error 500 - Internal Server Error"});
+      return;
     }
   }
 });
@@ -812,6 +852,7 @@ router.post('/add_trip', function(req, res, next) {
 
     if(!req.isAuthenticated()){
       res.redirect('/login/facebook');
+      return;
     }
 
     userID = req.user.userID;
@@ -848,12 +889,6 @@ router.post('/add_trip', function(req, res, next) {
       file.path, 
       function(result) {
 
-        // TODO: Not 100% sure about this part
-        if (result.error) {
-          res.send("Error in updating photo");
-          res.render('error',{message: "Error 500 - Internal Server Error"});
-        }
-
         // Edit the photo URL after the photo upload
         tripInfo["tripPhoto"] = result.eager[0].secure_url;
 
@@ -861,6 +896,7 @@ router.post('/add_trip', function(req, res, next) {
           res.redirect('/view_user/'+ userID);
         } else {
           res.render('error',{message: "Error 500 - Internal Server Error"});
+          return;
         }
       },
       {
@@ -883,6 +919,7 @@ router.post('/edit_trip/:tripID', function(req, res, next) {
 
     if(!req.isAuthenticated()){
       res.redirect('/login/facebook');
+      return;
 
     } else {
       userID = req.user.userID;
@@ -905,17 +942,20 @@ router.post('/edit_trip/:tripID', function(req, res, next) {
     if (err) {
       console.log("Error looking up trip of this trip ID");
       res.render('error',{message: "Error 500 - Internal Server Error"});
+      return;
     }
 
     if (foundTrip === null) {
       console.log("No such trip exists for this trip ID");
       res.render('error',{message: "Error 404 - Trip Does Not Exist"});
+      return;
     }
 
     var tripCreatorID = foundTrip.tripCreatorID;
 
     if (userID !== tripCreatorID) {
       res.render('error',{message: "Error 401 - Unauthorized"});
+      return;
     }
 
     // TODO: clean these up with loop or switch statements
@@ -951,6 +991,7 @@ router.post('/delete_trip', function(req, res, next) {
 
     if(!req.isAuthenticated()){
       res.redirect('/login/facebook');
+      return;
 
     } else {
       userID = req.user.userID;
@@ -967,17 +1008,20 @@ router.post('/delete_trip', function(req, res, next) {
     if (err) {
       console.log("Error looking up trip of this trip ID");
       res.render('error',{message: "Error 500 - Internal Server Error"});
+      return;
     }
 
     if (foundTrip === null) {
       console.log("No such trip exists for this trip ID");
       res.render('error',{message: "Error 404 - Trip Does Not Exist"});
+      return;
     }
 
     var tripCreatorID = foundTrip.tripCreatorID;
 
     if (userID !== tripCreatorID) {
       res.render('error',{message: "Error 401 - Unauthorized"});
+      return;
     }
 
     foundTrip.tripActive = false;
@@ -1009,6 +1053,7 @@ router.post('/like_trip', function(req, res, next) {
 
     if(!req.isAuthenticated()){
       res.redirect('/login/facebook');
+      return;
     }
 
     userID = req.user.userID;
@@ -1022,8 +1067,10 @@ router.post('/like_trip', function(req, res, next) {
   var callback = function(success) {
     if (success) {
       res.send('');
+      return;
     } else {
       res.send('error');
+      return;
     }
   }
 
@@ -1044,6 +1091,7 @@ router.post('/unlike_trip', function(req, res, next) {
 
     if(!req.isAuthenticated()){
       res.redirect('/login/facebook');
+      return;
     }
 
     userID = req.user.userID;
@@ -1057,8 +1105,10 @@ router.post('/unlike_trip', function(req, res, next) {
   var callback = function(success) {
     if (success) {
       res.send('');
+      return;
     } else {
       res.send('error');
+      return;
     }
   }
 

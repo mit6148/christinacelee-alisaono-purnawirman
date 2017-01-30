@@ -5,10 +5,12 @@
     <meta charset="utf-8">
     <title>tabibuddy | Create Trip</title>
 
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,500,500i,600,800" rel="stylesheet">
     <link rel='stylesheet' href="/stylesheets/top_bar_style.css" />
     <style>
       body {
         margin: 0;
+        font-family: 'Raleway', sans-serif;
       }
       .invisible {
         display: none;
@@ -72,7 +74,7 @@
         <option value="winter">Winter</option>
       </select> -->
       <br><br>
-      <input id="duration-input" type="number" min="1" placeholder="(*)Duration" name="duration" required><span> day(s)</span>
+      <input id="duration-input" type="number" min="0" placeholder="(*)Duration" name="duration" required><span> day(s)</span>
       <br><br>
       <span>&#36;</span><input id="budget-input" type="number" min="0" placeholder="(*)Budget" name="budget" required>
       <br><br>
@@ -104,23 +106,29 @@
         $('form input').on('keypress', function(e) {
           return e.which !== 13;
         });
+
         $('#save-trip').on('click', function(e) {
-          if ($('#duration-input').val() <= 0) {
-            alert("Trip length cannot be 0 day or shorter");
+          if ($('#duration-input').val().length > 0 && $('#duration-input').val() < 1) {
+            alert("Trip must be 1 day or longer");
             return false;
-          } else if ($('#budget-input').val() < 0) {
+          } else if ($('#budget-input').val().length > 0 && $('#budget-input').val() < 0) {
             alert("Budget must be $0 or higher");
             return false;
+          } else if ($('#place-id').val().length > 0) {
+            alert("Please input a valid city name");
+            return false;
           } else {
-            return $('#place-id').val().length > 0;
+            return true;
           }
         });
+
         $('form input[name="category"]:not(checked)').on('click', function(){
           if ($('form input[name="category"]:checked').length > 1) {
             $('form input[name="category"]').prop('checked',false);
             $(this).prop('checked',true);
           }
         });
+
         $('form input[name="season"]:not(checked)').on('click', function(){
           if ($('form input[name="season"]:checked').length > 1) {
             $('form input[name="season"]').prop('checked',false);
