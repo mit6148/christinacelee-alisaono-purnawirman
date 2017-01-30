@@ -192,8 +192,6 @@ body {
   margin-top: 3px;
 }
 .tab-index.active {
-  border-color: #1abc9c;
-  border-width: 0;
   background-color: #1abc9c;
   color: white;
 }

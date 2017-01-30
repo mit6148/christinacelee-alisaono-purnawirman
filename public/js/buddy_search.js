@@ -63,8 +63,8 @@ function populateSearchBar(filter){
   });
 
   $('<ul>').attr('id','filter-tags').appendTo(filterForm);
-  $('<button>').attr('id','apply-filter').text('Apply Filter').appendTo(filterForm);
-  $('<button>').attr('id','clear-filter').text('Clear Filter').appendTo(filterForm);
+  $('<div>').attr('id','apply-filter').text('Apply Filter').appendTo(filterForm);
+  $('<div>').attr('id','clear-filter').text('Clear Filter').appendTo(filterForm);
 
   $('#filter-by-container input[type=checkbox]').on('click',toggleFilterTags);
 
@@ -74,8 +74,8 @@ function populateSearchBar(filter){
 
 function expandFilterCriteria(event){
   event.preventDefault();
-  $('.filter-title-container').css('background-color','#95a5a6');
-  $(this).css('background-color','white');
+  $('.filter-title-container').css('color','#bdc3c7').css('background-color','#34495e');
+  $(this).css('color','white').css('background-color','#1abc9c');
   var groupName = $(this).attr('rel');
   $('.filter-criteria-container').hide();
   $('#'+groupName+'-criteria-container').show();
