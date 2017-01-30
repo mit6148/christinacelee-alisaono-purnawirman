@@ -388,7 +388,7 @@ module.exports = {
     var chalk = require('chalk');
     var requiredFields = ["tripID", "tripName", "tripCreatorID", "tripCreatorName", "tripDestinationID", "tripDestinationName", "tripType"];
     var fieldName;
-    // for(fieldName in requiredFields){
+
     for (var k = 0; k < requiredFields.length; k++){
       if(!tripInfo.hasOwnProperty(requiredFields[k])){
         console.log(chalk.red("incomplete input fields for add trip"));
@@ -438,7 +438,7 @@ module.exports = {
         } else {
           uniquePush(dest['tabies'], tripInfo.tripID);
           uniquePush(dest['buddies'], tripInfo.tripCreatorID);
-          dest.save()
+          dest.save();
         }
         callback(true);
       });

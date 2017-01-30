@@ -903,12 +903,6 @@ router.post('/add_trip', function(req, res, next) {
         }
 
         helperFunction.addTrip(User, Trip, tripInfo, redirectUser);
-        // if (helperFunction.addTrip(User, Trip, tripInfo)) {
-        //   res.redirect('/view_user/'+ userID);
-        // } else {
-        //   res.render('error',{message: "Error 500 - Internal Server Error"});
-        //   return;
-        // }
       },
       {
         public_id: tripID, 
