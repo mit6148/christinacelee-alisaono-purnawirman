@@ -22,7 +22,9 @@
       <div id="user-info">
         <div id="user-image-container">
           {{#if userIsOwner}}
-            <img id="user-image" src="{{userImageURL}}" class="edit-user-image" />
+            <img id="user-image" src="{{userImageURL}}" class="edittable-user-image" />
+            <div id="user-image-edit-blur" class="edittable-user-image edit-user-image"></div>
+            <img id="user-image-edit" src="/images/add-image.png" class="edittable-user-image edit-user-image" />
           {{else}}
             <img id="user-image" src="{{userImageURL}}" />
           {{/if}}
@@ -56,12 +58,16 @@
             {{#each userTrips}}
               <div class="user-trip">
                 <div class="trip" rel="{{tripID}}">
-                  <div class="trip-title-container">
+                  <div class="trip-title-container wide">
                     <h1 class="trip-title">{{tripTitle}}</h1>
-                  </div><div class="trip-edit-container">
-                    <img class="trip-edit" rel="{{tripID}}" src="/images/edit.png" />
-                  </div><div class= "trip-delete-container">
-                    <img class="trip-delete" rel="{{tripID}}" src="/images/delete.png" />
+                  </div>
+                  <div class="trip-options-container">
+                    <div class="trip-edit-container">
+                      <img class="trip-edit" rel="{{tripID}}" src="/images/edit.png" />
+                    </div>
+                    <div class= "trip-delete-container">
+                      <img class="trip-delete" rel="{{tripID}}" src="/images/delete.png" />
+                    </div>
                   </div>
                   <img class="trip-image" src="{{imageURL}}">
                   <p class="trip-description text-hidden">{{description}}</p>

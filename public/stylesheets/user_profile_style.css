@@ -14,14 +14,33 @@ body {
   text-align: center;
 }
 #user-image-container {
+  position: relative;
+  top: 0;
+  left: 0;
   width: 15%;
   display: inline-block;
 }
 #user-image {
   width: 100%;
 }
-.edit-user-image {
+#user-image-edit-blur {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: grey;
+  opacity: 0.8;
+  display: none;
+}
+#user-image-edit {
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  width: 50%;
+  height: 50%;
   cursor: pointer;
+  display: none;
 }
 #user-description-container {
   display: inline-block;
@@ -29,7 +48,7 @@ body {
   margin-left: 10px;
 }
 #user-info-edit-container {
-  width: 20px;
+  width: 40px;
   display: inline-block;
   vertical-align: top;
 }
@@ -51,9 +70,6 @@ body {
   text-align: center;
   vertical-align: top;
 }
-.new-trip {
-  cursor: pointer;
-}
 .trip, .new-trip {
   margin: 10px;
   padding: 10px;
@@ -63,9 +79,19 @@ body {
   cursor: zoom-in;
   font-size: 1.5vw;
 }
+.new-trip {
+  cursor: pointer;
+}
+.new-trip img {
+  margin-top: 10px;
+  width: 50%;
+}
 .trip-title-container {
   width: 85%;
   display: inline-block;
+}
+.trip-title-container.wide {
+  width: 100%;
 }
 .trip-title {
   width: 100%;
@@ -76,19 +102,27 @@ body {
   display: block;
   overflow: hidden;
 }
-.trip-like-container, .trip-edit-container {
+.trip-like-container {
   width: 15%;
   display: inline-block;
   vertical-align: top;
   text-align: right;
 }
-.trip-delete-container {
-  width: 15%;
-  vertical-align: top;
-  margin-top: 5px;
-  float: right;
+.trip-options-container {
+  width: 100%;
+  display: inline-block;
   text-align: right;
 }
+.trip-edit-container, .trip-delete-container {
+  width: 15%;
+  display: inline-block;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+.trip-edit-container img, .trip-delete-container img {
+  width: 100%;
+}
+
 .trip-like, .trip-unlike, .trip-edit, .trip-delete {
   width: 100%;
   height: 100%;

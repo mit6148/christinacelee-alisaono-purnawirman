@@ -3,7 +3,13 @@ var unlikeIconURL = "/images/unlike.png";
 
 var main = function() {
 
-  $('.edit-user-image').on('click',openEditUserImage)
+  $('.edittable-user-image').mouseenter(function(event){
+    $('.edit-user-image').show();
+  }).mouseleave(function(event){
+    $('.edit-user-image').hide();
+  });
+
+  $('.edit-user-image').on('click', openEditUserImage)
 
   $('#user-info-edit').on('click', openEditProfile);
 
@@ -137,7 +143,9 @@ function showPopupTrip(tripElement){
   $('#trip-popup-close').css('top',popupCloseTop+'px');
   $('#trip-popup-container').removeClass('popup-inactive');
 	$('#trip-popup').append(tripElement.clone());
-  $('#trip-popup img').css('width','50%');
+  $('#trip-popup .trip-image').css('width','50%');
+  $('#trip-popup .trip-like-container img').css('width','50%');
+  $('#trip-popup .trip-options-container div').css('width','7%');
   $('#trip-popup .trip-description').removeClass('text-hidden');
   $('#trip-popup').attr('rel',tripID);
   $('#trip-popup .trip-title').css('overflow-wrap','break-word');
