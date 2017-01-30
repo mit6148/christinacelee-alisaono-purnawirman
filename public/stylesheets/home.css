@@ -1,7 +1,10 @@
 
 body {
   margin: 0;
+  /*
   font-family: 'Raleway', sans-serif;
+  */
+  font: 300 16px/22px "Lato", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 .invisible {
   display: none;
@@ -40,7 +43,7 @@ body {
 }
 .hero p {
   font-size: 24px;
-  font-weight: 100;
+  font-weight: 320;
 }
 
 .container {
