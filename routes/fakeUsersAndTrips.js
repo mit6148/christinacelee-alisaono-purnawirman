@@ -39,7 +39,17 @@ var users = [
 			 "userDestinations": ["ChIJOwg_06VPwokRYv534QaPC8g", "ChIJX8wwy6Vw44kRh2xoiWSOOsU", "ChIJVTPokywQkFQRmtVEaUZlJRA"], 
 			 "userLikedTrips": [newYorkTestAID, cambridgeTestAID, cambridgeTestBID, seattleTestAID, seattleTestBID],
 			 "userCreatedTrips": [cambridgeTestAID, seattleTestAID]
-			},]
+			},
+			{"userID": "userD",
+			 "userName": "userD",
+			 "userEmail": "",
+			 "userPhoto": "http://placekitten.com/g/200/203",
+			 "userDescription": "This is a fake user D",
+			 "userActive": true,
+			 "userDestinations": ["ChIJOwg_06VPwokRYv534QaPC8g", "ChIJX8wwy6Vw44kRh2xoiWSOOsU", "ChIJVTPokywQkFQRmtVEaUZlJRA"], 
+			 "userLikedTrips": [newYorkTestAID, cambridgeTestAID, cambridgeTestBID, seattleTestAID, seattleTestBID],
+			 "userCreatedTrips": [cambridgeTestAID, seattleTestAID]
+			}]
 
 
 var trips = [
