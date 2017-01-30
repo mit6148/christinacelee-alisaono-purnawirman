@@ -902,7 +902,7 @@ router.post('/add_trip', function(req, res, next) {
           }
         }
 
-        helperFunction.addTrip(User, Trip, tripInfo, callback);
+        helperFunction.addTrip(User, Trip, tripInfo, redirectUser);
         // if (helperFunction.addTrip(User, Trip, tripInfo)) {
         //   res.redirect('/view_user/'+ userID);
         // } else {
