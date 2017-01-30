@@ -384,20 +384,20 @@ module.exports = {
   Trip
   User: userCreatedTrips, userDestinations
   Destination: new or just tabies, buddies */
-  addTrip: function(User, Trip, tripInfo){
+  addTrip: function(User, Trip, tripInfo, callback){
     var chalk = require('chalk');
     var requiredFields = ["tripID", "tripName", "tripCreatorID", "tripCreatorName", "tripDestinationID", "tripDestinationName", "tripType"];
     var fieldName;
-    // for(fieldName in requiredFields){
+
     for (var k = 0; k < requiredFields.length; k++){
       if(!tripInfo.hasOwnProperty(requiredFields[k])){
         console.log(chalk.red("incomplete input fields for add trip"));
-        return "incomplete input fields for add trip";
+        callback(false);
       }
     }
     if(isIDExist(Trip, "tripID", tripInfo.tripID)){
       console.log(chalk.red("trip already exist, can not add new trips"));
-      return "trip already exist, can not add new trips";
+      callback(false);
     }
 
     // if not existed, add new trip
@@ -408,34 +408,40 @@ module.exports = {
                 findOne({}).
                 where("userID").eq(tripInfo.tripCreatorID)
     query.exec(function(err, user){
-      if(err) console.log("Error in updating users for add trip");
-      if(user != null){
+      if(err) {
+        console.log("Error in updating users for add trip");
+        callback(false);
+      }
+      if(user !== null){
         user['userCreatedTrips'].push(tripInfo.tripID);
         user['userLikedTrips'].push(tripInfo.tripID);
         uniquePush(user['userDestinations'], tripInfo.tripDestinationID);
         user.save();
-        // console.log(chalk.red(JSON.stringify(user)));
       } else {
         console.log(chalk.red(tripInfo.tripCreatorID + " user not found!"));
+        callback(false);
       }
       // update destination
-        var queryDest = Destination.findOne({}).
-                        where("destinationID").eq(tripInfo.tripDestinationID);
-        queryDest.exec(function(err, dest){
-          if(err) console.log("Error in updating destination for add trip");
-          if(dest === null){
-            var newDestination = new Destination({"destinationID": tripInfo.tripDestinationID,
-                                                  "destinationName": tripInfo.tripDestinationName,
-                                                  "tabies": [tripInfo.tripID],
-                                                  "buddies": [tripInfo.tripCreatorID]});
-            newDestination.save();
-          } else {
-            uniquePush(dest['tabies'], tripInfo.tripID);
-            uniquePush(dest['buddies'], tripInfo.tripCreatorID);
-            dest.save()
-          }
-        });
-      return "update success";
+      var queryDest = Destination.findOne({}).
+                      where("destinationID").eq(tripInfo.tripDestinationID);
+      queryDest.exec(function(err, dest){
+        if(err) {
+          console.log("Error in updating destination for add trip");
+          callback(false);
+        }
+        if (dest === null) {
+          var newDestination = new Destination({"destinationID": tripInfo.tripDestinationID,
+                                                "destinationName": tripInfo.tripDestinationName,
+                                                "tabies": [tripInfo.tripID],
+                                                "buddies": [tripInfo.tripCreatorID]});
+          newDestination.save();
+        } else {
+          uniquePush(dest['tabies'], tripInfo.tripID);
+          uniquePush(dest['buddies'], tripInfo.tripCreatorID);
+          dest.save();
+        }
+        callback(true);
+      });
     });
 
 

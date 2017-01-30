@@ -1,5 +1,6 @@
 var likeIconURL = "/images/like.png";
 var unlikeIconURL = "/images/unlike.png";
+var loadingIconURL = "/images/loading.svg";
 
 var main = function() {
 
@@ -163,6 +164,9 @@ function closePopupTrip(event){
 }
 
 function likeTrip(eventTarget, tripID) {
+
+  $('img[rel="'+tripID+'"]').attr('src',loadingIconURL);
+
   $.ajax({
     url: '/like_trip',
     method: 'POST', 
@@ -177,6 +181,8 @@ function likeTrip(eventTarget, tripID) {
 }
 
 function unlikeTrip(eventTarget,tripID) {
+
+  $('img[rel="'+tripID+'"]').attr('src',loadingIconURL);
 
 	$.ajax({
     url: '/unlike_trip',

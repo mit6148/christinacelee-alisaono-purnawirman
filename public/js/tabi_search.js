@@ -1,5 +1,6 @@
 var likeIconURL = "/images/like.png";
 var unlikeIconURL = "/images/unlike.png";
+var loadingIconURL = "/images/loading.svg";
 
 var tripFilterGroups = {
   'Category': [
@@ -92,14 +93,13 @@ function populateSearchBar(filter){
   });
 
   $('<ul>').attr('id','filter-tags').appendTo(filterForm);
-  $('<button>').attr('id','apply-filter').text('Apply Filter').appendTo(filterForm);
-  $('<button>').attr('id','clear-filter').text('Clear Filter').appendTo(filterForm);
+  $('<div>').attr('id','apply-filter').text('Apply Filter').appendTo(filterForm);
+  $('<div>').attr('id','clear-filter').text('Clear Filter').appendTo(filterForm);
 
   $('#filter-by-container input[type=checkbox]').on('click',toggleFilterTags);
 
   $('#clear-filter').on('click',clearFilter);
   $('#apply-filter').on('click',applyFilter);
-
 }
 
 function addListenerToTrips(){
@@ -129,6 +129,8 @@ function addListenerToTrips(){
 
 function expandFilterCriteria(event){
   event.preventDefault();
+  $('.filter-title-container').css('color','#bdc3c7').css('background-color','#34495e');
+  $(this).css('color','white').css('background-color','#1abc9c');
   var groupName = $(this).attr('rel');
   $('.filter-criteria-container').hide();
   $('#'+groupName+'-criteria-container').show();
@@ -228,6 +230,9 @@ function closePopupTrip(event){
 }
 
 function likeTrip (eventTarget, tripID) {
+
+  $('img[rel="'+tripID+'"]').attr('src',loadingIconURL);
+
   $.ajax({
     url: '/like_trip',
     method: 'POST', 
@@ -243,6 +248,9 @@ function likeTrip (eventTarget, tripID) {
 }
 
 function unlikeTrip (eventTarget,tripID) {
+
+  $('img[rel="'+tripID+'"]').attr('src',loadingIconURL);
+
   $.ajax({
     url: '/unlike_trip',
     method: 'POST', 
