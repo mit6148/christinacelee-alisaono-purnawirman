@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
   <head>
-    <title>Buddy Search Results</title>
+    <meta charset="utf-8">
+    <title>tabibuddy | View Buddies</title>
     
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,500,500i,600,800" rel="stylesheet">
     <link rel='stylesheet' href="/stylesheets/top_bar_style.css" />
@@ -12,9 +14,9 @@
     <script src="/js/buddy_search.js"></script>
 
   </head>
-  <body>
+  <body rel="{{placeID}}">
 
-    {{> top_bar_temp showSearchBar=showSearchBar loggedIn=loggedIn}}
+    {{> top_bar showSearchBar=showSearchBar loggedIn=loggedIn}}
 
     <div id="filter-by-container">
       <form>

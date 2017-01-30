@@ -1,15 +1,15 @@
 var buddySearchGroups = {
   'Category': [
-    {title: 'Adventure', value: 'adventure'}, 
-    {title: 'Food', value: 'food'}, 
-    {title: 'Art', value: 'art'}, 
-    {title: 'History', value: 'history'}, 
+    {title: 'Adventure', value: 'Adventure'}, 
+    {title: 'Food', value: 'Food'}, 
+    {title: 'Art', value: 'Art'}, 
+    {title: 'History', value: 'History'}, 
   ],
-  'Availability': [
-  {title: '2016 Winter', value: '2016Winter'}, 
-  {title: '2016 Fall', value: '2016Fall'}, 
-  {title: '2016 Summer', value: '2016Summer'}, 
-  {title: '2016 Spring', value: '2016Spring'},
+  'Season': [
+  {title: 'Winter', value: 'Winter'}, 
+  {title: 'Fall', value: 'Fall'}, 
+  {title: 'Summer', value: 'Summer'}, 
+  {title: 'Spring', value: 'Spring'},
   ],
   'Duration': [
   {title: 'Day Trip', value: 'dayTrip'}, 
@@ -25,7 +25,6 @@ var buddySearchGroups = {
 }
 
 var main = function() {
-  // loadFakeTestingData();
 
   populateSearchBar(buddySearchGroups);
 
@@ -49,11 +48,25 @@ function populateSearchBar(filter){
     }
   }
 
+  $('form input[name="Duration"]:not(checked)').on('click', function(){
+    if ($('form input[name="Duration"]:checked').length > 1) {
+      $('form input[name="Duration"]').prop('checked',false);
+      $(this).prop('checked',true);
+    }
+  });
+
+  $('form input[name="Budget"]:not(checked)').on('click', function(){
+    if ($('form input[name="Budget"]:checked').length > 1) {
+      $('form input[name="Budget"]').prop('checked',false);
+      $(this).prop('checked',true);
+    }
+  });
+
   $('<ul>').attr('id','filter-tags').appendTo(filterForm);
   $('<button>').attr('id','apply-filter').text('Apply Filter').appendTo(filterForm);
   $('<button>').attr('id','clear-filter').text('Clear Filter').appendTo(filterForm);
 
-  $('#filter-by-container input[type=checkbox]').on('click',toggleFilterButtonTags);
+  $('#filter-by-container input[type=checkbox]').on('click',toggleFilterTags);
 
   $('#clear-filter').on('click',clearFilter);
   $('#apply-filter').on('click',applyFilter);
@@ -68,12 +81,10 @@ function expandFilterCriteria(event){
   $('#'+groupName+'-criteria-container').show();
 }
 
-function toggleFilterButtonTags(event){
+function toggleFilterTags(event){
   if ($('#filter-by-container input[type=checkbox]:checked').length > 0) {
-    $('#filter-by-container button').show();
     $('#filter-tags').show();
   } else {
-    $('#filter-by-container button').hide(); 
     $('#filter-tags').hide();
   }
 
@@ -85,9 +96,16 @@ function clearFilter(event){
   $('#filter-by-container input[type=checkbox]').prop('checked',false);
   $('#filter-by-container button').hide();
   $('#filter-tags').hide();
-
   updateFilterTags();
 
+  $.ajax({
+    url: '/buddy_search_filter',
+    method: 'GET', 
+    data: {placeID: $('body').attr('rel')},
+  }).done(function(response){
+    $('#search-results-container').html(response);
+    $('.user').on('click', showUserProfile);
+  });
 }
 
 function updateFilterTags() {
@@ -100,13 +118,25 @@ function updateFilterTags() {
 function applyFilter(event){
   event.preventDefault();
 
+  var filterData = {};
+  filterData['placeID'] = $('body').attr('rel');
+
+  $('#filter-by-container input[type=checkbox]:checked').each(function(){
+
+    var groupName = $(this).attr('name');
+    var value = $(this).attr('value');
+
+    if (groupName in filterData) {
+      filterData[groupName].push(value);
+    } else {
+      filterData[groupName] = [value];
+    }
+  });
+
   $.ajax({
     url: '/buddy_search_filter',
     method: 'GET', 
-    data: {
-      category: 'food',
-      duration: 'long',
-    }
+    data: filterData,
   }).done(function(response){
     $('#search-results-container').html(response);
     $('.user').on('click', showUserProfile);
@@ -117,25 +147,6 @@ function showUserProfile(event){
   event.preventDefault();
   var userID = $(this).attr('rel');
   window.location = '/view_user/' + userID;
-}
-
-function loadFakeTestingData(){
-  var fakeData = {users:[{userID: "123", username: "user1", userImageURL: 'http://placekitten.com/g/150/150',
-  tripImages: [{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'}]},
-  {userID: "124", username: "user2", userImageURL: 'http://placekitten.com/g/150/150', 
-  tripImages: [{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'}]},
-  {userID: "125", username: "user3", userImageURL: 'http://placekitten.com/g/150/150',
-  tripImages: [{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'}]},
-  {userID: "126", username: "user4", userImageURL: 'http://placekitten.com/g/150/150',
-  tripImages: [{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'}]},
-  {userID: "127", username: "user5", userImageURL: 'http://placekitten.com/g/150/150',
-  tripImages: [{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'},{tripImageURL:'http://placekitten.com/g/150/150'}]},
-  ]};
-
-  var source = $("#hbtemplate").html();
-  var template = Handlebars.compile(source);
-
-  $('#search-results-container').append(template(fakeData));
 }
 
 $(document).ready(main);

@@ -3,20 +3,20 @@ var unlikeIconURL = "/images/unlike.png";
 
 var tripFilterGroups = {
   'Category': [
-    {title: 'Adventure', value: 'adventure'}, 
-    {title: 'Food', value: 'food'}, 
-    {title: 'Art', value: 'art'}, 
-    {title: 'History', value: 'history'}, 
+    {title: 'Adventure', value: 'Adventure'}, 
+    {title: 'Food', value: 'Food'}, 
+    {title: 'Art', value: 'Art'}, 
+    {title: 'History', value: 'History'}, 
   ],
   'Season': [
-  {title: 'Winter', value: 'winter'}, 
-  {title: 'Fall', value: 'fall'}, 
-  {title: 'Summer', value: 'summer'}, 
-  {title: 'Spring', value: 'spring'},
+  {title: 'Winter', value: 'Winter'}, 
+  {title: 'Fall', value: 'Fall'}, 
+  {title: 'Summer', value: 'Summer'}, 
+  {title: 'Spring', value: 'Spring'},
   ],
   'Duration': [
   {title: 'Day Trip', value: 'dayTrip'}, 
-  {title: 'Short(1~3 days)', value: 'shortTrip'}, 
+  {title: 'Short(2~3 days)', value: 'shortTrip'}, 
   {title: 'Medium(4~7 days)', value: 'mediumTrip'}, 
   {title: 'Long(8+ days)', value: 'longTrip'},
   ],
@@ -28,8 +28,6 @@ var tripFilterGroups = {
 }
 
 var main = function() {
-
-  //loadFakeTestingData();
 
   populateSearchBar(tripFilterGroups);
 
@@ -79,14 +77,29 @@ function populateSearchBar(filter){
     }
   }
 
+  $('form input[name="Duration"]:not(checked)').on('click', function(){
+    if ($('form input[name="Duration"]:checked').length > 1) {
+      $('form input[name="Duration"]').prop('checked',false);
+      $(this).prop('checked',true);
+    }
+  });
+
+  $('form input[name="Budget"]:not(checked)').on('click', function(){
+    if ($('form input[name="Budget"]:checked').length > 1) {
+      $('form input[name="Budget"]').prop('checked',false);
+      $(this).prop('checked',true);
+    }
+  });
+
   $('<ul>').attr('id','filter-tags').appendTo(filterForm);
   $('<button>').attr('id','apply-filter').text('Apply Filter').appendTo(filterForm);
   $('<button>').attr('id','clear-filter').text('Clear Filter').appendTo(filterForm);
 
-  $('#filter-by-container input[type=checkbox]').on('click',toggleFilterButtonTags);
+  $('#filter-by-container input[type=checkbox]').on('click',toggleFilterTags);
 
   $('#clear-filter').on('click',clearFilter);
   $('#apply-filter').on('click',applyFilter);
+
 }
 
 function addListenerToTrips(){
@@ -121,12 +134,10 @@ function expandFilterCriteria(event){
   $('#'+groupName+'-criteria-container').show();
 }
 
-function toggleFilterButtonTags(event){
+function toggleFilterTags(event){
   if ($('#filter-by-container input[type=checkbox]:checked').length > 0) {
-    $('#filter-by-container button').show();
     $('#filter-tags').show();
   } else {
-    $('#filter-by-container button').hide(); 
     $('#filter-tags').hide();
   }
 
@@ -138,8 +149,16 @@ function clearFilter(event){
   $('#filter-by-container input[type=checkbox]').prop('checked',false);
   $('#filter-by-container button').hide();
   $('#filter-tags').hide();
-
   updateFilterTags();
+
+  $.ajax({
+    url: '/tabi_search_filter',
+    method: 'GET', 
+    data: {placeID: $('body').attr('rel')},
+  }).done(function(response){
+    $('#search-results-container').html(response);
+    addListenerToTrips();
+  });
 
 }
 
@@ -154,6 +173,7 @@ function applyFilter(event){
   event.preventDefault();
 
   var filterData = {};
+  filterData['placeID'] = $('body').attr('rel');
 
   $('#filter-by-container input[type=checkbox]:checked').each(function(){
 
@@ -166,8 +186,6 @@ function applyFilter(event){
       filterData[groupName] = [value];
     }
   });
-
-  // console.log(filterData);
 
   $.ajax({
     url: '/tabi_search_filter',
@@ -210,8 +228,6 @@ function closePopupTrip(event){
 }
 
 function likeTrip (eventTarget, tripID) {
-  // console.log(tripID+' liked post req');
-
   $.ajax({
     url: '/like_trip',
     method: 'POST', 
@@ -219,20 +235,14 @@ function likeTrip (eventTarget, tripID) {
       trip_id: tripID,
     }
   }).done(function(response){
-    //db updates trip with like
-    
-    // eventTarget.attr('class','trip-unlike');
-    // eventTarget.attr('src',unlikeIconURL);
 
-    $('.trip-like[rel="'+tripID+'"]').attr('class','trip-unlike');
-    $('.trip-like[rel="'+tripID+'"]').attr('src',unlikeIconURL);
+    $('img[rel="'+tripID+'"]').attr('class','trip-unlike');
+    $('img[rel="'+tripID+'"]').attr('src',unlikeIconURL);
 
   });
 }
 
 function unlikeTrip (eventTarget,tripID) {
-  // console.log(tripID+' unliked post req');
-  
   $.ajax({
     url: '/unlike_trip',
     method: 'POST', 
@@ -240,28 +250,11 @@ function unlikeTrip (eventTarget,tripID) {
       trip_id: tripID,
     }
   }).done(function(response){
-    //db updates trip with unlike
 
-    // eventTarget.attr('class','trip-like');
-    // eventTarget.attr('src',likeIconURL);
-
-    $('.trip-unlike[rel="'+tripID+'"]').attr('class','trip-like');
-    $('.trip-unlike[rel="'+tripID+'"]').attr('src',likeIconURL);
+    $('img[rel="'+tripID+'"]').attr('class','trip-like');
+    $('img[rel="'+tripID+'"]').attr('src',likeIconURL);
 
   });
-}
-
-function loadFakeTestingData() {
-  var fakeData = {trips:[{tripID: "12345", userID: "123", tripTitle: "test1", username: "user1", description: "this is test description1", liked: true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12346", userID: "124", tripTitle: "test2", username: "user2", description: "this is test description2", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12347", userID: "125", tripTitle: "test3", username: "user3", description: "this is test description3", liked:false, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12348", userID: "126", tripTitle: "test4", username: "user4", description: "this is test description4", liked:true, imageURL:'http://placekitten.com/g/150/150'},
-  {tripID: "12349", userID: "127", tripTitle: "test5", username: "user5", description: "this is test description5", liked:true, imageURL:'http://placekitten.com/g/150/150'},]};
-
-  var source = $("#hbtemplate").html();
-  var template = Handlebars.compile(source);
-
-  $('#search-results-container').append(template(fakeData));
 }
 
 $(document).ready(main);

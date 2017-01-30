@@ -1,32 +1,134 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
   <head>
-    <title>{{ title }}</title>
-    <link rel='stylesheet' href='/stylesheets/base.css' />
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="/js/ajax.js"></script>
+    <meta charset="utf-8">
+    <title>tabibuddy | Create Trip</title>
+
+    <link rel='stylesheet' href="/stylesheets/top_bar_style.css" />
+    <style>
+      body {
+        margin: 0;
+      }
+      .invisible {
+        display: none;
+      }
+      #body-container {
+        display: inline-block;
+        margin-top: 50px;
+        width: 100%;
+        text-align: center;
+      } 
+    </style>
+
   </head>
   <body>
-    <h1 class="workshop-name">6.148 Day 4 MongoDB Workshop</h1>
-    <div class="content">
-      <h1>{{ title }} Form</h1>
 
+    {{> top_bar showSearchBar=showSearchBar loggedIn=loggedIn}}
 
-      <form name="add_trip_form" method="post" action="/add_trip">
-        <ul>
-          <li>Tabi Destination</li>
+    <div id="body-container">
 
-          <li><input type="text" placeholder="" name="user_id"></li>
-          <li><input type="text" placeholder="" name="title"></li>
-          <li><input type="text" placeholder="" name="description"></li>
+    <h1>Add Trip</h1>
+    <form name="add_trip_form" method="post" action="/add_trip" enctype="multipart/form-data">
+      <span>(*)Upload Photo: </span>
+      <input id="trip-image" type="file" name="trip_image" accept="image/png, image/jpeg"/>
+      <br><br>
+      <span>(*)Location: </span>
+      <input id="place-autocomplete" type="text" required>
+      <input id="place-name" type="text" name="destination_name" class="invisible">
+      <input id="place-id" type="text" name="destination_id" class="invisible">
+      <br><br>
+      <span>(*)Title: </span>
+      <input id="title-input" type="text" name="title" required>
+      <br><br>
+      <span>(*)Description: </span>
+      <input id="description-input" type="text" name="description" required>
+      <br><br>
+      <span>(*)Category: </span>
+      <input type="checkbox" name="category" value="Adventure">Adventure
+      <input type="checkbox" name="category" value="Food">Food
+      <input type="checkbox" name="category" value="Art">Art
+      <input type="checkbox" name="category" value="History">History
+<!--       <select id="category-input" name="category" form="add_trip_form" required>
+      <span>(*)Category: </span>
+      <select id="category-input" name="category" form="add_trip_form" required>
+        <option value="adventure">Adventure</option>
+        <option value="food">Food</option>
+        <option value="art">Art</option>
+        <option value="history">History</option>
+      </select> -->
+      <br><br>
+      <span>(*)Season: </span>
+      <input type="checkbox" name="season" value="Spring">Spring
+      <input type="checkbox" name="season" value="Summer">Summer
+      <input type="checkbox" name="season" value="Fall">Fall
+      <input type="checkbox" name="season" value="Winter">Winter
+<!--       <select id="season-input" name="season" form="add_trip_form">
+<span>(*)Season: </span>
+      <select id="season-input" name="season" form="add_trip_form" required>
+        <option value="spring">Spring</option>
+        <option value="summer">Summer</option>
+        <option value="fall">Fall</option>
+        <option value="winter">Winter</option>
+      </select> -->
+      <br><br>
+      <input id="duration-input" type="number" min="1" placeholder="(*)Duration" name="duration" required><span> day(s)</span>
+      <br><br>
+      <span>&#36;</span><input id="budget-input" type="number" min="0" placeholder="(*)Budget" name="budget" required>
+      <br><br>
+      <button id="save-trip" type="submit">Save</button>
+    </form>
 
-          <li><button type="submit">Explore!</button></li>
-        </ul>
-      </form>
-
-
-      <a href="/userlist">See userlist</a>
     </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/js/top_bar.js"></script>
+    <script type="text/javascript">
+      function initMap() {
+        var input = $('#place-autocomplete')[0];
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.setTypes(['(cities)']);
+
+        autocomplete.addListener('place_changed', function() {
+
+          var place = autocomplete.getPlace();
+          var placeID = place.place_id;
+          var placeName = place.formatted_address;
+
+          $('#place-id').val(placeID);
+          $('#place-name').val(placeName);
+        });
+      }
+
+      $(document).ready(function(){
+        $('form input').on('keypress', function(e) {
+          return e.which !== 13;
+        });
+        $('#save-trip').on('click', function(e) {
+          if ($('#duration-input').val() <= 0) {
+            alert("Trip length cannot be 0 day or shorter");
+            return false;
+          } else if ($('#budget-input').val() < 0) {
+            alert("Budget must be $0 or higher");
+            return false;
+          } else {
+            return $('#place-id').val().length > 0;
+          }
+        });
+        $('form input[name="category"]:not(checked)').on('click', function(){
+          if ($('form input[name="category"]:checked').length > 1) {
+            $('form input[name="category"]').prop('checked',false);
+            $(this).prop('checked',true);
+          }
+        });
+        $('form input[name="season"]:not(checked)').on('click', function(){
+          if ($('form input[name="season"]:checked').length > 1) {
+            $('form input[name="season"]').prop('checked',false);
+            $(this).prop('checked',true);
+          }
+        });
+      });
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8lG_CLlQVPpyRbKhHHUe0vZYjFnCPTNs&libraries=places&callback=initMap" async defer></script>
   </body>
 </html>
