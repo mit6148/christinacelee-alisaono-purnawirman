@@ -95,7 +95,7 @@ function populateSearchBar(filter){
   $('<button>').attr('id','apply-filter').text('Apply Filter').appendTo(filterForm);
   $('<button>').attr('id','clear-filter').text('Clear Filter').appendTo(filterForm);
 
-  $('#filter-by-container input[type=checkbox]').on('click',toggleFilterButtonTags);
+  $('#filter-by-container input[type=checkbox]').on('click',toggleFilterTags);
 
   $('#clear-filter').on('click',clearFilter);
   $('#apply-filter').on('click',applyFilter);
@@ -134,12 +134,10 @@ function expandFilterCriteria(event){
   $('#'+groupName+'-criteria-container').show();
 }
 
-function toggleFilterButtonTags(event){
+function toggleFilterTags(event){
   if ($('#filter-by-container input[type=checkbox]:checked').length > 0) {
-    $('#filter-by-container button').show();
     $('#filter-tags').show();
   } else {
-    $('#filter-by-container button').hide(); 
     $('#filter-tags').hide();
   }
 

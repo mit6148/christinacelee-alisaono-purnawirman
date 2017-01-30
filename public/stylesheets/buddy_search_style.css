@@ -28,7 +28,6 @@ body {
 }
 #filter-by-container button {
   margin: 10px;
-  display: none;
 }
 #filter-by-container ul {
   margin-top: 10px;
