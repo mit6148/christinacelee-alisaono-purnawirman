@@ -622,7 +622,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
     } else {
       var queryTrips = Trip.find({}).
                        where("tripID").in(user.userLikedTrips).
-                       select("tripID tripCreatorID tripName tripCreatorName tripDescription tripPhoto tripLikedUsers");
+                       select("tripID tripCreatorID tripName tripDestinationName tripCreatorName tripDescription tripPhoto tripLikedUsers");
       
       queryTrips.exec(function(err, trips){
         if(err) { 
@@ -645,6 +645,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
           var tripsList = {tripID: trips[i].tripID,
                             userID: trips[i].tripCreatorID,
                             tripTitle: trips[i].tripName,
+                            tripPlace: trips[i].tripDestinationName,
                             username: trips[i].tripCreatorName,
                             description: trips[i].tripDescription,
                             liked: tripLiked, 
