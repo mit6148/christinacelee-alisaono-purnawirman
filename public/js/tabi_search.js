@@ -241,8 +241,6 @@ function likeTrip (eventTarget, tripID) {
     }
   }).done(function(response){
 
-    console.log(response);
-
     if (response === '') {
       $('img[rel="'+tripID+'"]').attr('class','trip-unlike');
       $('img[rel="'+tripID+'"]').attr('src',unlikeIconURL);
