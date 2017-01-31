@@ -28,6 +28,28 @@ var tripFilterGroups = {
   ]    
 }
 
+
+function initMap() {
+  var tabiInput = $('#auto-completion')[0];
+  
+  var tabiAutocomplete = new google.maps.places.Autocomplete(tabiInput);
+
+  tabiAutocomplete.setTypes(['(cities)']);
+
+  tabiAutocomplete.addListener('place_changed', function() {
+
+    var place = tabiAutocomplete.getPlace();
+    var placeID = place.place_id;
+    var placeName = place.formatted_address;
+
+    $('#tabi-place-id').val(placeID);
+    $('#tabi-place-name').val(placeName);
+
+    $('#search-button').css('background-color', 'white').css('color','black');
+  });
+}
+
+
 var main = function() {
 
   populateSearchBar(tripFilterGroups);
@@ -57,6 +79,12 @@ var main = function() {
         break;
       default:
         break;
+    }
+  });
+
+  $('#search-button').on('click',function(event){
+    if ($('#tabi-place-id').val().length > 0) {
+      $('#new-search-form').submit();
     }
   });
 } 

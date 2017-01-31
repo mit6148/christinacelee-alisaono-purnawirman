@@ -303,7 +303,8 @@ router.get('/tabi_search', function(req, res, next) {
       }
 
       res.render('tabi_search', {placeID: placeID, placeName: placeName, 
-        trips: tabiList, showSearchBar: false, loggedIn: loggedIn, loggedInUser: loggedInUser});   
+        trips: tabiList, showSearchBar: true, isTabiSearch: true,
+        loggedIn: loggedIn, loggedInUser: loggedInUser});   
     })
   });
 });
@@ -456,7 +457,8 @@ router.get('/buddy_search', function(req, res, next) {
         }
       }
       res.render('buddy_search', {placeID: placeID, placeName: placeName, 
-        users: buddyList, showSearchBar: false, loggedIn: loggedIn, loggedInUser: loggedInUser});   
+        users: buddyList, showSearchBar: true, isTabiSearch: false, 
+        loggedIn: loggedIn, loggedInUser: loggedInUser});   
     })
   });
 });

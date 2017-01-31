@@ -16,7 +16,7 @@
   </head>
   <body rel="{{placeID}}">
 
-    {{> top_bar showSearchBar=showSearchBar loggedIn=loggedIn}}
+    {{> top_bar showSearchBar=showSearchBar loggedIn=loggedIn isTabiSearch=isTabiSearch}}
 
     <div class="background-container">
       <img src="/images/buddy-search-background.jpg">
@@ -45,6 +45,8 @@
       {{/each}}
 
     </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8lG_CLlQVPpyRbKhHHUe0vZYjFnCPTNs&libraries=places&callback=initMap" async defer></script>
 
   </body>
 </html>

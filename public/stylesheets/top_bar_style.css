@@ -6,6 +6,7 @@
   position: fixed;
   z-index: 1;
 }
+
 #logo-container {
   height: 50px;
   width: 200px;
@@ -20,12 +21,61 @@
   height: 100%;
   cursor: pointer;
 }
+
 #top-search-bar-container {
+  position: relative;
+  top: 0;
+  left: 0;
   height: 50px;
-  width: 50%;
-  background-color: yellow;
+  width: 40%;
   display: inline-block;
 }
+#search-icon-container {
+  position: absolute;
+  left: 0;
+  height: 40px;
+  width: 10%;
+  margin-top: 5px;
+  background-color: #34495e;
+  text-align: center;
+  border-radius: 5px 0 0 5px;
+}
+#search-icon-container img {
+  width: 40px;
+  height: 40px;
+}
+#auto-completion {
+  position: absolute;
+  left: 10%;
+  height: 40px;
+  width: 66%;
+  margin-top: 5px;
+  padding: 0 2% 0 2%;
+  border-width: 0;
+  background-color: #7f8c8d;
+  color: white;
+  font-size: 2.2vw;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.invisible {
+  display: none;
+}
+#search-button {
+  position: absolute;
+  left: 80%;
+  height: 40px;
+  line-height: 40px;
+  width: 20%;
+  margin-top: 5px;
+  background-color: #34495e;
+  text-align: center;
+  color: #7f8c8d;
+  font-size: 2.2vw;
+  cursor: pointer;
+  border-radius: 0 5px 5px 0;
+}
+
 #user-hello {
   height: 50px;
   position: absolute;
