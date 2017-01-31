@@ -265,56 +265,61 @@ router.get('/tabi_search', function(req, res, next) {
     }
 
     if (foundDestination !== null) {
-    
       tabies = foundDestination["tabies"];
+    }
 
-      var tabiList = [];
-      var query = Trip.
-                  find({}).
-                  where("tripID").in(tabies).
-                  select("tripID tripActive tripCreatorID tripName tripCreatorName tripDescription tripPhoto tripLikedUsers");
-      
-      query.exec(function(err, trips){
-        if (err) {
-          console.log("Error in finding trips");
-          res.render('error',{message: "Error 500 - Internal Server Error"});
-          return;
-        }
+    var tabiList = [];
+    var query = Trip.
+                find({}).
+                where("tripID").in(tabies).
+                select("tripID tripActive tripCreatorID tripName tripCreatorName tripDescription tripPhoto tripLikedUsers");
+    
+    query.exec(function(err, trips){
+      if (err) {
+        console.log("Error in finding trips");
+        res.render('error',{message: "Error 500 - Internal Server Error"});
+        return;
+      }
 
-        if(trips !== null){
-          for(var k = 0; k < trips.length; k++){
+      if(trips !== null){
+        for(var k = 0; k < trips.length; k++){
 
-            // Check if the logged-in user has liked the trip
-            var tripLikedUsers = trips[k].tripLikedUsers;
-            var tripLiked = tripLikedUsers.some(function(tripUser){
-              return tripUser === loggedUserID;
+          // Check if the logged-in user has liked the trip
+          var tripLikedUsers = trips[k].tripLikedUsers;
+          var tripLiked = tripLikedUsers.some(function(tripUser){
+            return tripUser === loggedUserID;
+          });
+
+          if (trips[k].tripActive && trips[k].tripCreatorID !== loggedUserID) {
+            tabiList.push({tripID: trips[k].tripID,
+                            userID: trips[k].tripCreatorID,
+                            tripTitle: trips[k].tripName,
+                            username: trips[k].tripCreatorName,
+                            description: trips[k].tripDescription,
+                            liked: tripLiked,
+                            imageURL: trips[k].tripPhoto
             });
-
-            if (trips[k].tripActive && trips[k].tripCreatorID !== loggedUserID) {
-              tabiList.push({tripID: trips[k].tripID,
-                              userID: trips[k].tripCreatorID,
-                              tripTitle: trips[k].tripName,
-                              username: trips[k].tripCreatorName,
-                              description: trips[k].tripDescription,
-                              liked: tripLiked,
-                              imageURL: trips[k].tripPhoto
-              });
-            }
           }
         }
+      }
 
+      if (tripList.length > 0) {
         res.render('tabi_search', {placeID: placeID, placeName: placeName, 
           noTrips: false, trips: tabiList, showSearchBar: true, isTabiSearch: true,
           loggedIn: loggedIn, loggedInUser: loggedInUser});   
-      });
+      } else {
+        suggestionList = [{placeID:'123',placeName:'NYC'}];
 
-    } else {
-      suggestionList = [{placeID:'123',placeName:'NYC'}];
+        res.render('tabi_search', {placeID: placeID, placeName: placeName,
+          noTrips: true, suggestions: suggestionList, 
+          trips: [], showSearchBar: true, isTabiSearch: true,
+          loggedIn: loggedIn, loggedInUser: loggedInUser});
 
-          res.render('tabi_search', {placeID: placeID, placeName: placeName,
-            noTrips: true, suggestions: suggestionList, 
-            trips: [], showSearchBar: true, isTabiSearch: true,
-            loggedIn: loggedIn, loggedInUser: loggedInUser});
+      }
+    });
+
+    // } else {
+
 
       // Destination.aggregate(
       //   [{ "$project": {
@@ -343,7 +348,7 @@ router.get('/tabi_search', function(req, res, next) {
       //       trips: [], showSearchBar: true, isTabiSearch: true,
       //       loggedIn: loggedIn, loggedInUser: loggedInUser});
       // });
-    }
+    // }
   });
 });
 
