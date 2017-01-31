@@ -303,20 +303,20 @@ router.get('/tabi_search', function(req, res, next) {
         }
       }
 
-      // if (tripList.length > 0) {
+      if (tabiList.length > 0) {
         res.render('tabi_search', {placeID: placeID, placeName: placeName, 
-          noTrips: true, trips: tabiList, showSearchBar: true, isTabiSearch: true,
+          noTrips: false, trips: tabiList, showSearchBar: true, isTabiSearch: true,
           loggedIn: loggedIn, loggedInUser: loggedInUser});
 
-      // } else {
-      //   suggestionList = [{placeID:'123',placeName:'NYC'}];
+      } else {
+        // suggestionList = [{placeID:'123',placeName:'NYC'}];
 
-      //   res.render('tabi_search', {placeID: placeID, placeName: placeName,
-      //     noTrips: true, suggestions: suggestionList, 
-      //     trips: [], showSearchBar: true, isTabiSearch: true,
-      //     loggedIn: loggedIn, loggedInUser: loggedInUser});
+        res.render('tabi_search', {placeID: placeID, placeName: placeName,
+          noTrips: true,  
+          trips: [], showSearchBar: true, isTabiSearch: true,
+          loggedIn: loggedIn, loggedInUser: loggedInUser});
 
-      // }
+      }
     });
 
     // } else {
