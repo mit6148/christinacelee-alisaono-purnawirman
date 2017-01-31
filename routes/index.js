@@ -309,13 +309,12 @@ router.get('/tabi_search', function(req, res, next) {
           loggedIn: loggedIn, loggedInUser: loggedInUser});
 
       } else {
-        // suggestionList = [{placeID:'123',placeName:'NYC'}];
+        suggestionList = [{placeID:'123',placeName:'NYC'}];
 
         res.render('tabi_search', {placeID: placeID, placeName: placeName,
-          noTrips: true,  
+          noTrips: true, suggestions: suggestionList,
           trips: [], showSearchBar: true, isTabiSearch: true,
           loggedIn: loggedIn, loggedInUser: loggedInUser});
-
       }
     });
 
