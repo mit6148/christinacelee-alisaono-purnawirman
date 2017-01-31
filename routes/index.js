@@ -311,33 +311,38 @@ router.get('/tabi_search', function(req, res, next) {
     } else {
       suggestionList = [];
 
-      Destination.aggregate(
-        [{ "$project": {
-            "destinationID": 1,
-            "destinationName": 1,
-            "tabies": 1,
-            "length": {"$size": "$tabies"}
-        }},
-        { "$sort": { "length": -1 } },
-        { "$limit": 5 }
-        ],
-
-        function(err,results) {
-          if (err) {
-            console.log("Error in finding destinations");
-            res.render('error',{message: "Error 500 - Internal Server Error"});
-          }
-
-          for (var i=0; i<results.length; i++) {
-            suggestionList.push({ placeName: results[i].destinationName,
-                                  placeID: results[i].destinationID });
-          }
-          
           res.render('tabi_search', {placeID: placeID, placeName: placeName,
             noTrips: true, suggestions: suggestionList, 
             trips: [], showSearchBar: true, isTabiSearch: true,
             loggedIn: loggedIn, loggedInUser: loggedInUser});
-      });
+
+      // Destination.aggregate(
+      //   [{ "$project": {
+      //       "destinationID": 1,
+      //       "destinationName": 1,
+      //       "tabies": 1,
+      //       "length": {"$size": "$tabies"}
+      //   }},
+      //   { "$sort": { "length": -1 } },
+      //   { "$limit": 5 }
+      //   ],
+
+      //   function(err,results) {
+      //     if (err) {
+      //       console.log("Error in finding destinations");
+      //       res.render('error',{message: "Error 500 - Internal Server Error"});
+      //     }
+
+      //     for (var i=0; i<results.length; i++) {
+      //       suggestionList.push({ placeName: results[i].destinationName,
+      //                             placeID: results[i].destinationID });
+      //     }
+          
+      //     res.render('tabi_search', {placeID: placeID, placeName: placeName,
+      //       noTrips: true, suggestions: suggestionList, 
+      //       trips: [], showSearchBar: true, isTabiSearch: true,
+      //       loggedIn: loggedIn, loggedInUser: loggedInUser});
+      // });
     }
   });
 });
