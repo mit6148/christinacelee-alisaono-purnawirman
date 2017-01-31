@@ -309,48 +309,17 @@ router.get('/tabi_search', function(req, res, next) {
           loggedIn: loggedIn, loggedInUser: loggedInUser});
 
       } else {
-        // suggestionList = [{placeID:'123',placeName:'NYC'}];
 
-      Destination.aggregate(
-        [{ "$project": {
-            "destinationID": 1,
-            "destinationName": 1,
-            "tabies": 1,
-            "length": {"$size": "$tabies"}
-        }},
-        { "$sort": { "length": -1 } },
-        { "$limit": 5 }
-        ],
+        suggestionList = [{placeID:"ChIJOwg_06VPwokRYv534QaPC8g",placeName:"New York, NY, USA"},
+                          {placeID:"ChIJTUbDjDsYAHwRbJen81_1KEs",placeName: "Honolulu, HI, USA"},
+                          {placeID:"ChIJByjqov3-AzQR2pT0dDW0bUg",placeName: "Hong Kong"},];
 
-        function(err,results) {
-          if (err) {
-            console.log("Error in finding destinations");
-            res.render('error',{message: "Error 500 - Internal Server Error"});
-          }
-
-          suggestionList = [];
-
-          for (var i=0; i<results.length; i++) {
-            suggestionList.push({ placeName: results[i].destinationName,
-                                  placeID: results[i].destinationID });
-          }
-          
-          res.render('tabi_search', {placeID: placeID, placeName: placeName,
-            noTrips: false, suggestions: suggestionList, 
-            trips: [], showSearchBar: true, isTabiSearch: true,
-            loggedIn: loggedIn, loggedInUser: loggedInUser});
-      });
-
-
-        // res.render('tabi_search', {placeID: placeID, placeName: placeName,
-        //   noTrips: true, suggestions: suggestionList,
-        //   trips: [], showSearchBar: true, isTabiSearch: true,
-        //   loggedIn: loggedIn, loggedInUser: loggedInUser});
+        res.render('tabi_search', {placeID: placeID, placeName: placeName,
+          noTrips: true, suggestions: suggestionList, 
+          trips: [], showSearchBar: true, isTabiSearch: true,
+          loggedIn: loggedIn, loggedInUser: loggedInUser});
       }
     });
-
-    // } else {
-
 
       // Destination.aggregate(
       //   [{ "$project": {
@@ -379,7 +348,6 @@ router.get('/tabi_search', function(req, res, next) {
       //       trips: [], showSearchBar: true, isTabiSearch: true,
       //       loggedIn: loggedIn, loggedInUser: loggedInUser});
       // });
-    // }
   });
 });
 
@@ -504,68 +472,80 @@ router.get('/buddy_search', function(req, res, next) {
 
     if(foundDestination !== null){
       buddies = foundDestination["buddies"];
-    
-      var buddyList = [];
-      var query = User.
-                  find({}).
-                  where("userID").in(buddies).
-                  select("userID userName userPhoto");
-
-      query.exec(function(err, users){
-        if (err) { 
-          console.log("Error in finding users");
-          res.render('error',{message: "Error 500 - Internal Server Error"});
-        }
-
-        if (users !== null) {
-          for(var k = 0; k < users.length; k++){
-            // Don't show the logged-in user itself
-            if (users[k].userID !== loggedUserID) {
-              buddyList.push({userID: users[k].userID,
-                              username: users[k].userName,
-                              userImageURL: users[k].userPhoto,
-                              tripImages: []
-              }); 
-            }
-          }
-        }
-        res.render('buddy_search', {placeID: placeID, placeName: placeName, 
-          users: buddyList, showSearchBar: true, isTabiSearch: false, 
-          loggedIn: loggedIn, loggedInUser: loggedInUser});   
-      });
-
-    } else {
-
-      suggestionList = [];
-
-      Destination.aggregate(
-        [{ "$project": {
-            "destinationID": 1,
-            "destinationName": 1,
-            "buddies": 1,
-            "length": {"$size": "$buddies"}
-        }},
-        { "$sort": { "length": -1 } },
-        { "$limit": 5 }
-        ],
-
-        function(err,results) {
-          if (err) {
-            console.log("Error in finding destinations");
-            res.render('error',{message: "Error 500 - Internal Server Error"});
-          }
-
-          for (var i=0; i<results.length; i++) {
-            suggestionList.push({ placeName: results[i].destinationName,
-                                  placeID: results[i].destinationID });
-          }
-          
-          res.render('buddy_search', {placeID: placeID, placeName: placeName,
-            noBuddies: true, suggestions: suggestionList, 
-            users: [], showSearchBar: true, isTabiSearch: true,
-            loggedIn: loggedIn, loggedInUser: loggedInUser});
-      });
     }
+    
+    var buddyList = [];
+    var query = User.
+                find({}).
+                where("userID").in(buddies).
+                select("userID userName userPhoto");
+
+    query.exec(function(err, users){
+      if (err) { 
+        console.log("Error in finding users");
+        res.render('error',{message: "Error 500 - Internal Server Error"});
+      }
+
+      if (users !== null) {
+        for(var k = 0; k < users.length; k++){
+          // Don't show the logged-in user itself
+          if (users[k].userID !== loggedUserID) {
+            buddyList.push({userID: users[k].userID,
+                            username: users[k].userName,
+                            userImageURL: users[k].userPhoto,
+                            tripImages: []
+            }); 
+          }
+        }
+      }
+
+      if (buddyList.length > 0) {
+        res.render('buddy_search', {placeID: placeID, placeName: placeName, 
+        noBuddies: false, users: buddyList, showSearchBar: true, isTabiSearch: false, 
+        loggedIn: loggedIn, loggedInUser: loggedInUser}); 
+
+      } else {
+
+        suggestionList = [{placeID:"ChIJOwg_06VPwokRYv534QaPC8g",placeName:"New York, NY, USA"},
+                          {placeID:"ChIJTUbDjDsYAHwRbJen81_1KEs",placeName: "Honolulu, HI, USA"},
+                          {placeID:"ChIJByjqov3-AzQR2pT0dDW0bUg",placeName: "Hong Kong"},];
+
+        res.render('tabi_search', {placeID: placeID, placeName: placeName,
+          noBuddies: true, suggestions: suggestionList, 
+          trips: [], showSearchBar: true, isTabiSearch: false,
+          loggedIn: loggedIn, loggedInUser: loggedInUser});
+      }
+    });
+
+      // suggestionList = [];
+
+      // Destination.aggregate(
+      //   [{ "$project": {
+      //       "destinationID": 1,
+      //       "destinationName": 1,
+      //       "buddies": 1,
+      //       "length": {"$size": "$buddies"}
+      //   }},
+      //   { "$sort": { "length": -1 } },
+      //   { "$limit": 5 }
+      //   ],
+
+      //   function(err,results) {
+      //     if (err) {
+      //       console.log("Error in finding destinations");
+      //       res.render('error',{message: "Error 500 - Internal Server Error"});
+      //     }
+
+      //     for (var i=0; i<results.length; i++) {
+      //       suggestionList.push({ placeName: results[i].destinationName,
+      //                             placeID: results[i].destinationID });
+      //     }
+          
+      //     res.render('buddy_search', {placeID: placeID, placeName: placeName,
+      //       noBuddies: true, suggestions: suggestionList, 
+      //       users: [], showSearchBar: true, isTabiSearch: true,
+      //       loggedIn: loggedIn, loggedInUser: loggedInUser});
+      // });
   });
 });
 
