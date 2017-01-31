@@ -336,7 +336,7 @@ router.get('/tabi_search', function(req, res, next) {
           }
           
           res.render('tabi_search', {placeID: placeID, placeName: placeName,
-            noTrips: true, suggestions: suggestionList, 
+            noTrips: false, suggestions: suggestionList, 
             trips: [], showSearchBar: true, isTabiSearch: true,
             loggedIn: loggedIn, loggedInUser: loggedInUser});
       });
