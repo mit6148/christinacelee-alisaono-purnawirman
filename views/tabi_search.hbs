@@ -47,18 +47,17 @@
             </div>
           </div>
         {{/each}}
-<!-- 
-        {{#if noTrips}} -->
+
           <div id="suggestion-container">
             <p>There are no trips to show for this location yet.</p>
             <p>Still looking for trip inspirations?</p>
             <p>Try our most popular destinations:</p>
-            <p>
+<!--             <p>
               {{#each suggestions}}
                   <label class="suggestion-place" rel="{{placeID}}"><u>{{placeName}}</u></label>
                 <br>
               {{/each}}
-            </p>
+            </p> -->
           </div>
           
           <form method="get" action="/tabi_search" id="suggestion-search-form" class="invisible">
@@ -67,7 +66,6 @@
           </form>
 
           <div id="suggestion-background"></div>
-<!--         {{/if}} -->
 
     </div>
 
