@@ -55,6 +55,14 @@ var main = function() {
       $('#new-search-form').submit();
     }
   });
+
+  $('.suggestion-place').on('click',function(event){
+    var placeID = $(this).attr('rel');
+    var placeName = $(this).text();
+    $('#suggested-place-id').val(placeID);
+    $('#suggested-place-name').val(placeName);
+    $('#suggestion-search-form').submit();
+  });
 }
 
 function populateSearchBar(filter){

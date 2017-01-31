@@ -48,6 +48,27 @@
           </div>
         {{/each}}
 
+        {{#if noTrips}}
+          <div id="suggestion-container">
+            <p>There are no trips to show for this location yet.</p>
+            <p>Still looking for trip inspirations?</p>
+            <p>Try our most popular destinations:</p>
+            <p>
+              {{#each suggestions}}
+                  <label class="suggestion-place" rel="{{placeID}}"><u>{{placeName}}</u></label>
+                <br>
+              {{/each}}
+            </p>
+          </div>
+          
+          <form method="get" action="/tabi_search" id="suggestion-search-form" class="invisible">
+            <input id="suggested-place-name" type="text" name="tabi_destination_name">
+            <input id="suggested-place-id" type="text" name="tabi_destination_id">
+          </form>
+
+          <div id="suggestion-background"></div>
+        {{/if}}
+
     </div>
 
     <div id="trip-popup-container" class="popup-inactive">

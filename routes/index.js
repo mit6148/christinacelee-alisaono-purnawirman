@@ -264,48 +264,81 @@ router.get('/tabi_search', function(req, res, next) {
       return;
     }
 
-    if(foundDestination !== null){
-      tabies = foundDestination["tabies"];
-    }
-
-    var tabiList = [];
-    var query = Trip.
-                find({}).
-                where("tripID").in(tabies).
-                select("tripID tripActive tripCreatorID tripName tripCreatorName tripDescription tripPhoto tripLikedUsers");
+    if (foundDestination !== null) {
     
-    query.exec(function(err, trips){
-      if (err) {
-        console.log("Error in finding trips");
-        res.render('error',{message: "Error 500 - Internal Server Error"});
-      }
+      tabies = foundDestination["tabies"];
 
-      if(trips !== null){
-        for(var k = 0; k < trips.length; k++){
+      var tabiList = [];
+      var query = Trip.
+                  find({}).
+                  where("tripID").in(tabies).
+                  select("tripID tripActive tripCreatorID tripName tripCreatorName tripDescription tripPhoto tripLikedUsers");
+      
+      query.exec(function(err, trips){
+        if (err) {
+          console.log("Error in finding trips");
+          res.render('error',{message: "Error 500 - Internal Server Error"});
+          return;
+        }
 
-          // Check if the logged-in user has liked the trip
-          var tripLikedUsers = trips[k].tripLikedUsers;
-          var tripLiked = tripLikedUsers.some(function(tripUser){
-            return tripUser === loggedUserID;
-          });
+        if(trips !== null){
+          for(var k = 0; k < trips.length; k++){
 
-          if (trips[k].tripActive && trips[k].tripCreatorID !== loggedUserID) {
-            tabiList.push({tripID: trips[k].tripID,
-                            userID: trips[k].tripCreatorID,
-                            tripTitle: trips[k].tripName,
-                            username: trips[k].tripCreatorName,
-                            description: trips[k].tripDescription,
-                            liked: tripLiked,
-                            imageURL: trips[k].tripPhoto
+            // Check if the logged-in user has liked the trip
+            var tripLikedUsers = trips[k].tripLikedUsers;
+            var tripLiked = tripLikedUsers.some(function(tripUser){
+              return tripUser === loggedUserID;
             });
+
+            if (trips[k].tripActive && trips[k].tripCreatorID !== loggedUserID) {
+              tabiList.push({tripID: trips[k].tripID,
+                              userID: trips[k].tripCreatorID,
+                              tripTitle: trips[k].tripName,
+                              username: trips[k].tripCreatorName,
+                              description: trips[k].tripDescription,
+                              liked: tripLiked,
+                              imageURL: trips[k].tripPhoto
+              });
+            }
           }
         }
-      }
 
-      res.render('tabi_search', {placeID: placeID, placeName: placeName, 
-        trips: tabiList, showSearchBar: true, isTabiSearch: true,
-        loggedIn: loggedIn, loggedInUser: loggedInUser});   
-    })
+        res.render('tabi_search', {placeID: placeID, placeName: placeName, 
+          noTrips: false, trips: tabiList, showSearchBar: true, isTabiSearch: true,
+          loggedIn: loggedIn, loggedInUser: loggedInUser});   
+      });
+
+    } else {
+      suggestionList = [];
+
+      Destination.aggregate(
+        [{ "$project": {
+            "destinationID": 1,
+            "destinationName": 1,
+            "tabies": 1,
+            "length": {"$size": "$tabies"}
+        }},
+        { "$sort": { "length": -1 } },
+        { "$limit": 5 }
+        ],
+
+        function(err,results) {
+          if (err) {
+            console.log("Error in finding destinations");
+            res.render('error',{message: "Error 500 - Internal Server Error"});
+          }
+
+          for (var i=0; i<results.length; i++) {
+            suggestionList.push({ placeName: results[i].destinationName,
+                                  placeID: results[i].destinationID });
+          }
+          
+          res.render('tabi_search', {placeID: placeID, placeName: placeName,
+            noTrips: true, suggestions: suggestionList, 
+            trips: [], showSearchBar: true, isTabiSearch: true,
+            loggedIn: loggedIn, loggedInUser: loggedInUser});
+      });
+    }
   });
 });
 
@@ -430,36 +463,68 @@ router.get('/buddy_search', function(req, res, next) {
 
     if(foundDestination !== null){
       buddies = foundDestination["buddies"];
-    }
+    
+      var buddyList = [];
+      var query = User.
+                  find({}).
+                  where("userID").in(buddies).
+                  select("userID userName userPhoto");
 
-    var buddyList = [];
-    var query = User.
-                find({}).
-                where("userID").in(buddies).
-                select("userID userName userPhoto");
+      query.exec(function(err, users){
+        if (err) { 
+          console.log("Error in finding users");
+          res.render('error',{message: "Error 500 - Internal Server Error"});
+        }
 
-    query.exec(function(err, users){
-      if (err) { 
-        console.log("Error in finding users");
-        res.render('error',{message: "Error 500 - Internal Server Error"});
-      }
-
-      if (users !== null) {
-        for(var k = 0; k < users.length; k++){
-          // Don't show the logged-in user itself
-          if (users[k].userID !== loggedUserID) {
-            buddyList.push({userID: users[k].userID,
-                            username: users[k].userName,
-                            userImageURL: users[k].userPhoto,
-                            tripImages: []
-            }); 
+        if (users !== null) {
+          for(var k = 0; k < users.length; k++){
+            // Don't show the logged-in user itself
+            if (users[k].userID !== loggedUserID) {
+              buddyList.push({userID: users[k].userID,
+                              username: users[k].userName,
+                              userImageURL: users[k].userPhoto,
+                              tripImages: []
+              }); 
+            }
           }
         }
-      }
-      res.render('buddy_search', {placeID: placeID, placeName: placeName, 
-        users: buddyList, showSearchBar: true, isTabiSearch: false, 
-        loggedIn: loggedIn, loggedInUser: loggedInUser});   
-    })
+        res.render('buddy_search', {placeID: placeID, placeName: placeName, 
+          users: buddyList, showSearchBar: true, isTabiSearch: false, 
+          loggedIn: loggedIn, loggedInUser: loggedInUser});   
+      });
+
+    } else {
+
+      suggestionList = [];
+
+      Destination.aggregate(
+        [{ "$project": {
+            "destinationID": 1,
+            "destinationName": 1,
+            "buddies": 1,
+            "length": {"$size": "$buddies"}
+        }},
+        { "$sort": { "length": -1 } },
+        { "$limit": 5 }
+        ],
+
+        function(err,results) {
+          if (err) {
+            console.log("Error in finding destinations");
+            res.render('error',{message: "Error 500 - Internal Server Error"});
+          }
+
+          for (var i=0; i<results.length; i++) {
+            suggestionList.push({ placeName: results[i].destinationName,
+                                  placeID: results[i].destinationID });
+          }
+          
+          res.render('buddy_search', {placeID: placeID, placeName: placeName,
+            noBuddies: true, suggestions: suggestionList, 
+            users: [], showSearchBar: true, isTabiSearch: true,
+            loggedIn: loggedIn, loggedInUser: loggedInUser});
+      });
+    }
   });
 });
 

@@ -44,6 +44,27 @@
         </div>
       {{/each}}
 
+      {{#if noBuddies}}
+        <div id="suggestion-container">
+          <p>There are no users to show for this location yet.</p>
+          <p>Still looking for travel buddies?</p>
+          <p>Try our most popular destinations:</p>
+          <p>
+            {{#each suggestions}}
+                <label class="suggestion-place" rel="{{placeID}}"><u>{{placeName}}</u></label>
+              <br>
+            {{/each}}
+          </p>
+        </div>
+        
+        <form method="get" action="/buddy_search" id="suggestion-search-form" class="invisible">
+          <input id="suggested-place-name" type="text" name="buddy_destination_name">
+          <input id="suggested-place-id" type="text" name="buddy_destination_id">
+        </form>
+
+        <div id="suggestion-background"></div>
+      {{/if}}
+
     </div>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8lG_CLlQVPpyRbKhHHUe0vZYjFnCPTNs&libraries=places&callback=initMap" async defer></script>
