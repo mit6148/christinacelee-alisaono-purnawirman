@@ -311,6 +311,7 @@ router.get('/tabi_search', function(req, res, next) {
       } else {
 
         suggestionList = [{placeID:"ChIJOwg_06VPwokRYv534QaPC8g",placeName:"New York, NY, USA"},
+                          {placeID:"ChIJX8wwy6Vw44kRh2xoiWSOOsU", placeName:"Cambridge, MA, USA"},
                           {placeID:"ChIJTUbDjDsYAHwRbJen81_1KEs",placeName: "Honolulu, HI, USA"},
                           {placeID:"ChIJByjqov3-AzQR2pT0dDW0bUg",placeName: "Hong Kong"},];
 
@@ -507,6 +508,7 @@ router.get('/buddy_search', function(req, res, next) {
       } else {
 
         suggestionList = [{placeID:"ChIJOwg_06VPwokRYv534QaPC8g",placeName:"New York, NY, USA"},
+                          {placeID:"ChIJX8wwy6Vw44kRh2xoiWSOOsU", placeName:"Cambridge, MA, USA"},
                           {placeID:"ChIJTUbDjDsYAHwRbJen81_1KEs",placeName: "Honolulu, HI, USA"},
                           {placeID:"ChIJByjqov3-AzQR2pT0dDW0bUg",placeName: "Hong Kong"},];
 
