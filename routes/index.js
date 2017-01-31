@@ -783,13 +783,9 @@ router.post('/edit_profile_photo/:user_id', function(req, res, next) {
 
   } 
 
-  console.log(userID);
-
   var form = new formidable.IncomingForm();
 
   form.on('file', function(field, file) {
-    console.log(field);
-    console.log(file);
     cloudinary.uploader.upload(
       file.path, 
       function(result) {

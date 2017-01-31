@@ -1,10 +1,10 @@
 
 body {
   margin: 0;
-  /*
+  
   font-family: 'Raleway', sans-serif;
-  */
-  font: 300 16px/22px "Lato", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  
+  /*font: 300 16px/22px "Lato", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;*/
 }
 .invisible {
   display: none;
@@ -34,7 +34,7 @@ body {
 
 .hero {
   line-height: 44px;
-  padding: 22px 80px 44px 80px;
+  padding: 0 80px 44px 80px;
   text-align: center;
   cursor: default;
 }

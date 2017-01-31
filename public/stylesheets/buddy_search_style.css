@@ -103,7 +103,7 @@ body {
   padding: 10px;
   border: 3px solid #95a5a6;
   border-radius: 10px;
-  background-color: white;
+  background-color: #efefef;
   cursor: pointer;
 }
 .username-container {
@@ -116,7 +116,7 @@ body {
   margin-top: 0;
   margin-bottom: 0;
   font-size: 2.5vw;
-  color: #2c3e50;
+  color: #34495e;
   text-align: left;
   text-overflow: ellipsis;
   display: block;

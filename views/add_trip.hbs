@@ -7,93 +7,11 @@
 
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,500,500i,600,800" rel="stylesheet">
     <link rel='stylesheet' href="/stylesheets/top_bar_style.css" />
-    <style>
-      body {
-        margin: 0;
-        font-family: 'Raleway', sans-serif;
-      }
-      .invisible {
-        display: none;
-      }
+    <link rel='stylesheet' href="/stylesheets/add_trip_style.css" />
 
-      .background-container {
-        position: fixed;
-        top: 50px;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        text-align: center;
-        vertical-align: center;
-      }
-      .background-container img {
-        width: 100%;
-        height: 100%;
-      }
-
-      #add-trip-container {
-        position: relative;
-        top: 100px;
-        width: 100%;
-        margin-bottom: 50px;
-      } 
-      #add-trip-content {
-        width: 40%;
-        margin-left: 30%;
-        padding: 30px 0 50px 0;
-        word-wrap: break-word;
-      }
-      #add-trip-content h1 {
-        font-size: 2.5vw;
-        color: white;
-        text-align: center;
-      }
-      #add-trip-content form {
-        text-align: left;
-        margin-left: 10%;
-        padding: 0;
-        color: #bdc3c7;
-      }
-      .form-title {
-        width: 29%;
-        padding-left: 1%;
-        display: inline-block;
-        background-color: #7f8c8d;
-        color: white;
-      }
-      #place-autocomplete, #title-input, #descripion-input {
-        width: 60%;
-        vertical-align: top;
-      }
-      #duration-input, #budget-input {
-        width: 20%;
-        vertical-align: top;
-      }
-      #save-trip {
-        width: 20%;
-        padding: 5px;
-        margin-left: 40%;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        border-radius: 2px;
-        background-color: #1abc9c;
-        color: white;
-        text-align: center;
-        cursor: pointer;
-      }
-
-      #add-trip-form-background {
-        position: absolute;
-        top: 0;
-        left: 30%;
-        bottom: 0;
-        width: 40%;
-        height: 100%;
-        border-radius: 10px;
-        background-color: #2c3e50;
-        opacity: 0.9;
-        z-index: -1;
-      }
-    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/js/top_bar.js"></script>
+    <script src="/js/add_trip.js"></script>
 
   </head>
   <body>
@@ -109,36 +27,36 @@
       <div id="add-trip-content">
         <h1>Add Trip</h1>
         <form name="add_trip_form" method="post" action="/add_trip" enctype="multipart/form-data">
-          <div class="form-title">(*)Upload Photo: </div>
+          <div class="form-title">Upload Photo: </div>
           <input id="trip-image" type="file" name="trip_image" accept="image/png, image/jpeg"/>
           <br><br>
-          <div class="form-title">(*)Location: </div>
+          <div class="form-title">Location: </div>
           <input id="place-autocomplete" type="text" required>
           <input id="place-name" type="text" name="destination_name" class="invisible">
           <input id="place-id" type="text" name="destination_id" class="invisible">
           <br><br>
-          <div class="form-title">(*)Title: </div>
+          <div class="form-title">Title: </div>
           <input id="title-input" type="text" name="title" placeholder="Enter a title" required>
           <br><br>
-          <div class="form-title">(*)Description: </div>
+          <div class="form-title">Description: </div>
           <textarea id="descripion-input" form="edit_trip_form" name="description" placeholder="Enter a description" required></textarea>
           <br><br>
-          <div class="form-title">(*)Category: </div>
+          <div class="form-title">Category: </div>
           <input type="checkbox" name="category" value="Adventure"><span id="category-Adventure" class="category-choices">Adventure</span>
           <input type="checkbox" name="category" value="Food"><span id="category-Food" class="category-choices">Food</span>
           <input type="checkbox" name="category" value="Art"><span id="category-Art" class="category-choices">Art</span>
           <input type="checkbox" name="category" value="History"><span id="category-History" class="category-choices">History</span>
           <br><br>
-          <div class="form-title">(*)Season: </div>
+          <div class="form-title">Season: </div>
           <input type="checkbox" name="season" value="Spring"><span id="season-Spring" class="season-choices">Spring</span>
           <input type="checkbox" name="season" value="Summer"><span id="season-Summer" class="season-choices">Summer</span>
           <input type="checkbox" name="season" value="Fall"><span id="season-Fall" class="season-choices">Fall</span>
           <input type="checkbox" name="season" value="Winter"><span id="season-Winter" class="season-choices">Winter</span>
           <br><br>
-          <div class="form-title">(*)Duration: </div>
+          <div class="form-title">Duration: </div>
           <input id="duration-input" type="number" min="0" name="duration" placeholder="Enter a number" required><span> day(s)</span>
           <br><br>
-          <div class="form-title">(*)Budget: </div>
+          <div class="form-title">Budget: </div>
           <span>&#36; </span><input id="budget-input" type="number" min="0" name="budget" placeholder="Enter a number" required>
           <br><br>
         </form>
@@ -151,61 +69,6 @@
 
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="/js/top_bar.js"></script>
-    <script type="text/javascript">
-      function initMap() {
-        var input = $('#place-autocomplete')[0];
-        var autocomplete = new google.maps.places.Autocomplete(input);
-        autocomplete.setTypes(['(cities)']);
-
-        autocomplete.addListener('place_changed', function() {
-
-          var place = autocomplete.getPlace();
-          var placeID = place.place_id;
-          var placeName = place.formatted_address;
-
-          $('#place-id').val(placeID);
-          $('#place-name').val(placeName);
-        });
-      }
-
-      $(document).ready(function(){
-        $('form input').on('keypress', function(e) {
-          return e.which !== 13;
-        });
-
-        $('#save-trip').on('click', function(e) {
-          if ($('#duration-input').val().length > 0 && $('#duration-input').val() < 1) {
-            alert("Trip must be 1 day or longer");
-          } else if ($('#budget-input').val().length > 0 && $('#budget-input').val() < 0) {
-            alert("Budget must be $0 or higher");
-          } else if ($('#place-id').val().length === 0) {
-            alert("Please input a valid city name");
-          } else {
-            $('form').submit();
-          }
-        });
-
-        $('form input[name="category"]:not(checked)').on('click', function(){
-          $('.category-choices').css('color','#bdc3c7');
-          $('#category-'+$(this).val()).css('color','white'); 
-          if ($('form input[name="category"]:checked').length > 1) {
-            $('form input[name="category"]').prop('checked',false)          
-            $(this).prop('checked',true);
-          }
-        });
-
-        $('form input[name="season"]:not(checked)').on('click', function(){
-          $('.season-choices').css('color','#bdc3c7');
-          $('#season-'+$(this).val()).css('color','white'); 
-          if ($('form input[name="season"]:checked').length > 1) {
-            $('form input[name="season"]').prop('checked',false);
-            $(this).prop('checked',true);
-          }
-        });
-      });
-    </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8lG_CLlQVPpyRbKhHHUe0vZYjFnCPTNs&libraries=places&callback=initMap" async defer></script>
   </body>
 </html>
