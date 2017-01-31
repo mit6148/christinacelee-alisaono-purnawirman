@@ -309,7 +309,7 @@ router.get('/tabi_search', function(req, res, next) {
       });
 
     } else {
-      suggestionList = [];
+      suggestionList = [{placeID:'123',placeName:'NYC'}];
 
           res.render('tabi_search', {placeID: placeID, placeName: placeName,
             noTrips: true, suggestions: suggestionList, 
