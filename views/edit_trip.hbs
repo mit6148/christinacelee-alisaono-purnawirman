@@ -8,143 +8,66 @@
 
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,500,500i,600,800" rel="stylesheet">
     <link rel='stylesheet' href="/stylesheets/top_bar_style.css" />
-    <style>
-      body {
-        margin: 0;
-        font-family: 'Raleway', sans-serif;
-      }
-      .invisible {
-        display: none;
-      }
-      #body-container {
-        display: inline-block;
-        margin-top: 50px;
-        width: 100%;
-        text-align: center;
-      } 
-      textarea {
-        vertical-align: top;
-      }
-    </style>
+    <link rel='stylesheet' href="/stylesheets/edit_trip_style.css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/js/top_bar.js"></script>
+    <script src="/js/edit_trip.js"></script>
 
   </head>
   <body>
 
     {{> top_bar showSearchBar=showSearchBar loggedIn=loggedIn}}
 
-    <div id="body-container">
 
-      <h1>Edit Trip</h1>
-
-      <form id="edit_trip_form" method="post" action="/edit_trip/{{tripID}}">
-
-        <span>Title: </span>
-        <input id="title-input" type="text" name="title" placeholder="{{title}}">
-        <br><br>
-
-        <span>Description: </span>
-        <textarea id="descripion-input" form="edit_trip_form" name="description" placeholder="{{description}}"></textarea>
-        <br><br>
-
-        <span id="category-input" current="{{category}}">Category: </span>
-        <input type="checkbox" name="category" value="Adventure">Adventure
-        <input type="checkbox" name="category" value="Food">Food
-        <input type="checkbox" name="category" value="Art">Art
-        <input type="checkbox" name="category" value="History">History
-        <br><br>
-
-        <span id="season-input" current="{{season}}">Season: </span>
-        <input type="checkbox" name="season" value="Spring">Spring
-        <input type="checkbox" name="season" value="Summer">Summer
-        <input type="checkbox" name="season" value="Fall">Fall
-        <input type="checkbox" name="season" value="Winter">Winter
-        <br><br>
-
-        <input id="duration-input" type="number" min="1" placeholder="{{duration}}" name="duration">
-        <span> day(s)</span>
-        <br><br>
-
-        <span>&#36;</span>
-        <input id="budget-input" type="number" min="0" placeholder="{{budget}}" name="budget">
-        <br><br>
-
-        <button id="save-trip" type="submit">Save</button>
-      </form>
+    <div class="background-container">
+      <img src="/images/edit-trip-background.jpg">
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="/js/top_bar.js"></script>
+    <div id="edit-trip-container">
 
-    <script type="text/javascript">
-      $(document).ready(function(){
-        var category = $('#category-input').attr('current');
-        var season = $('#season-input').attr('current');
-        $('form input[name="category"][value="'+category+'"]').prop('checked',true);
-        $('form input[name="season"][value="'+season+'"]').prop('checked',true);
+      <div id="edit-trip-content">
+        <h1>Edit Trip</h1>
 
-        $('form input[name="category"]').on('click', function(){
-          if ($('form input[name="category"]:checked').length === 0) {
-            $(this).prop('checked',true);
-          }
-        });
-        $('form input[name="season"]').on('click', function(){
-          if ($('form input[name="season"]:checked').length === 0) {
-            $(this).prop('checked',true);
-          }
-        });        
-        $('form input[name="category"]:not(checked)').on('click', function(){
-          if ($('form input[name="category"]:checked').length > 1) {
-            $('form input[name="category"]').prop('checked',false);
-            $(this).prop('checked',true);
-          }
-        });
-        $('form input[name="season"]:not(checked)').on('click', function(){
-          if ($('form input[name="season"]:checked').length > 1) {
-            $('form input[name="season"]').prop('checked',false);
-            $(this).prop('checked',true);
-          }
-        });
-        $('form input').on('keypress', function(e) {
-          return e.which !== 13;
-        });
-        $('#save-trip').on('click', function(e) {
-          if ($('#duration-input').val().length > 0 && $('#duration-input').val() < 1) {
-            alert("Trip must be 1 day or longer");
-            return false;
-          } else if ($('#budget-input').val().length > 0 && $('#budget-input').val() < 0) {
-            alert("Budget must be $0 or higher");
-            return false;
-          } else {
-            return true;
-          }
-        });
-      });
-    </script>
+        <form id="edit_trip_form" method="post" action="/edit_trip/{{tripID}}">
+
+          <div class="form-title">Title: </div>
+          <input id="title-input" type="text" name="title" placeholder="{{title}}">
+          <br><br>
+
+          <div class="form-title">Description: </div>
+          <textarea id="descripion-input" form="edit_trip_form" name="description" placeholder="{{description}}"></textarea>
+          <br><br>
+
+          <div class="form-title" id="category-input" current="{{category}}">Category: </div>
+          <input type="checkbox" name="category" value="Adventure"><span id="category-Adventure" class="category-choices">Adventure</span>
+          <input type="checkbox" name="category" value="Food"><span id="category-Food" class="category-choices">Food</span>
+          <input type="checkbox" name="category" value="Art"><span id="category-Art" class="category-choices">Art</span>
+          <input type="checkbox" name="category" value="History"><span id="category-History" class="category-choices">History</span>
+          <br><br>
+
+
+          <div class="form-title" id="season-input" current="{{season}}">Season: </div>
+          <input type="checkbox" name="season" value="Spring"><span id="season-Spring" class="season-choices">Spring</span>
+          <input type="checkbox" name="season" value="Summer"><span id="season-Summer" class="season-choices">Summer</span>
+          <input type="checkbox" name="season" value="Fall"><span id="season-Fall" class="season-choices">Fall</span>
+          <input type="checkbox" name="season" value="Winter"><span id="season-Winter" class="season-choices">Winter</span>
+          <br><br>
+
+          <div class="form-title">Duration: </div>
+          <input id="duration-input" type="number" min="1" placeholder="{{duration}}" name="duration">
+          <span> day(s)</span>
+          <br><br>
+
+          <div class="form-title">Budget: </div>
+          <span>&#36; </span><input id="budget-input" type="number" min="0" placeholder="{{budget}}" name="budget">
+          <br><br>
+        </form>
+
+        <div id="save-trip">Save</div>
+      </div>
+      <div id="edit-trip-form-background">
+      </div>
+    </div>
   </body>
 </html>
-
-<!--         <span>(*)Title: </span>
-        <input id="title-input" type="text" name="title" placeholder="{{title}}" required>
-        <br><br>
-        <span>(*)Description: </span>
-        <input id="description-input" type="text" name="description" placeholder="{{description}}" required>
-        <br><br>
-        <span>(*)Category: </span>
-        <select id="category-input" name="category" form="add_trip_form" current="{{category}}" required>
-          <option value="adventure">Adventure</option>
-          <option value="food">Food</option>
-          <option value="art">Art</option>
-          <option value="history">History</option>
-        </select>
-        <br><br>
-        <span>(*)Season: </span>
-        <input type="checkbox" name="season" value="spring">Spring
-        <input type="checkbox" name="season" value="summer">Summer
-        <input type="checkbox" name="season" value="fall">Fall
-        <input type="checkbox" name="season" value="winter">Winter
-        <br><br>
-        <span>(*)</span><input id="duration-input" type="number" min="1" placeholder="{{duration}}" name="duration"><span> day(s)</span>
-        <br><br>
-        <span>&#36;</span><input id="budget-input" type="number" min="0" placeholder="{{budget}}" name="budget">
-        <br><br>
-        <button id="save-trip" type="submit">Save</button> -->

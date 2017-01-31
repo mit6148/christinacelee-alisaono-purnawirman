@@ -28,6 +28,28 @@ var tripFilterGroups = {
   ]    
 }
 
+
+function initMap() {
+  var tabiInput = $('#auto-completion')[0];
+  
+  var tabiAutocomplete = new google.maps.places.Autocomplete(tabiInput);
+
+  tabiAutocomplete.setTypes(['(cities)']);
+
+  tabiAutocomplete.addListener('place_changed', function() {
+
+    var place = tabiAutocomplete.getPlace();
+    var placeID = place.place_id;
+    var placeName = place.formatted_address;
+
+    $('#tabi-place-id').val(placeID);
+    $('#tabi-place-name').val(placeName);
+
+    $('#search-button').css('background-color', 'white').css('color','black');
+  });
+}
+
+
 var main = function() {
 
   populateSearchBar(tripFilterGroups);
@@ -58,6 +80,20 @@ var main = function() {
       default:
         break;
     }
+  });
+
+  $('#search-button').on('click',function(event){
+    if ($('#tabi-place-id').val().length > 0) {
+      $('#new-search-form').submit();
+    }
+  });
+
+  $('.suggestion-place').on('click',function(event){
+    var placeID = $(this).attr('rel');
+    var placeName = $(this).text();
+    $('#suggested-place-id').val(placeID);
+    $('#suggested-place-name').val(placeName);
+    $('#suggestion-search-form').submit();
   });
 } 
 
@@ -241,8 +277,15 @@ function likeTrip (eventTarget, tripID) {
     }
   }).done(function(response){
 
-    $('img[rel="'+tripID+'"]').attr('class','trip-unlike');
-    $('img[rel="'+tripID+'"]').attr('src',unlikeIconURL);
+    if (response === '') {
+      $('img[rel="'+tripID+'"]').attr('class','trip-unlike');
+      $('img[rel="'+tripID+'"]').attr('src',unlikeIconURL);
+    } else if (response === 'login') {
+      window.location = "/login/facebook";
+    } else {
+      alert('Error... reloading the page');
+      location.reload();
+    }
 
   });
 }
@@ -259,9 +302,15 @@ function unlikeTrip (eventTarget,tripID) {
     }
   }).done(function(response){
 
-    $('img[rel="'+tripID+'"]').attr('class','trip-like');
-    $('img[rel="'+tripID+'"]').attr('src',likeIconURL);
-
+    if (response === '') {
+      $('img[rel="'+tripID+'"]').attr('class','trip-like');
+      $('img[rel="'+tripID+'"]').attr('src',likeIconURL);
+    } else if (response === 'login') {
+      window.location = "/login/facebook";
+    } else {
+      alert('Error... reloading the page');
+      location.reload();
+    }
   });
 }
 

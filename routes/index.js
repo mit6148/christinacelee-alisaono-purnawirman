@@ -264,7 +264,7 @@ router.get('/tabi_search', function(req, res, next) {
       return;
     }
 
-    if(foundDestination !== null){
+    if (foundDestination !== null) {
       tabies = foundDestination["tabies"];
     }
 
@@ -278,6 +278,7 @@ router.get('/tabi_search', function(req, res, next) {
       if (err) {
         console.log("Error in finding trips");
         res.render('error',{message: "Error 500 - Internal Server Error"});
+        return;
       }
 
       if(trips !== null){
@@ -289,7 +290,7 @@ router.get('/tabi_search', function(req, res, next) {
             return tripUser === loggedUserID;
           });
 
-          if (trips[k].tripActive) {
+          if (trips[k].tripActive && trips[k].tripCreatorID !== loggedUserID) {
             tabiList.push({tripID: trips[k].tripID,
                             userID: trips[k].tripCreatorID,
                             tripTitle: trips[k].tripName,
@@ -302,9 +303,51 @@ router.get('/tabi_search', function(req, res, next) {
         }
       }
 
-      res.render('tabi_search', {placeID: placeID, placeName: placeName, 
-        trips: tabiList, showSearchBar: false, loggedIn: loggedIn, loggedInUser: loggedInUser});   
-    })
+      if (tabiList.length > 0) {
+        res.render('tabi_search', {placeID: placeID, placeName: placeName, 
+          noTrips: false, trips: tabiList, showSearchBar: true, isTabiSearch: true,
+          loggedIn: loggedIn, loggedInUser: loggedInUser});
+
+      } else {
+
+        suggestionList = [{placeID:"ChIJOwg_06VPwokRYv534QaPC8g",placeName:"New York, NY, USA"},
+                          {placeID:"ChIJTUbDjDsYAHwRbJen81_1KEs",placeName: "Honolulu, HI, USA"},
+                          {placeID:"ChIJByjqov3-AzQR2pT0dDW0bUg",placeName: "Hong Kong"},];
+
+        res.render('tabi_search', {placeID: placeID, placeName: placeName,
+          noTrips: true, suggestions: suggestionList, 
+          trips: [], showSearchBar: true, isTabiSearch: true,
+          loggedIn: loggedIn, loggedInUser: loggedInUser});
+      }
+    });
+
+      // Destination.aggregate(
+      //   [{ "$project": {
+      //       "destinationID": 1,
+      //       "destinationName": 1,
+      //       "tabies": 1,
+      //       "length": {"$size": "$tabies"}
+      //   }},
+      //   { "$sort": { "length": -1 } },
+      //   { "$limit": 5 }
+      //   ],
+
+      //   function(err,results) {
+      //     if (err) {
+      //       console.log("Error in finding destinations");
+      //       res.render('error',{message: "Error 500 - Internal Server Error"});
+      //     }
+
+      //     for (var i=0; i<results.length; i++) {
+      //       suggestionList.push({ placeName: results[i].destinationName,
+      //                             placeID: results[i].destinationID });
+      //     }
+          
+      //     res.render('tabi_search', {placeID: placeID, placeName: placeName,
+      //       noTrips: true, suggestions: suggestionList, 
+      //       trips: [], showSearchBar: true, isTabiSearch: true,
+      //       loggedIn: loggedIn, loggedInUser: loggedInUser});
+      // });
   });
 });
 
@@ -385,7 +428,7 @@ router.get('/tabi_search_filter', function(req, res, next) {
             return tripUser === loggedUserID;
           });
 
-          if (trips[k].tripActive) {
+          if (trips[k].tripActive && trips[k].tripCreatorID !== loggedUserID) {
             tabiList.push({tripID: trips[k].tripID,
                             userID: trips[k].tripCreatorID,
                             tripTitle: trips[k].tripName,
@@ -430,7 +473,7 @@ router.get('/buddy_search', function(req, res, next) {
     if(foundDestination !== null){
       buddies = foundDestination["buddies"];
     }
-
+    
     var buddyList = [];
     var query = User.
                 find({}).
@@ -455,9 +498,54 @@ router.get('/buddy_search', function(req, res, next) {
           }
         }
       }
-      res.render('buddy_search', {placeID: placeID, placeName: placeName, 
-        users: buddyList, showSearchBar: false, loggedIn: loggedIn, loggedInUser: loggedInUser});   
-    })
+
+      if (buddyList.length > 0) {
+        res.render('buddy_search', {placeID: placeID, placeName: placeName, 
+        noBuddies: false, users: buddyList, showSearchBar: true, isTabiSearch: false, 
+        loggedIn: loggedIn, loggedInUser: loggedInUser}); 
+
+      } else {
+
+        suggestionList = [{placeID:"ChIJOwg_06VPwokRYv534QaPC8g",placeName:"New York, NY, USA"},
+                          {placeID:"ChIJTUbDjDsYAHwRbJen81_1KEs",placeName: "Honolulu, HI, USA"},
+                          {placeID:"ChIJByjqov3-AzQR2pT0dDW0bUg",placeName: "Hong Kong"},];
+
+        res.render('buddy_search', {placeID: placeID, placeName: placeName,
+          noBuddies: true, suggestions: suggestionList, 
+          users: [], showSearchBar: true, isTabiSearch: false,
+          loggedIn: loggedIn, loggedInUser: loggedInUser});
+      }
+    });
+
+      // suggestionList = [];
+
+      // Destination.aggregate(
+      //   [{ "$project": {
+      //       "destinationID": 1,
+      //       "destinationName": 1,
+      //       "buddies": 1,
+      //       "length": {"$size": "$buddies"}
+      //   }},
+      //   { "$sort": { "length": -1 } },
+      //   { "$limit": 5 }
+      //   ],
+
+      //   function(err,results) {
+      //     if (err) {
+      //       console.log("Error in finding destinations");
+      //       res.render('error',{message: "Error 500 - Internal Server Error"});
+      //     }
+
+      //     for (var i=0; i<results.length; i++) {
+      //       suggestionList.push({ placeName: results[i].destinationName,
+      //                             placeID: results[i].destinationID });
+      //     }
+          
+      //     res.render('buddy_search', {placeID: placeID, placeName: placeName,
+      //       noBuddies: true, suggestions: suggestionList, 
+      //       users: [], showSearchBar: true, isTabiSearch: true,
+      //       loggedIn: loggedIn, loggedInUser: loggedInUser});
+      // });
   });
 });
 
@@ -622,7 +710,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
     } else {
       var queryTrips = Trip.find({}).
                        where("tripID").in(user.userLikedTrips).
-                       select("tripID tripCreatorID tripName tripCreatorName tripDescription tripPhoto tripLikedUsers");
+                       select("tripID tripCreatorID tripName tripDestinationName tripCreatorName tripDescription tripPhoto tripLikedUsers");
       
       queryTrips.exec(function(err, trips){
         if(err) { 
@@ -645,6 +733,7 @@ router.get('/view_user/:user_id', function(req, res, next) {
           var tripsList = {tripID: trips[i].tripID,
                             userID: trips[i].tripCreatorID,
                             tripTitle: trips[i].tripName,
+                            tripPlace: trips[i].tripDestinationName,
                             username: trips[i].tripCreatorName,
                             description: trips[i].tripDescription,
                             liked: tripLiked, 
@@ -768,45 +857,52 @@ router.post('/edit_profile_photo/:user_id', function(req, res, next) {
 
   var userID = req.params.user_id;
 
-  if (!req.isAuthenticated()) {
-    res.redirect('/login/facebook');
-    return;
+  if (process.env.NODE_ENV === "production") {
 
-  } else if (req.user.userID !== userID) {
-    res.render('error',{message: "Error 401 - Unauthorized"});
-    return;
+    if (!req.isAuthenticated()) {
+      res.redirect('/login/facebook');
+      return;
 
-  } else {
-    var form = new formidable.IncomingForm();
+    } else if (req.user.userID !== userID) {
+      res.render('error',{message: "Error 401 - Unauthorized"});
+      return;
+    }
 
-    form.on('file', function(field, file) {
-      cloudinary.uploader.upload(
-        file.path, 
-        function(result) {
+  } 
 
-          var newImageURL = result.eager[0].secure_url; 
-          var userInfo = {userID: userID, userPhoto: newImageURL};
+  var form = new formidable.IncomingForm();
 
-          if (helperFunction.editUserProfile(userInfo)) {
-            res.redirect('/view_user/'+userID); 
+  form.on('file', function(field, file) {
+    cloudinary.uploader.upload(
+      file.path, 
+      function(result) {
 
+        var newImageURL = result.eager[0].secure_url; 
+        var userInfo = {userID: userID, userPhoto: newImageURL};
+
+        var redirectUser = function(success) {
+          if (success) {
+            res.redirect('/view_user/'+ userID);
+            return;
           } else {
-            res.send("Error in updating photo");
             res.render('error',{message: "Error 500 - Internal Server Error"});
             return;
           }
-        },
-        {
-          public_id: userID, 
-          quality: "auto:good",
-          width: 400, height: 400, crop: "limit",
-          eager: [{ width: 300, height: 300, crop: 'thumb', gravity: 'face', format: 'jpg'}],                                   
         }
-      );
-    });
 
-    // form.parse(req);
-  }
+        helperFunction.editUserProfile(userInfo, redirectUser);
+      },
+      {
+        public_id: userID, 
+        invalidate: true,
+        quality: "auto:good",
+        width: 400, height: 400, crop: "limit",
+        eager: [{ width: 300, height: 300, crop: 'thumb', gravity: 'face', format: 'jpg'}],                                   
+      }
+    );
+  });
+
+  form.parse(req);
 });
 
 
@@ -1057,7 +1153,7 @@ router.post('/like_trip', function(req, res, next) {
   if (process.env.NODE_ENV === "production") {
 
     if(!req.isAuthenticated()){
-      res.redirect('/login/facebook');
+      res.send('login');
       return;
     }
 
@@ -1095,7 +1191,7 @@ router.post('/unlike_trip', function(req, res, next) {
   if (process.env.NODE_ENV === "production") {
 
     if(!req.isAuthenticated()){
-      res.redirect('/login/facebook');
+      res.send('login');
       return;
     }
 

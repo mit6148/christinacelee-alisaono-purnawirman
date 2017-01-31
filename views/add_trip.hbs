@@ -7,136 +7,68 @@
 
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,500,500i,600,800" rel="stylesheet">
     <link rel='stylesheet' href="/stylesheets/top_bar_style.css" />
-    <style>
-      body {
-        margin: 0;
-        font-family: 'Raleway', sans-serif;
-      }
-      .invisible {
-        display: none;
-      }
-      #body-container {
-        display: inline-block;
-        margin-top: 50px;
-        width: 100%;
-        text-align: center;
-      } 
-    </style>
+    <link rel='stylesheet' href="/stylesheets/add_trip_style.css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/js/top_bar.js"></script>
+    <script src="/js/add_trip.js"></script>
 
   </head>
   <body>
 
     {{> top_bar showSearchBar=showSearchBar loggedIn=loggedIn}}
 
-    <div id="body-container">
+    <div class="background-container">
+      <img src="/images/add-trip-background.jpg">
+    </div>
 
-    <h1>Add Trip</h1>
-    <form name="add_trip_form" method="post" action="/add_trip" enctype="multipart/form-data">
-      <span>(*)Upload Photo: </span>
-      <input id="trip-image" type="file" name="trip_image" accept="image/png, image/jpeg"/>
-      <br><br>
-      <span>(*)Location: </span>
-      <input id="place-autocomplete" type="text" required>
-      <input id="place-name" type="text" name="destination_name" class="invisible">
-      <input id="place-id" type="text" name="destination_id" class="invisible">
-      <br><br>
-      <span>(*)Title: </span>
-      <input id="title-input" type="text" name="title" required>
-      <br><br>
-      <span>(*)Description: </span>
-      <input id="description-input" type="text" name="description" required>
-      <br><br>
-      <span>(*)Category: </span>
-      <input type="checkbox" name="category" value="Adventure">Adventure
-      <input type="checkbox" name="category" value="Food">Food
-      <input type="checkbox" name="category" value="Art">Art
-      <input type="checkbox" name="category" value="History">History
-<!--       <select id="category-input" name="category" form="add_trip_form" required>
-      <span>(*)Category: </span>
-      <select id="category-input" name="category" form="add_trip_form" required>
-        <option value="adventure">Adventure</option>
-        <option value="food">Food</option>
-        <option value="art">Art</option>
-        <option value="history">History</option>
-      </select> -->
-      <br><br>
-      <span>(*)Season: </span>
-      <input type="checkbox" name="season" value="Spring">Spring
-      <input type="checkbox" name="season" value="Summer">Summer
-      <input type="checkbox" name="season" value="Fall">Fall
-      <input type="checkbox" name="season" value="Winter">Winter
-<!--       <select id="season-input" name="season" form="add_trip_form">
-<span>(*)Season: </span>
-      <select id="season-input" name="season" form="add_trip_form" required>
-        <option value="spring">Spring</option>
-        <option value="summer">Summer</option>
-        <option value="fall">Fall</option>
-        <option value="winter">Winter</option>
-      </select> -->
-      <br><br>
-      <input id="duration-input" type="number" min="0" placeholder="(*)Duration" name="duration" required><span> day(s)</span>
-      <br><br>
-      <span>&#36;</span><input id="budget-input" type="number" min="0" placeholder="(*)Budget" name="budget" required>
-      <br><br>
-      <button id="save-trip" type="submit">Save</button>
-    </form>
+    <div id="add-trip-container">
+
+      <div id="add-trip-content">
+        <h1>Add Trip</h1>
+        <form name="add_trip_form" method="post" action="/add_trip" enctype="multipart/form-data">
+          <div class="form-title">Upload Photo: </div>
+          <input id="trip-image" type="file" name="trip_image" accept="image/png, image/jpeg"/>
+          <br><br>
+          <div class="form-title">Location: </div>
+          <input id="place-autocomplete" type="text" required>
+          <input id="place-name" type="text" name="destination_name" class="invisible">
+          <input id="place-id" type="text" name="destination_id" class="invisible">
+          <br><br>
+          <div class="form-title">Title: </div>
+          <input id="title-input" type="text" name="title" placeholder="Enter a title" required>
+          <br><br>
+          <div class="form-title">Description: </div>
+          <textarea id="descripion-input" form="edit_trip_form" name="description" placeholder="Enter a description" required></textarea>
+          <br><br>
+          <div class="form-title">Category: </div>
+          <input type="checkbox" name="category" value="Adventure"><span id="category-Adventure" class="category-choices">Adventure</span>
+          <input type="checkbox" name="category" value="Food"><span id="category-Food" class="category-choices">Food</span>
+          <input type="checkbox" name="category" value="Art"><span id="category-Art" class="category-choices">Art</span>
+          <input type="checkbox" name="category" value="History"><span id="category-History" class="category-choices">History</span>
+          <br><br>
+          <div class="form-title">Season: </div>
+          <input type="checkbox" name="season" value="Spring"><span id="season-Spring" class="season-choices">Spring</span>
+          <input type="checkbox" name="season" value="Summer"><span id="season-Summer" class="season-choices">Summer</span>
+          <input type="checkbox" name="season" value="Fall"><span id="season-Fall" class="season-choices">Fall</span>
+          <input type="checkbox" name="season" value="Winter"><span id="season-Winter" class="season-choices">Winter</span>
+          <br><br>
+          <div class="form-title">Duration: </div>
+          <input id="duration-input" type="number" min="0" name="duration" placeholder="Enter a number" required><span> day(s)</span>
+          <br><br>
+          <div class="form-title">Budget: </div>
+          <span>&#36; </span><input id="budget-input" type="number" min="0" name="budget" placeholder="Enter a number" required>
+          <br><br>
+        </form>
+        
+        <div id="save-trip">Create</div>
+      </div>
+
+      <div id="add-trip-form-background">
+      </div>
 
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="/js/top_bar.js"></script>
-    <script type="text/javascript">
-      function initMap() {
-        var input = $('#place-autocomplete')[0];
-        var autocomplete = new google.maps.places.Autocomplete(input);
-        autocomplete.setTypes(['(cities)']);
-
-        autocomplete.addListener('place_changed', function() {
-
-          var place = autocomplete.getPlace();
-          var placeID = place.place_id;
-          var placeName = place.formatted_address;
-
-          $('#place-id').val(placeID);
-          $('#place-name').val(placeName);
-        });
-      }
-
-      $(document).ready(function(){
-        $('form input').on('keypress', function(e) {
-          return e.which !== 13;
-        });
-
-        $('#save-trip').on('click', function(e) {
-          if ($('#duration-input').val().length > 0 && $('#duration-input').val() < 1) {
-            alert("Trip must be 1 day or longer");
-            return false;
-          } else if ($('#budget-input').val().length > 0 && $('#budget-input').val() < 0) {
-            alert("Budget must be $0 or higher");
-            return false;
-          } else if ($('#place-id').val().length === 0) {
-            alert("Please input a valid city name");
-            return false;
-          } else {
-            return true;
-          }
-        });
-
-        $('form input[name="category"]:not(checked)').on('click', function(){
-          if ($('form input[name="category"]:checked').length > 1) {
-            $('form input[name="category"]').prop('checked',false);
-            $(this).prop('checked',true);
-          }
-        });
-
-        $('form input[name="season"]:not(checked)').on('click', function(){
-          if ($('form input[name="season"]:checked').length > 1) {
-            $('form input[name="season"]').prop('checked',false);
-            $(this).prop('checked',true);
-          }
-        });
-      });
-    </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8lG_CLlQVPpyRbKhHHUe0vZYjFnCPTNs&libraries=places&callback=initMap" async defer></script>
   </body>
 </html>

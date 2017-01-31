@@ -5,7 +5,24 @@
 
   {{#if showSearchBar}}
     <div id="top-search-bar-container">
-      search bar
+      <div id="search-icon-container">
+        <img src="/images/search.png" />
+      </div>
+      {{#if isTabiSearch}}
+        <form id="new-search-form" name="tabi_destination_form" method="get" action="/tabi_search">
+          <input id="auto-completion" placeholder="{{placeName}}">
+          <input id="tabi-place-name" type="text" name="tabi_destination_name" class="invisible">
+          <input id="tabi-place-id" type="text" name="tabi_destination_id" class="invisible">
+          <div id="search-button">Search</div>
+        </form>
+      {{else}}
+        <form id="new-search-form" name="buddy_destination_form" method="get" action="/buddy_search">
+        <input id="auto-completion" placeholder="{{placeName}}">
+          <input id="buddy-place-name" type="text" name="buddy_destination_name" class="invisible">
+          <input id="buddy-place-id" type="text" name="buddy_destination_id" class="invisible">
+          <div id="search-button">Search</div>
+        </form>
+      {{/if}}
     </div>
   {{/if}}
 

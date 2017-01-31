@@ -88,7 +88,7 @@ $(document).ready(function(){
 
 
   $(function(){
-    var backgrounds = ['sf','switzerland','egypt','stonehenge','india','russia','tokyo'];
+    var backgrounds = ['user','tabi-search','add-trip'];
     var index = 0;
 
     function nextBackground(){
@@ -100,12 +100,12 @@ $(document).ready(function(){
         $('#background').show();
       });
 
-      setTimeout(nextBackground,3000);
+      setTimeout(nextBackground,6000);
     };
 
     $('#background').attr('src','/images/'+backgrounds[0]+'-background.jpg');
     $('#background-next').attr('src','/images/'+backgrounds[1]+'-background.jpg');
-    setTimeout(nextBackground,3000);
+    setTimeout(nextBackground,6000);
   });
 
 });

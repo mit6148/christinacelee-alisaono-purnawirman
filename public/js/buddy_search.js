@@ -24,11 +24,45 @@ var buddySearchGroups = {
   ]    
 }
 
+function initMap() {
+  var buddyInput = $('#auto-completion')[0];
+  
+  var buddyAutocomplete = new google.maps.places.Autocomplete(buddyInput);
+
+  buddyAutocomplete.setTypes(['(cities)']);
+
+  buddyAutocomplete.addListener('place_changed', function() {
+
+    var place = buddyAutocomplete.getPlace();
+    var placeID = place.place_id;
+    var placeName = place.formatted_address;
+
+    $('#buddy-place-id').val(placeID);
+    $('#buddy-place-name').val(placeName);
+
+    $('#search-button').css('background-color', 'white').css('color','black');
+  });
+}
+
 var main = function() {
 
   populateSearchBar(buddySearchGroups);
 
   $('.user').on('click', showUserProfile);
+
+  $('#search-button').on('click',function(event){
+    if ($('#buddy-place-id').val().length > 0) {
+      $('#new-search-form').submit();
+    }
+  });
+
+  $('.suggestion-place').on('click',function(event){
+    var placeID = $(this).attr('rel');
+    var placeName = $(this).text();
+    $('#suggested-place-id').val(placeID);
+    $('#suggested-place-name').val(placeName);
+    $('#suggestion-search-form').submit();
+  });
 }
 
 function populateSearchBar(filter){

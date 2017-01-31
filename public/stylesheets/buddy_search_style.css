@@ -103,7 +103,7 @@ body {
   padding: 10px;
   border: 3px solid #95a5a6;
   border-radius: 10px;
-  background-color: white;
+  background-color: #efefef;
   cursor: pointer;
 }
 .username-container {
@@ -116,7 +116,7 @@ body {
   margin-top: 0;
   margin-bottom: 0;
   font-size: 2.5vw;
-  color: #2c3e50;
+  color: #34495e;
   text-align: left;
   text-overflow: ellipsis;
   display: block;
@@ -136,4 +136,37 @@ body {
   width: 48%;
   margin: 0;
   margin-top: 5px;
+}
+
+/* no trips yet */
+#suggestion-container {
+  width: 70%;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding-right: 20%; 
+  padding-left: 10%;
+  text-align: center;
+  font-size: 2.5vw;
+  color: white;
+}
+#suggestion-background {
+  position: absolute;
+  top: 60px;
+  left: 28%;
+  right: 12%;
+  height: 500px;
+  border-radius: 10px;
+  background-color: #2c3e50;
+  opacity: 0.8;
+  z-index: -1;
+}
+.invisible {
+  display: none;
+}
+.suggestion-place {
+  color: #bdc3c7;
+  cursor: pointer;
+}
+.suggestion-place:hover {
+  color: white;
 }
