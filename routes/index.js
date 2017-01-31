@@ -289,7 +289,7 @@ router.get('/tabi_search', function(req, res, next) {
             return tripUser === loggedUserID;
           });
 
-          if (trips[k].tripActive) {
+          if (trips[k].tripActive && trips[k].tripCreatorID !== loggedUserID) {
             tabiList.push({tripID: trips[k].tripID,
                             userID: trips[k].tripCreatorID,
                             tripTitle: trips[k].tripName,
@@ -385,7 +385,7 @@ router.get('/tabi_search_filter', function(req, res, next) {
             return tripUser === loggedUserID;
           });
 
-          if (trips[k].tripActive) {
+          if (trips[k].tripActive && trips[k].tripCreatorID !== loggedUserID) {
             tabiList.push({tripID: trips[k].tripID,
                             userID: trips[k].tripCreatorID,
                             tripTitle: trips[k].tripName,
@@ -1066,7 +1066,7 @@ router.post('/like_trip', function(req, res, next) {
   if (process.env.NODE_ENV === "production") {
 
     if(!req.isAuthenticated()){
-      res.redirect('/login/facebook');
+      res.send('login');
       return;
     }
 
@@ -1104,7 +1104,7 @@ router.post('/unlike_trip', function(req, res, next) {
   if (process.env.NODE_ENV === "production") {
 
     if(!req.isAuthenticated()){
-      res.redirect('/login/facebook');
+      res.send('login');
       return;
     }
 

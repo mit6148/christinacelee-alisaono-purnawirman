@@ -174,9 +174,16 @@ function likeTrip(eventTarget, tripID) {
       trip_id: tripID,
     }
   }).done(function(response){
-
-    $('img[rel="'+tripID+'"]').attr('class','trip-unlike');
-    $('img[rel="'+tripID+'"]').attr('src',unlikeIconURL);
+    
+    if (response === '') {
+      $('img[rel="'+tripID+'"]').attr('class','trip-unlike');
+      $('img[rel="'+tripID+'"]').attr('src',unlikeIconURL);
+    } else if (response === 'login') {
+      window.location = "/login/facebook";
+    } else {
+      alert('Error... reloading the page');
+      location.reload();
+    }
   });
 }
 
@@ -192,8 +199,15 @@ function unlikeTrip(eventTarget,tripID) {
     }
   }).done(function(response){
 
-    $('img[rel="'+tripID+'"]').attr('class','trip-like');
-    $('img[rel="'+tripID+'"]').attr('src',likeIconURL);
+    if (response === '') {
+      $('img[rel="'+tripID+'"]').attr('class','trip-like');
+      $('img[rel="'+tripID+'"]').attr('src',likeIconURL);
+    } else if (response === 'login') {
+      window.location = "/login/facebook";
+    } else {
+      alert('Error... reloading the page');
+      location.reload();
+    }
   });
 }
 
@@ -213,8 +227,10 @@ function deleteTrip(event){
   }).done(function(response){
     if (response === '') {
       location.reload();
-    } 
-    // error?
+    } else {
+      alert('Error... reloading the page');
+      location.reload();
+    }
   });
 }
 
