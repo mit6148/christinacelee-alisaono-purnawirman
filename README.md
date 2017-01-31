@@ -1,5 +1,15 @@
 # PAC team
 
+##CITATIONS
+All images have been sourced from personal owners or from copyright-free websites (pexels.com).
+
+Citations for the airplace icon on the homepage: 
+	-Icon made by http://www.flaticon.com/authors/chanut-is-industries from www.flaticon.com is licensed by Creative Commons BY 3.0
+Citation for the buddy icon on the homepage:
+	-Icon made by http://www.freepik.com from http://www.flaticon.com is licensed by Creative Commons BY 3.0
+
+
+
 ## Team members note:
 #### For first time cloning, do the following:
 1. npm install // install all dependecies

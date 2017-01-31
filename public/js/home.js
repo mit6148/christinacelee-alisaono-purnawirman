@@ -40,16 +40,52 @@ $(document).ready(function(){
     return $('#buddy-place-id').val().length > 0;
   });
 
-  $('.fieldset-home').hover(
+  // $('.fieldset-home ').hover(
+  //   function() {
+  //     $(this).find('.expand-show').show();
+  //     $(this).animate({height:'+=200', width:'+=200'}, 'slow');
+  //   },
+  //   function() {
+  //     $(this).animate({height:'-=200', width:'-=200'}, 'slow');
+  //     $(this).find('.expand-show').hide();
+  //   }
+  // );
+  var isTabiOpen = false;
+  var isBuddyOpen = false;
+
+    $('.fieldset-home-tabi ').hover(
     function() {
-      $(this).find('.expand-show').show();
-      $(this).animate({height:'+=80', width:'+=80'}, 'slow');
-    },
-    function() {
-      $(this).animate({height:'-=80', width:'-=80'}, 'slow');
-      $(this).find('.expand-show').hide();
+      if (!isTabiOpen) {
+        isTabiOpen = true;
+        $(this).find('.expand-show').show();
+        $(this).animate({height:'+=120', width:'+=120'}, 'slow');
+      };
+
+      if (isBuddyOpen) {
+        isBuddyOpen = false;
+        $('.fieldset-home-buddy').animate({height:'-=120', width:'-=120'}, 'slow');
+        $('.fieldset-home-buddy').find('.expand-show').hide();
+      };
     }
   );
+
+  $('.fieldset-home-buddy ').hover(
+    function() {
+      if (!isBuddyOpen) {
+        isBuddyOpen = true;
+        $(this).find('.expand-show').show();
+        $(this).animate({height:'+=120', width:'+=120'}, 'slow');
+      };
+
+      if (isTabiOpen) {
+        isTabiOpen = false;
+        $('.fieldset-home-tabi').animate({height:'-=120', width:'-=120'}, 'slow');
+        $('.fieldset-home-tabi').find('.expand-show').hide();
+      };
+    }
+  );
+
+
 
   $(function(){
     var backgrounds = ['user','tabi-search','add-trip'];

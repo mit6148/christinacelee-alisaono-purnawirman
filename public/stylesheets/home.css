@@ -53,7 +53,7 @@ body {
   width: 50%;
 
 }
-.fieldset-home {
+.fieldset-home-tabi {
   width: 200px;
   height: 200px;
   padding-top: 10px;
@@ -65,9 +65,26 @@ body {
   background-color: #1abc9c;
   overflow: hidden;
 }
-.fieldset-home h3, h4{
+.fieldset-home-tabi h3, h4{
   cursor: default;
 }
+
+.fieldset-home-buddy {
+  width: 200px;
+  height: 200px;
+  padding-top: 10px;
+  display: inline-block;
+  margin: 5%;
+  border-width: 0;
+  border-radius: 50%;
+  text-align: center;
+  background-color: #1abc9c;
+  overflow: hidden;
+}
+.fieldset-home-buddy h3, h4{
+  cursor: default;
+}
+
 .tabi {
   float: right;
   margin-right: 12.5%
