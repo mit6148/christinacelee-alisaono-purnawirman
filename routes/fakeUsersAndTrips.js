@@ -307,6 +307,15 @@ var users = [
 			 "userLikedTrips": [christinaTripAID],
 			 "userCreatedTrips": [christinaTripAID]
 			},
+			{ "_id": "588fbad7ab2ad529bc7d6f0b", 
+			  "userPhoto": "https://res.cloudinary.com/tabibuddy/image/upload/c_thumb,g_face,h_300,w_300/v1485838258/1216321191789270.jpg", 
+			  "userName": "Kalyn Bowen", 
+			  "userID": "1216321191789270", 
+			  "userDescription": "Japanese girl from Hawaii/Boston, I mostly travel to Asian countries", 
+			  "userEmail": "", 
+			  "userCreatedTrips": [ "588fbe17b21c8438f0ba72d0", "588fbf04b21c8438f0ba72d3", "588fbfe17b88e81a9cc7c901", "588fc11f7b88e81a9cc7c904", "588fc1877b88e81a9cc7c906", "588fc20b7b88e81a9cc7c908", "588fc27b7b88e81a9cc7c90a", "588fc2e77b88e81a9cc7c90d", "588fc34e7b88e81a9cc7c90f", "588fc3957b88e81a9cc7c911", "588fc3bb7b88e81a9cc7c913", "588fc3eb7b88e81a9cc7c915", "588fc6bd28c610328cc765ba", "588fc6f328c610328cc765bc", "588fc71628c610328cc765be" ], "userLikedTrips": [ "588f9fdbd714d531204e345b", "588fa37488d8211404306167", "588fbe17b21c8438f0ba72d0", "588fbf04b21c8438f0ba72d3", "588fbfe17b88e81a9cc7c901", "588fc11f7b88e81a9cc7c904", "588fc1877b88e81a9cc7c906", "588fc20b7b88e81a9cc7c908", "588fc27b7b88e81a9cc7c90a", "588fc2e77b88e81a9cc7c90d", "588fc34e7b88e81a9cc7c90f", "588fc3957b88e81a9cc7c911", "588fc3bb7b88e81a9cc7c913", "588fc3eb7b88e81a9cc7c915", "588fc6bd28c610328cc765ba", "588fc6f328c610328cc765bc", "588fc71628c610328cc765be" ], "userDestinations": [ "ChIJTUbDjDsYAHwRbJen81_1KEs", "ChIJByjqov3-AzQR2pT0dDW0bUg", "ChIJCWW2u-xbGGARAFQoYPaDlgY", "ChIJeZG7TctYAHwRx_CZ3-LyTqI", "ChIJmY8AduF6ATQRrXXv59PpHbk" ], 
+			  "userActive": true 
+			}, 
 			]
 
 

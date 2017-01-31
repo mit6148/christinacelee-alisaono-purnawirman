@@ -924,15 +924,18 @@ router.post('/edit_profile_info/:user_id', function(req, res, next) {
                     "userDescription": req.body.new_profile_text,
                     "userEmail": req.body.new_profile_contact}
 
-    if (helperFunction.editUserProfile(userInfo)) {
-      res.redirect('/view_user/'+userID);
-      return;
-
-    } else {
-      res.send("Error in updating profile")
-      res.render('error',{message: "Error 500 - Internal Server Error"});
-      return;
+    var editCallback = function(success) {
+      if (success) {
+        res.redirect('/view_user/'+userID);
+        return;
+      } else {
+        res.send("Error in updating profile")
+        res.render('error',{message: "Error 500 - Internal Server Error"});
+        return;
+      }
     }
+
+    helperFunction.editUserProfile(userInfo, editCallback)
   }
 });
 
