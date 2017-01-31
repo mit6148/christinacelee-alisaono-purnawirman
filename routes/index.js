@@ -510,9 +510,9 @@ router.get('/buddy_search', function(req, res, next) {
                           {placeID:"ChIJTUbDjDsYAHwRbJen81_1KEs",placeName: "Honolulu, HI, USA"},
                           {placeID:"ChIJByjqov3-AzQR2pT0dDW0bUg",placeName: "Hong Kong"},];
 
-        res.render('tabi_search', {placeID: placeID, placeName: placeName,
+        res.render('buddy_search', {placeID: placeID, placeName: placeName,
           noBuddies: true, suggestions: suggestionList, 
-          trips: [], showSearchBar: true, isTabiSearch: false,
+          users: [], showSearchBar: true, isTabiSearch: false,
           loggedIn: loggedIn, loggedInUser: loggedInUser});
       }
     });
