@@ -11,6 +11,10 @@ Citation for the buddy icon on the homepage:
 
 
 ## Team members note:
+
+#### PLEASE NOTE:
+API and client keys for Cloudinary and Facebook oauth are depricated. Please provide your own.
+
 #### For first time cloning, do the following:
 1. npm install // install all dependecies
 2. remember to setup mongodb, make a directory ./data, then run mongod -dbpath ./data
@@ -22,3 +26,15 @@ npm run startDemon
 
 #### For filling location information automatically, use the script:
 npm run fillLocation
+
+
+## Contributors:
+
+Alisa Ono 
+
+Christina Lee
+
+Purnawirman Huang
+
+
+Created for 6.148 (2017 IAP)
